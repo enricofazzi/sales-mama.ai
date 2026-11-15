@@ -1,0 +1,175 @@
+{
+  "surfaceId": "weekly_review",
+  "title": "Weekly review \u00b7 2026-W46",
+  "subtitle": "Team numbers from scripts/weekly.py",
+  "agent": "mama",
+  "dataRef": "log/weekly/2026-W46.json",
+  "components": [
+    {
+      "id": "root",
+      "component": "Column",
+      "children": [
+        "lead",
+        "kpis",
+        "grid",
+        "conv",
+        "next"
+      ]
+    },
+    {
+      "id": "lead",
+      "component": "Callout",
+      "tone": "warn",
+      "title": "Too early to judge the scoring",
+      "text": "Fewer than 20 touches per tier, so calibration says insufficient. The pipeline is still all top-of-funnel: nothing has moved past researched."
+    },
+    {
+      "id": "kpis",
+      "component": "Grid",
+      "min": 160,
+      "children": [
+        "k_sent",
+        "k_replies",
+        "k_meet",
+        "k_team"
+      ]
+    },
+    {
+      "id": "k_sent",
+      "component": "KpiTile",
+      "label": "Sent this week",
+      "value": {
+        "path": "/metrics/week/total/sent"
+      }
+    },
+    {
+      "id": "k_replies",
+      "component": "KpiTile",
+      "label": "Replies",
+      "value": {
+        "path": "/metrics/week/total/replies"
+      }
+    },
+    {
+      "id": "k_meet",
+      "component": "KpiTile",
+      "label": "Meetings",
+      "value": {
+        "path": "/metrics/week/total/meetings"
+      }
+    },
+    {
+      "id": "k_team",
+      "component": "KpiTile",
+      "label": "Team meeting rate (smoothed)",
+      "value": {
+        "path": "/allocation/team_rate"
+      },
+      "note": "prior until real touches arrive",
+      "format": "percent"
+    },
+    {
+      "id": "grid",
+      "component": "Grid",
+      "children": [
+        "p_funnel",
+        "p_cal"
+      ]
+    },
+    {
+      "id": "p_funnel",
+      "component": "Panel",
+      "title": "Funnel",
+      "subtitle": "now vs a week ago",
+      "children": [
+        "funnel"
+      ]
+    },
+    {
+      "id": "funnel",
+      "component": "Funnel",
+      "data": {
+        "path": "/funnel/stages"
+      },
+      "compareKey": "week_ago",
+      "compareLabel": "this week"
+    },
+    {
+      "id": "p_cal",
+      "component": "Panel",
+      "title": "Calibration",
+      "subtitle": "meeting rate by tier, 8 weeks",
+      "children": [
+        "cal"
+      ]
+    },
+    {
+      "id": "cal",
+      "component": "BarChart",
+      "data": {
+        "path": "/calibration/tiers"
+      },
+      "y": [
+        "contacted",
+        "meetings"
+      ]
+    },
+    {
+      "id": "conv",
+      "component": "Panel",
+      "title": "Rep \u00d7 industry conversion",
+      "span": "full",
+      "children": [
+        "conv_t"
+      ]
+    },
+    {
+      "id": "conv_t",
+      "component": "DataTable",
+      "rows": {
+        "path": "/allocation/conversion"
+      },
+      "empty": "No touches logged yet.",
+      "columns": [
+        {
+          "key": "rep",
+          "label": "Rep"
+        },
+        {
+          "key": "industry",
+          "label": "Industry"
+        },
+        {
+          "key": "contacted",
+          "label": "Contacted",
+          "numeric": true
+        },
+        {
+          "key": "meetings",
+          "label": "Meetings",
+          "numeric": true
+        },
+        {
+          "key": "smoothed_rate",
+          "label": "Smoothed rate",
+          "numeric": true,
+          "format": "percent"
+        }
+      ]
+    },
+    {
+      "id": "next",
+      "component": "ActionBar",
+      "actions": [
+        {
+          "label": "Review the allocation",
+          "prompt": "/mama-allocate"
+        },
+        {
+          "label": "Open the review queue",
+          "prompt": "/mama-manager"
+        }
+      ]
+    }
+  ]
+}

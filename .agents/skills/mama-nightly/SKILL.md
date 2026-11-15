@@ -47,7 +47,7 @@ Hard errors (stop the remaining steps, record, still write the brief and sync): 
 ## Finish
 - Summary, 1–3 lines (this is the final output saved in `runner/logs/`): "Nightly ok 02:00–02:41 · SG · 41 items: 9 linked, 4 review, 3 new leads · 11 pre-drafts · proposal 14 leads awaiting approval · lint 0 errors." On failure: "Nightly FAILED at score: <error>. See log/briefs/2026-11-03-manager.md."
 - Log: `- [YYYY-MM-DD HH:MM] nightly | <manager> | run <run-id> | ok; 41 items, 9 linked, 4 review, 3 new_lead; 14 leads proposed; lint 0 errors` (dry-run: add `dry-run`).
-- Only when the session contains `MAMA_CARDS=on`: an `agents` card for the subagent lanes, then a `run_status` card.
-```mama-card
-{"type":"run_status","title":"Nightly run · 3 Nov","agent":"mama","ok":true,"started":"2026-11-03 02:00","finished":"2026-11-03 02:41","markets":["SG"],"items":41,"linked":9,"review":4,"new_leads":3,"errors":0,"refs":["log/briefs/2026-11-03-manager.md"]}
+- Only when the session contains `MAMA_CARDS=on` (`a2ui` surfaces, docs/UI.md §2): an `AgentsCard` for the subagent lanes, then a `RunStatusCard`.
+```a2ui
+{"surfaceId": "run_status", "components": [{"id": "root", "component": "RunStatusCard", "title": "Nightly run · 3 Nov", "agent": "mama", "ok": true, "started": "2026-11-03 02:00", "finished": "2026-11-03 02:41", "markets": ["SG"], "items": 41, "linked": 9, "review": 4, "new_leads": 3, "errors": 0, "refs": ["log/briefs/2026-11-03-manager.md"]}]}
 ```

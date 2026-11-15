@@ -11,7 +11,7 @@ description: 'Weekly review for the manager: lint, funnel and reply metrics, sco
 ## Before you start
 - Who: the manager only, interactively (not the runner: steps 5 and 8 need approval).
 - Scripts: `lint.py`, `find.py` (Phase 0); `eval.py` (Phase 1); `score.py` (Phase 3); `allocate.py`, `claim.py` (Phase 6); `weekly.py` (Phase 7). `gh` is optional.
-- Numbers: run `python3 scripts/weekly.py --json` once (add `--week <yyyy-Www>` for another week) and use its numbers verbatim in steps 2, 3, 4 and 7. Never recompute them by hand; your job is to interpret them and write proposals.
+- Numbers: run `python3 scripts/weekly.py --save` once (add `--week <yyyy-Www>` for another week). It prints JSON and writes `log/weekly/<yyyy-Www>.json`, the data the console draws. Use its numbers verbatim in steps 2, 3, 4 and 7. Never recompute them by hand; your job is to interpret them and write proposals.
 - If a required script is missing, say which phase adds it and stop.
 - Week = ISO week `<yyyy-Www>` ending today; trailing window = the 4 weeks before that.
 - Re-read any page right before changing it (rule 17).
@@ -37,7 +37,7 @@ description: 'Weekly review for the manager: lint, funnel and reply metrics, sco
 ## Finish
 - Summary, 1–3 lines: "Week 2026-W45: 212 sent, 19 replies (9%), 6 meetings. Tier A 3.1× tier C: no weight change. PR opened: 2 patterns promoted, 1 retired, 3 ontology terms, 14 expired raw files removed."
 - Log: `- [YYYY-MM-DD HH:MM] weekly | <manager> | log/weekly/<yyyy-Www> | report + PR weekly/<yyyy-Www>: 2 promoted, 1 retired, 14 raw removed`
-- Only when the session contains `MAMA_CARDS=on`: a `plan` card of the steps, then a `brief` card with one section per report heading.
-```mama-card
-{"type":"brief","title":"Weekly review · 2026-W45","agent":"mama","subject":"Funnel, calibration and proposals","sections":[{"heading":"Metrics","bullets":["212 sent, 19 replies (9%), 6 meetings"]},{"heading":"Calibration","bullets":["Tier A meeting rate 3.1x tier C: no change"]}],"refs":["log/weekly/2026-W45.md"]}
+- Only when the session contains `MAMA_CARDS=on`: one `a2ui` surface (docs/UI.md §2) with `"dataRef": "log/weekly/<yyyy-Www>.json"`. Lead with a `Callout` of your judgement, then `KpiTile`s (sent, replies, meetings, team rate with `"format": "percent"`), a `Funnel` of `/funnel/stages` with `"compareKey": "week_ago"`, a `BarChart` of `/calibration/tiers`, and a `DataTable` of `/allocation/conversion`; end with an `ActionBar` (e.g. `/mama-allocate`). Bind every number with `{"path": …}`; never type one. Full example: `console/test/fixtures/a2ui/weekly.json`.
+```a2ui
+{"surfaceId":"weekly_review","title":"Weekly review · 2026-W45","dataRef":"log/weekly/2026-W45.json","components":[{"id":"root","component":"Column","children":["lead","sent","funnel"]},{"id":"lead","component":"Callout","tone":"good","text":"Tier A converts 3.1× tier C: no weight change."},{"id":"sent","component":"KpiTile","label":"Sent","value":{"path":"/metrics/week/total/sent"}},{"id":"funnel","component":"Funnel","data":{"path":"/funnel/stages"},"compareKey":"week_ago"}]}
 ```

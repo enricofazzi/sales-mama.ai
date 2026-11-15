@@ -390,32 +390,20 @@ def _dataset(con) -> str:
 # ----------------------------------------------------------------------------
 # Reports
 # ----------------------------------------------------------------------------
-ICON = {"pass": "✅", "fail": "❌", "warn": "⚠️", "unknown": "❔", "n/a": "–", "info": "ℹ️"}
-
-
 def report_md(res: dict, user: str) -> tuple[dict, str]:
+    """The audit record kept in git. The full result is data in the sibling .json; the console draws it
+    as an A2UI surface and plain chat as markdown written by the agent (ADR-0009)."""
     meta = {"type": "company_check", "uen": res.get("uen", ""), "name": res.get("name", ""),
             "verdict": res["verdict"], "score": res["score"], "checked": res["checked"], "by": user,
             "dataset": res["dataset"]}
     lines = [f"# {res.get('name') or res['query']} · {res['verdict']} ({res['score']}/100)", ""]
     if res.get("uen"):
         lines += [f"UEN {res['uen']} · {res.get('entity_type', '')} · {res.get('status', '')} · "
-                  f"registered {res.get('registered', '')}", f"Address: {res.get('address', '')}",
-                  f"Activity: {res.get('ssic', '')}", ""]
-    lines += ["| Check | Result | Detail | Source |", "|---|---|---|---|"]
-    for c in res["checks"]:
-        src = c["source"]
-        src = f"[{Path(src).name}]({src})" if "/" in src else src
-        lines.append(f"| {c['id']} {c['check']} | {ICON.get(c['result'], '')} {c['result']} | "
-                     f"{c['detail'].replace('|', '/')} | {src} |")
-    vend = (res.get("evidence") or {}).get("vendor") or []
-    if vend:
-        lines += ["", "## Vendor data (estimates)", "| Vendor | Employees | Industry | Website | Founded |", "|---|---|---|---|---|"]
-        for v in vend:
-            lines.append(f"| {v.get('name', '')} | {v.get('employees', '')} | {v.get('industry', '')} | "
-                         f"{v.get('website', '')} | {v.get('founded', '')} |")
-    lines += ["", "## Sources", rd.LICENCE.format(what="ACRA, BCA, GeBIZ and HDB datasets", date=res["checked"]),
-              "Web evidence is summarised in company-check/evidence/ (headline, URL, date, short summary)."]
+                  f"registered {res.get('registered', '')}", ""]
+    lines += ["## Checks", ""]
+    lines += [f"- {c['id']} {c['check']}: {c['result']} ({c['source']})" for c in res["checks"]]
+    lines += ["", "## Sources", "", rd.LICENCE.format(what="ACRA, BCA, GeBIZ and HDB datasets", date=res["checked"]),
+              "Details, vendor estimates and reasons: the sibling .json. Web evidence: company-check/evidence/."]
     return meta, "\n".join(lines) + "\n"
 
 
@@ -556,17 +544,6 @@ def enrich_leads(root: Path, csv_path: Path, vendor_json: Path) -> dict:
     return {"rows": len(rows), "enriched": n, "in_band": sum(1 for r in rows if r.get("icp_size") == "yes")}
 
 
-def print_result(res: dict) -> None:
-    print(f"{res.get('name') or res['query']} · {res.get('uen', '')} · {res['verdict']} ({res['score']}/100)")
-    if res.get("candidates") and not res.get("uen"):
-        print("Possible matches:")
-        for c in res["candidates"]:
-            print(f"  {c['uen']}  {c['name']}  ({c['conf']:.2f})")
-    for c in res["checks"]:
-        print(f"  {ICON.get(c['result'], ' ')} {c['id']:3} {c['check']:26} {c['result']:8} {c['detail']}")
-    print(f"  {res['dataset']}")
-
-
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description="Check whether a Singapore company is legitimate: ACRA, BCA, GeBIZ, "
                                              "HDB open data plus web evidence.")
@@ -575,7 +552,7 @@ def main(argv: list[str] | None = None) -> int:
     c.add_argument("query")
     c.add_argument("--evidence", action="append", default=[], help="verifier JSON (repeatable)")
     c.add_argument("--save", action="store_true", help="write company-check/reports/<date>-<uen>.md/.json")
-    c.add_argument("--json", action="store_true")
+    c.add_argument("--json", action="store_true", help="print JSON (the default for check)")
     b = sub.add_parser("batch", help="registry checks for many companies")
     g = b.add_mutually_exclusive_group(required=True)
     g.add_argument("--owner", help="'me' or a rep id: that book's SG accounts")
@@ -622,7 +599,7 @@ def main(argv: list[str] | None = None) -> int:
         res = run_check(root, con, cfg, args.query, args.evidence)
         if args.save and res.get("uen"):
             res["report"] = mc.rel_posix(save(root, res, user), root)
-        print(json.dumps(res, indent=2, ensure_ascii=False)) if args.json else print_result(res)
+        print(json.dumps(res, indent=2, ensure_ascii=False))
         return 0 if res.get("uen") else 1
     rows = []
     for label, q in batch_queries(root, args):

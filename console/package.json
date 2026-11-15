@@ -12,25 +12,32 @@
     "build": "vite build",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "record": "tsx bin/record.ts"
+    "record": "tsx bin/record.ts",
+    "catalog": "tsx bin/catalog.ts"
   },
   "dependencies": {
+    "@a2ui/react": "0.14.0",
+    "@a2ui/web_core": "0.14.0",
+    "@vitejs/plugin-react": "4.3.4",
     "ajv": "8.17.1",
     "dompurify": "3.2.4",
     "marked": "15.0.7",
     "react": "18.3.1",
     "react-dom": "18.3.1",
+    "react-is": "18.3.1",
+    "recharts": "3.10.1",
     "tsx": "4.19.3",
     "vite": "5.4.14",
-    "@vitejs/plugin-react": "4.3.4",
     "ws": "8.18.1",
-    "yaml": "2.7.0"
+    "yaml": "2.7.0",
+    "zod": "3.25.76"
   },
   "devDependencies": {
     "@types/node": "20.17.24",
     "@types/react": "18.3.18",
     "@types/react-dom": "18.3.5",
     "@types/ws": "8.18.0",
+    "happy-dom": "21.0.4",
     "typescript": "5.7.3",
     "vitest": "2.1.9"
   }

@@ -4,3 +4,4 @@
 - **Context:** Reps want a colourful, chat-driven cockpit, but the harness must stay Claude Code / Codex native.
 - **Decision:** The optional Sales Mama Console (Phase 9) drives the local `claude` CLI (or `codex exec`) headless, appends `MAMA_CARDS=on`, and renders `mama-card` blocks, agent lanes and tool chips (`docs/UI.md`). It runs on localhost under each user's own login, uses the project's permission settings unchanged, and has no send button.
 - **Consequences:** anything done in the console can also be done by typing in Claude Code; the console can be dropped without losing data or features.
+- **Update (2026-11-15, ADR-0009):** reports render as A2UI surfaces bound read-only to scripts' JSON (`/api/data`, allow-listed data folders). "Share as page" builds the HTML in the browser for download; the console still writes nothing to the repo.

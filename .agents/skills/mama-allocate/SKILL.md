@@ -16,8 +16,8 @@ description: 'Propose an allocation of unowned leads across reps using scores, c
 - Re-read an account page before quoting it or assigning it by hand (rule 17).
 
 ## Steps
-1. Proposal: if today's `log/allocation/<YYYY-MM-DD>.md` exists with no `status`, use it; otherwise run `python3 scripts/allocate.py`. It applies market, territory, capacity, suppression and `do_not_contact` constraints and continuity, assigns by EV greedily, runs fairness swaps, and writes `log/allocation/<date>.md` and `.csv`.
-2. Present it by market (the `.md` has `## Per rep`, `## Rows`, `## Constraints holding`, `## Not assigned`, `## Rebalancing`):
+1. Proposal: if today's `log/allocation/<YYYY-MM-DD>.md` exists with no `status`, use it; otherwise run `python3 scripts/allocate.py`. It applies market, territory, capacity, suppression and `do_not_contact` constraints and continuity, assigns by EV greedily, runs fairness swaps, and writes `log/allocation/<date>.json` (the full proposal: `rows`, `per_rep`, `checks`, `unassigned`, `rebalance`, `fair_moves`), a short `.md` record and the `.csv` of rows.
+2. Present it by market from the `.json` (a proposal from before 2026-11-15 has only the `.md`, with `## Per rep`, `## Rows`, `## Constraints holding`, `## Not assigned`, `## Rebalancing`):
    - Per rep: leads (A / B count), total EV in the base currency, and the script's reason ("Mei: F&B meeting rate 14% vs team 9%; 6 slots free; same group as Kopi Co").
    - The numbered rows the manager will refer to, the EV spread vs `max_ev_spread`, the constraints table (all must say ok; `allocate.py` refuses to write a proposal that breaks one), and anything left unassigned with why.
    - Rebalancing: lapsed claims (21 days without a touch) and overloaded reps, each with a proposed `claim.py --release` or `--reassign`.
@@ -40,7 +40,7 @@ description: 'Propose an allocation of unowned leads across reps using scores, c
 ## Finish
 - Summary, 1–3 lines: "Approved 12 leads to 4 reps (EV spread 14%, limit 20%). 2 rejected: already claimed. 1 lapsed claim released to the pool."
 - Log: `- [YYYY-MM-DD HH:MM] allocate | <manager> | log/allocation/<date> | proposal: 14 leads, 4 reps, spread 14%` and, after approval, `- [YYYY-MM-DD HH:MM] assign | <manager> | log/allocation/<date> | 12 assigned (A 4, B 8), 2 rejected`
-- Only when the session contains `MAMA_CARDS=on`: one `allocation` card.
-```mama-card
-{"type":"allocation","title":"Allocation proposal · 3 Nov","agent":"allocator","total":14,"spread":0.14,"limit":0.2,"rows":[{"rep":"mei","market":"SG","leads_a":2,"leads_b":3,"ev":4100,"currency":"SGD","why":"F&B meeting rate 14% vs team 9%; 6 slots free"}],"refs":["log/allocation/2026-11-03.md"],"actions":[{"label":"Approve all","prompt":"approve all","style":"primary"}]}
+- Only when the session contains `MAMA_CARDS=on`: one `a2ui` surface (docs/UI.md §2) with `"agent": "allocator"` and `"dataRef": "log/allocation/<date>.json"`: a `Callout` (who gets what and why, in one sentence), a `Gauge` per rep (`/per_rep/<i>/active` of `/per_rep/<i>/max_active`, `"invert": true`), a stacked horizontal `BarChart` of `/per_rep` with `"x": "rep", "y": ["A","B","C"]`, a `DataTable` of `/checks`, a `DataTable` of `/rows` (`account` with `"format": "account"`, `tier` with `"format": "tier"`, score, product, reason), and an `ActionBar` ("approve all", "approve except …"). Bind every number with `{"path": …}`. Full example: `console/test/fixtures/a2ui/allocation.json`.
+```a2ui
+{"surfaceId":"allocation_proposal","title":"Allocation proposal · 3 Nov","agent":"allocator","dataRef":"log/allocation/2026-11-03.json","components":[{"id":"root","component":"Column","children":["load","rows","go"]},{"id":"load","component":"BarChart","data":{"path":"/per_rep"},"x":"rep","y":["A","B","C"],"stacked":true,"orientation":"horizontal"},{"id":"rows","component":"DataTable","rows":{"path":"/rows"},"columns":[{"key":"row","label":"#","numeric":true},{"key":"account","label":"Account","format":"account"},{"key":"tier","label":"Tier","format":"tier"},{"key":"reason","label":"Why"}]},{"id":"go","component":"ActionBar","actions":[{"label":"Approve all","prompt":"approve all"}]}]}
 ```

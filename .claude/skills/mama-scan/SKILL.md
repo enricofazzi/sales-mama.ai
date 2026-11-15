@@ -43,7 +43,7 @@ description: Scan external and internal signal sources from knowledge/sources.ya
 ## Finish
 - Summary, 1–3 lines: "Scanned 6 SG sources: 41 items → 9 linked, 4 review, 3 new leads, 25 dropped. Hot: harbourlight-foods (+0.22). 1 source capped."
 - Log: `- [YYYY-MM-DD HH:MM] scan | <user> | run <run-id> | 41 items: 9 linked, 4 review, 3 new_lead, 25 dropped` (resolve.py may also log `resolve` lines).
-- Only when the session contains `MAMA_CARDS=on`: an `agents` card (one lane per scout), then a `run_status` card with the counts.
-```mama-card
-{"type":"agents","title":"Scanning SG sources","agent":"scout","lanes":[{"agent":"scout","label":"SG news","done":30,"total":30,"status":"done"},{"agent":"scout","label":"SG gov procurement","done":8,"total":30,"status":"running"}],"refs":["knowledge/sources.yaml"]}
+- Only when the session contains `MAMA_CARDS=on` (`a2ui` surfaces, docs/UI.md §2): an `AgentsCard` (one lane per scout), then a `RunStatusCard` with the counts.
+```a2ui
+{"surfaceId": "agents", "components": [{"id": "root", "component": "AgentsCard", "title": "Scanning SG sources", "agent": "scout", "lanes": [{"agent": "scout", "label": "SG news", "done": 30, "total": 30, "status": "done"}, {"agent": "scout", "label": "SG gov procurement", "done": 8, "total": 30, "status": "running"}], "refs": ["knowledge/sources.yaml"]}]}
 ```

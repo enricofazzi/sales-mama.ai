@@ -16,5 +16,21 @@ jobs:
         run: python scripts/selftest.py
       - name: Wiki lint
         run: python scripts/lint.py
+      - name: Eval gate
+        run: python scripts/eval.py
       - name: Skills mirror in sync
         run: python scripts/sync_skills.py --check
+  console:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: console/package-lock.json
+      - run: npm --prefix console ci --no-audit --no-fund
+      - name: Typecheck
+        run: npm --prefix console run typecheck
+      - name: Console tests (A2UI parser, catalog sync, rendering, data allow-list)
+        run: npm --prefix console test

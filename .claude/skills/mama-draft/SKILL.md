@@ -50,7 +50,7 @@ description: 'Draft an outreach message (connection note, first email, WhatsApp,
 ## Finish
 - Summary, 1–3 lines: "Draft in your mailbox: first email to Jane Tan, Harbourlight Foods (pattern first-contract-win). Ready to send Tue 3 Nov, 09:00–11:30 SGT: run /mama-send."
 - Log: `- [YYYY-MM-DD HH:MM] draft | <rep> | accounts/<id> | first email to jane-tan-<id>, pattern first-contract-win`
-- Only when the session contains `MAMA_CARDS=on`: one `draft` card per draft, listing the checks that passed.
-```mama-card
-{"type":"draft","title":"First email · Harbourlight Foods","agent":"writer","account":"harbourlight-foods","to":"jane.tan@harbourlight.example","channel":"email","subject":"Your new catering contract","body":"Hi Jane, congratulations on the catering contract announced on 28 Oct...","signal":"contract_win (2026-10-28)","pattern":"first-contract-win","checks":["owner ok","not suppressed","entity check ok","SG channel ok"],"send_window":"Tue 3 Nov, 09:00-11:30 SGT","refs":["wiki/accounts/harbourlight-foods.md"],"actions":[{"label":"Shorter","prompt":"Make the Harbourlight draft shorter","style":"secondary"}]}
+- Only when the session contains `MAMA_CARDS=on` (`a2ui` surfaces, docs/UI.md §2): one `DraftCard` per draft, listing the checks that passed.
+```a2ui
+{"surfaceId": "draft", "components": [{"id": "root", "component": "DraftCard", "title": "First email · Harbourlight Foods", "agent": "writer", "account": "harbourlight-foods", "to": "jane.tan@harbourlight.example", "channel": "email", "subject": "Your new catering contract", "body": "Hi Jane, congratulations on the catering contract announced on 28 Oct...", "signal": "contract_win (2026-10-28)", "pattern": "first-contract-win", "passed": ["owner ok", "not suppressed", "entity check ok", "SG channel ok"], "send_window": "Tue 3 Nov, 09:00-11:30 SGT", "refs": ["wiki/accounts/harbourlight-foods.md"], "actions": [{"label": "Shorter", "prompt": "Make the Harbourlight draft shorter", "style": "secondary"}]}]}
 ```

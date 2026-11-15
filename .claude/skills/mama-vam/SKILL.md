@@ -40,7 +40,7 @@ description: 'Run virtual account managers over one book, all books, or the hous
 ## Finish
 - Summary, 1–3 lines: "VAMs refreshed 4 books + house: 63 accounts, 11 pre-drafts, 7 at risk, 3 hot. House: 2 pool accounts rose to tier B. Lint: 0 out-of-bounds edits."
 - Log, one line per book: `- [YYYY-MM-DD HH:MM] vam | <user> | books/<rep> | 18 accounts, 4 pre-drafts, 2 at risk, 1 hot`
-- Only when the session contains `MAMA_CARDS=on`: an `agents` card with one lane per book.
-```mama-card
-{"type":"agents","title":"VAMs refreshing books","agent":"vam","lanes":[{"agent":"vam","label":"Mei's book","done":18,"total":18,"status":"done"},{"agent":"vam","label":"House pool","done":9,"total":25,"status":"running"}],"refs":["log/briefs/2026-11-03-books.md"]}
+- Only when the session contains `MAMA_CARDS=on` (`a2ui` surfaces, docs/UI.md §2): an `AgentsCard` with one lane per book.
+```a2ui
+{"surfaceId": "agents", "components": [{"id": "root", "component": "AgentsCard", "title": "VAMs refreshing books", "agent": "vam", "lanes": [{"agent": "vam", "label": "Mei's book", "done": 18, "total": 18, "status": "done"}, {"agent": "vam", "label": "House pool", "done": 9, "total": 25, "status": "running"}], "refs": ["log/briefs/2026-11-03-books.md"]}]}
 ```

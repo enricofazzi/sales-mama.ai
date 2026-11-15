@@ -42,7 +42,7 @@ description: Ingest new files from raw/ (CRM exports, lead lists, call notes) in
 ## Finish
 - Summary, 1–3 lines: "Ingested crm-2026-11-01.csv: 50 rows → 38 new accounts, 12 updated, 4 contract_ending signals, 2 unmapped industries. Lint clean."
 - Log, one line per file: `- [YYYY-MM-DD HH:MM] ingest | <user> | raw/crm/<file> | 38 new, 12 updated, 4 contract_ending, 2 unmapped`
-- Only when the session contains `MAMA_CARDS=on`: a `plan` card of the steps (and an `error` card for any blocking file).
-```mama-card
-{"type":"plan","title":"Ingest crm-2026-11-01.csv","agent":"mama","steps":[{"label":"Map and dedupe 50 rows","status":"done","agent":"mama"},{"label":"Contract-end signals","status":"done","agent":"mama"},{"label":"Score and rebuild index","status":"running","agent":"mama"}],"refs":["raw/crm/crm-2026-11-01.csv"]}
+- Only when the session contains `MAMA_CARDS=on` (`a2ui` surfaces, docs/UI.md §2): a `PlanCard` of the steps (and an `ErrorCard` for any blocking file).
+```a2ui
+{"surfaceId": "plan", "components": [{"id": "root", "component": "PlanCard", "title": "Ingest crm-2026-11-01.csv", "agent": "mama", "steps": [{"label": "Map and dedupe 50 rows", "status": "done", "agent": "mama"}, {"label": "Contract-end signals", "status": "done", "agent": "mama"}, {"label": "Score and rebuild index", "status": "running", "agent": "mama"}], "refs": ["raw/crm/crm-2026-11-01.csv"]}]}
 ```

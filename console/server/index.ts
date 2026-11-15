@@ -7,8 +7,9 @@ import { fileURLToPath } from 'node:url';
 import { randomUUID } from 'node:crypto';
 import { WebSocketServer, type WebSocket } from 'ws';
 import { createServer as createVite } from 'vite';
+import { buildViewer } from './viewer';
 import { Run } from './engine';
-import { findRepoRoot, readRail, readSource } from './repo';
+import { findRepoRoot, readData, readRail, readSource } from './repo';
 import type { ClientMsg, ServerMsg } from '../shared/protocol';
 
 const HOST = '127.0.0.1';
@@ -39,6 +40,20 @@ const http = createServer((req, res) => {
     const file = readSource(root, url.searchParams.get('path') ?? '');
     if (!file) { res.writeHead(404, { 'content-type': 'text/plain' }).end('Not readable from the console.'); return; }
     res.writeHead(200, { 'content-type': 'application/json', 'cache-control': 'no-store' }).end(JSON.stringify(file));
+    return;
+  }
+  if (url.pathname === '/api/data') {
+    // A surface's dataRef: a script's JSON output (read-only, allow-listed, ADR-0009).
+    const d = readData(root, url.searchParams.get('path') ?? '');
+    if (!d.ok) { res.writeHead(d.status, { 'content-type': 'text/plain' }).end(d.error); return; }
+    res.writeHead(200, { 'content-type': 'application/json', 'cache-control': 'no-store' }).end(JSON.stringify(d.value));
+    return;
+  }
+  if (url.pathname === '/api/viewer') {
+    // The bundle a shared page embeds. Built in memory once; nothing is written to disk.
+    buildViewer(consoleDir).then(
+      b => res.writeHead(200, { 'content-type': 'application/json' }).end(JSON.stringify(b)),
+      e => res.writeHead(500, { 'content-type': 'text/plain' }).end(`viewer build failed: ${(e as Error).message}`));
     return;
   }
   if (url.pathname === '/api/replay') {

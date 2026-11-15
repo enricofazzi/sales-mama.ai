@@ -1,0 +1,24 @@
+{
+  "surfaceId": "allocation_proposal",
+  "title": "Allocation proposal · 15 leads",
+  "subtitle": "From scripts/allocate.py; nothing is assigned until you approve",
+  "agent": "allocator",
+  "dataRef": "log/allocation/2026-11-15.json",
+  "components": [
+    { "id": "root", "component": "Column", "children": ["lead", "grid", "rows", "go"] },
+    { "id": "lead", "component": "Callout", "tone": "neutral", "text": "All 15 go to one rep because the team has one rep. Every hard constraint holds." },
+    { "id": "grid", "component": "Grid", "children": ["p_load", "p_mix"] },
+    { "id": "p_load", "component": "Panel", "title": "Load per rep", "children": ["cap", "load"] },
+    { "id": "cap", "component": "Gauge", "label": "praveen · active of max", "value": { "path": "/per_rep/0/active" }, "max": { "path": "/per_rep/0/max_active" }, "invert": true },
+    { "id": "load", "component": "BarChart", "data": { "path": "/per_rep" }, "x": "rep", "y": ["A", "B", "C"], "stacked": true, "orientation": "horizontal", "height": 120 },
+    { "id": "p_mix", "component": "Panel", "title": "Constraints", "children": ["checks"] },
+    { "id": "checks", "component": "DataTable", "rows": { "path": "/checks" }, "columns": [{ "key": "check", "label": "Check" }, { "key": "ok", "label": "Holds" }] },
+    { "id": "rows", "component": "Panel", "title": "Rows", "span": "full", "children": ["t"] },
+    { "id": "t", "component": "DataTable", "rows": { "path": "/rows" }, "sortBy": "score", "columns": [
+      { "key": "row", "label": "#", "numeric": true }, { "key": "account", "label": "Account", "format": "account" },
+      { "key": "tier", "label": "Tier", "format": "tier" }, { "key": "score", "label": "Score", "numeric": true },
+      { "key": "product", "label": "Product" }, { "key": "reason", "label": "Why" } ] },
+    { "id": "go", "component": "ActionBar", "actions": [
+      { "label": "Approve all", "prompt": "approve all" }, { "label": "Approve tier A only", "prompt": "approve the tier A rows only" } ] }
+  ]
+}

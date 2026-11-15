@@ -460,56 +460,38 @@ def latest_proposal(root: Path, date: str | None) -> Path | None:
     return files[-1] if files else None
 
 
-def render(P: dict, user: str) -> str:
-    rows, base = P["rows"], P["base"]
-    by_rep: dict[tuple, dict] = {}
-    for r in rows:
-        k = (r["market"], r["rep"])
-        s = by_rep.setdefault(k, {"A": 0, "B": 0, "C": 0, "ev": 0.0, "n": 0})
-        s[r["tier"]] = s.get(r["tier"], 0) + 1
-        s["ev"] += r["ev"]
-        s["n"] += 1
+def render(P: dict, user: str, stem: str) -> str:
+    """The proposal's audit record. The full proposal is data in <stem>.json (rows also in <stem>.csv);
+    the console shows it as an A2UI surface, plain chat as markdown written by the agent (ADR-0009)."""
+    rows = P["rows"]
+    broken = [c["check"] for c in P["checks"] if not c["ok"]]
     L = [f"# Allocation proposal · {P['date']}", "",
-         f"{len(rows)} leads to {len({r['rep'] for r in rows})} rep(s). EV in {base}. "
-         f"EV spread {P['spread']:.0%} (limit {P['limit']:.0%})"
-         + (f", was {P['spread_before']:.0%} before {len(P['fair_moves'])} fairness move(s)" if P["fair_moves"] else "")
-         + f". Team meeting rate {P['team_rate']:.1%} (smoothed).", "",
+         f"{len(rows)} leads to {len({r['rep'] for r in rows})} rep(s). EV spread {P['spread']:.0%} "
+         f"(limit {P['limit']:.0%}). Hard constraints: {'all hold' if not broken else 'VIOLATED ' + ', '.join(broken)}. "
+         f"{len(P['unassigned'])} not assigned, {len(P['rebalance'])} rebalancing flag(s), "
+         f"{len(P['fair_moves'])} fairness move(s).", "",
+         f"Data: `{stem}.json` (rows, per-rep load, checks, reasons) · rows: `{stem}.csv`.", "",
          "Approve in one sentence: \"approve all\", \"approve except 3 and 7\", or an edit "
-         "(\"give the logistics ones to Arun\").", "", "## Per rep", "",
-         "| Market | Rep | Leads | A | B | C | EV (" + base + ") | Active / max | Slots this run |",
-         "|---|---|---|---|---|---|---|---|---|"]
-    for (mk, rid), s in sorted(by_rep.items()):
-        rp = P["reps"][rid]
-        L.append(f"| {mk} | {rid} | {s['n']} | {s['A']} | {s['B']} | {s['C']} | {s['ev']:,.0f} | "
-                 f"{rp['active']} / {rp['max_active']} | {rp['slots']} |")
-    L += ["", "## Rows", "", "| # | Rep | Account | Mkt | Tier | Score | Product | EV | Reason |",
-          "|---|---|---|---|---|---|---|---|---|"]
-    for r in rows:
-        L.append(f"| {r['row']} | {r['rep']} | [[accounts/{r['account']}]] | {r['market']} | {r['tier']} | "
-                 f"{r['score']:.2f} | {r['product']} | {r['ev']:,.0f} | {r['reason']} |")
-    L += ["", "## Constraints holding", "", "| Check | Result |", "|---|---|"]
-    for c in P["checks"]:
-        L.append(f"| {c['check']} | {'ok' if c['ok'] else 'VIOLATED: ' + ', '.join(c['violations'])} |")
-    L.append(f"| EV spread ≤ {P['limit']:.0%} | {'ok' if P['spread'] <= P['limit'] else 'over limit: no improving move left'} ({P['spread']:.0%}) |")
-    L += ["", "## Not assigned", ""]
-    groups: dict[str, list[str]] = {}
-    for u in P["unassigned"]:
-        groups.setdefault(u["reason"], []).append(f"{u['account']} ({u['tier']})")
-    for reason, accs in sorted(groups.items(), key=lambda kv: -len(kv[1])):
-        L.append(f"- {len(accs)} × {reason}: " + ", ".join(accs[:12]) + (" …" if len(accs) > 12 else ""))
-    if not groups:
-        L.append("- none")
-    L += ["", "## Rebalancing", ""]
-    for b in P["rebalance"]:
-        L.append(f"- {b['owner']} · {b['account'] or '-'} · {b['flag']} → `{b['action']}`")
-    if not P["rebalance"]:
-        L.append("- none: no lapsed claims, overloaded reps or inactive owners")
-    if P["fair_moves"]:
-        L += ["", "## Fairness moves", ""] + [f"- {m}" for m in P["fair_moves"]]
-    L.append("")
+         "(\"give the logistics ones to Arun\").", ""]
     meta = {"type": "allocation", "date": P["date"], "status": "proposed", "created_by": user,
-            "leads": len(rows), "spread": P["spread"], "limit": P["limit"], "base_currency": base}
+            "leads": len(rows), "spread": P["spread"], "limit": P["limit"], "base_currency": P["base"],
+            "data": f"log/allocation/{stem}.json"}
     return mc.compose_page(meta, "\n".join(L))
+
+
+def per_rep(P: dict) -> list[dict]:
+    """Per (market, rep) load of a proposal: lead count, tier mix and EV."""
+    by: dict[tuple, dict] = {}
+    for r in P["rows"]:
+        s = by.setdefault((r["market"], r["rep"]), {"market": r["market"], "rep": r["rep"], "leads": 0,
+                                                     "A": 0, "B": 0, "C": 0, "ev": 0.0})
+        s[r["tier"]] = s.get(r["tier"], 0) + 1
+        s["ev"] = round(s["ev"] + r["ev"], 2)
+        s["leads"] += 1
+    for s in by.values():
+        rp = P["reps"].get(s["rep"]) or {}
+        s.update(active=rp.get("active"), max_active=rp.get("max_active"), slots=rp.get("slots"))
+    return [by[k] for k in sorted(by)]
 
 
 def to_csv(rows: list[dict]) -> str:
@@ -535,6 +517,20 @@ def parse_ids(text: str | None) -> set[int]:
     return out
 
 
+def _record_decision(md: Path, status: str, user: str, lines: list[str]) -> None:
+    """Mirror the decision into the proposal's .json (if present) so the console shows the live status."""
+    j = md.with_suffix(".json")
+    if not j.is_file():
+        return
+    try:
+        data = json.loads(mc.read_text(j))
+    except ValueError:
+        return
+    data.update(status=status, decided_by=user, decided_on=mc.today().isoformat(),
+                decisions=(data.get("decisions") or []) + lines)
+    mc.write_text(j, json.dumps(data, indent=2, ensure_ascii=False, default=str) + "\n")
+
+
 def approve(root: Path, user: dict, which: str, exclude: str | None, date: str | None, reject: bool) -> dict:
     md = latest_proposal(root, date)
     if md is None:
@@ -547,6 +543,7 @@ def approve(root: Path, user: dict, which: str, exclude: str | None, date: str |
     if reject:
         mc.update_frontmatter(md, {"status": "rejected", "decided_by": user["id"], "decided_on": mc.today().isoformat()})
         mc.write_text(md, mc.read_text(md).rstrip("\n") + f"\n\n## Decisions\n\n- Rejected by {user['id']} on {mc.today()}.\n")
+        _record_decision(md, "rejected", user["id"], [f"Rejected by {user['id']} on {mc.today()}."])
         mc.append_log("allocate", user["id"], f"log/allocation/{md.stem}", "proposal rejected")
         return {"proposal": md.name, "status": "rejected", "applied": [], "rejected": []}
     want = {int(r["row"]) for r in rows} if which.strip().lower() == "all" else parse_ids(which)
@@ -565,6 +562,7 @@ def approve(root: Path, user: dict, which: str, exclude: str | None, date: str |
         lines.append(f"- Refused by claim.py: {r['account']} — {r['reason']}")
     mc.update_frontmatter(md, {"status": new_status, "decided_by": user["id"], "decided_on": mc.today().isoformat()})
     mc.write_text(md, mc.read_text(md).rstrip("\n") + "\n\n## Decisions\n\n" + "\n".join(lines) + "\n")
+    _record_decision(md, new_status, user["id"], [x.removeprefix("- ") for x in lines])
     tiers: dict[str, int] = {}
     for r in chosen:
         if r["account"] in done:
@@ -649,17 +647,20 @@ def main(argv: list[str] | None = None) -> int:
         print_summary(P, None)
         print("ERROR: a proposed row breaks a hard constraint; nothing written.")
         return 2
-    path = None
+    path = data = None
     if not args.dry_run:
         md = out_path(root, P["date"])
-        mc.write_text(md, render(P, user["id"]))
+        mc.write_text(md, render(P, user["id"], md.stem))
         mc.write_text(md.with_suffix(".csv"), to_csv(P["rows"]))
+        mc.write_text(md.with_suffix(".json"), json.dumps({**P, "per_rep": per_rep(P), "status": "proposed"},
+                                                          indent=2, ensure_ascii=False, default=str) + "\n")
         path = mc.rel_posix(md, root)
+        data = mc.rel_posix(md.with_suffix(".json"), root)
         reps_n = len({r["rep"] for r in P["rows"]})
         mc.append_log("allocate", user["id"], path.removesuffix(".md"),
                       f"proposal: {len(P['rows'])} leads, {reps_n} reps, spread {P['spread']:.0%}")
     if args.json:
-        print(json.dumps({**P, "path": path}, indent=2, default=str))
+        print(json.dumps({**P, "per_rep": per_rep(P), "path": path, "data": data}, indent=2, default=str))
     else:
         print_summary(P, path)
     return 0

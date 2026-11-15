@@ -537,6 +537,58 @@ def check_allocation(root: Path) -> Check:
     return c.done(not bad, f"{len(bad)} ({owned} owned accounts + dry-run proposal of {len(P['rows'])})", bad)
 
 
+A2UI_FENCE = re.compile(r"```a2ui[^\n]*\n(.*?)```", re.S)
+SEND_WORD = re.compile(r"\bsend\b", re.I)
+
+
+def _surface_blocks(root: Path) -> list[tuple[str, str]]:
+    """(where, raw JSON) for every A2UI example agents learn from: skill fences and console fixtures."""
+    out = []
+    for p in sorted((root / ".agents" / "skills").glob("*/SKILL.md")):
+        out += [(f"{mc.rel_posix(p, root)} #{i + 1}", m.group(1)) for i, m in enumerate(A2UI_FENCE.finditer(mc.read_text(p)))]
+    fx = root / "console" / "test" / "fixtures" / "a2ui"
+    out += [(mc.rel_posix(p, root), mc.read_text(p)) for p in sorted(fx.glob("*.json"))] if fx.is_dir() else []
+    return out
+
+
+def check_surfaces(root: Path) -> Check:
+    """ADR-0009: example surfaces use only catalog components, bind every number to their dataRef and offer
+    no send action. Structural only; the console validates the full props with the catalog's own schemas."""
+    c = Check("surfaces", "A2UI surfaces: catalog components, bound numbers, no send", "0")
+    cat_file = root / "console" / "a2ui" / "catalog.json"
+    if not cat_file.is_file():
+        return c.pending("console/a2ui/catalog.json missing (run `npm --prefix console run catalog`)")
+    meta = json.loads(mc.read_text(cat_file)).get("x-sales-mama") or {}
+    known = set(meta.get("salesMamaComponents") or []) | set(meta.get("basicComponents") or [])
+    data_props = meta.get("dataProps") or {}
+    blocks, bad = _surface_blocks(root), []
+    for where, raw in blocks:
+        try:
+            b = json.loads(raw)
+        except ValueError as exc:
+            bad.append(f"{where}: not JSON ({exc})")
+            continue
+        comps = b.get("components") or []
+        ids = {x.get("id") for x in comps if isinstance(x, dict)}
+        if "root" not in ids:
+            bad.append(f"{where}: no root component")
+        ref = b.get("dataRef")
+        if ref and not (str(ref).endswith(".json") and str(ref).startswith(("log/", "wiki/books/", "company-check/reports/", "company-check/leads/"))):
+            bad.append(f"{where}: dataRef {ref} outside the data folders")
+        for x in comps:
+            name, cid = x.get("component"), x.get("id")
+            if name not in known:
+                bad.append(f"{where}: {cid} uses {name}, not in the catalog")
+            for prop in data_props.get(name, []) if ref else []:
+                v = x.get(prop)
+                if v is not None and not (isinstance(v, dict) and ("path" in v or "call" in v)):
+                    bad.append(f"{where}: {cid}.{prop} is typed in, not bound to {ref}")
+            for a in x.get("actions") or []:
+                if SEND_WORD.search(str(a.get("label", ""))) or SEND_WORD.search(str(a.get("prompt", ""))):
+                    bad.append(f"{where}: {cid} offers a send action ({a.get('label')})")
+    return c.done(not bad, f"{len(bad)} in {len(blocks)} surface(s)", bad)
+
+
 def pending_checks(root: Path) -> list[Check]:
     scripts = root / "scripts"
     weeks = 0
@@ -560,7 +612,7 @@ def run(root: Path) -> list[Check]:
     live = [check_cited(root, accounts), check_catalog(root, accounts), check_suppression(root),
             check_golden(root), check_labelled(root), check_resolution(root)]
     live += [check_recommendation(root), check_entities(root, accounts)]
-    live += draft_checks(root) + send_checks(root) + [check_replies(root), check_allocation(root)]
+    live += draft_checks(root) + send_checks(root) + [check_replies(root), check_allocation(root), check_surfaces(root)]
     return live + pending_checks(root)
 
 

@@ -39,7 +39,7 @@ export function useBridge() {
     })).then(setTurns);
   }, [replay]);
 
-  // A saved result shown as a chat turn: /?result=company-check/reports/<date>-<uen>.cards.md&ask=/company-check%20<uen>
+  // A saved result shown as a chat turn: /?result=company-check/reports/<date>-<uen>.view.md&ask=/company-check%20<uen>
   // (the same cards a live run prints; read through /api/source, so only readable folders).
   const params = new URLSearchParams(location.search);
   const result = params.get('result');

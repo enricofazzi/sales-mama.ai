@@ -33,7 +33,7 @@ description: 'Work the rep''s allocated queue and, if allowed, self-claim tier C
 ## Finish
 - Summary, 1–3 lines: "6 new allocated accounts (A 1, B 2, C 3). 4 free slots; claimed 2 tier C: lumen-clinic, sunrise-logistics. Next: research the tier A one?"
 - Log: `claim.py` already wrote it; don't add a second line. Format, for reference: `- [YYYY-MM-DD HH:MM] claim | <rep> | accounts/lumen-clinic | self-claimed tier C`
-- Only when the session contains `MAMA_CARDS=on`: one `account` card per newly allocated tier A account, or an `error` card if claiming failed.
-```mama-card
-{"type":"account","title":"Sunrise Logistics","agent":"mama","id":"sunrise-logistics","name":"Sunrise Logistics","market":"SG","tier":"A","score":0.74,"stage":"new","owner":"mei","refs":["wiki/accounts/sunrise-logistics.md"],"actions":[{"label":"Research it","prompt":"/mama-research sunrise-logistics","style":"primary"}]}
+- Only when the session contains `MAMA_CARDS=on` (`a2ui` surfaces, docs/UI.md §2): one `AccountCard` per newly allocated tier A account, or an `ErrorCard` if claiming failed.
+```a2ui
+{"surfaceId": "account", "components": [{"id": "root", "component": "AccountCard", "title": "Sunrise Logistics", "agent": "mama", "account_id": "sunrise-logistics", "name": "Sunrise Logistics", "market": "SG", "tier": "A", "score": 0.74, "stage": "new", "owner": "mei", "refs": ["wiki/accounts/sunrise-logistics.md"], "actions": [{"label": "Research it", "prompt": "/mama-research sunrise-logistics", "style": "primary"}]}]}
 ```

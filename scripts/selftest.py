@@ -406,6 +406,35 @@ def t_books(r: Runner) -> None:
              "Pool (unowned, active): 2" in team and "A 0 · B 1 · C 1" in team
              and "| 2 / 40 | 1 | 1 | 0 | 2 | 1 | 1 / 8 | 2 | 1 |" in team
              and "Review queue: 1 undecided" in team, "", team)
+    mj = _json(mc.read_text(books / "mei.json")) if (books / "mei.json").is_file() else {}
+    tj = _json(mc.read_text(books / "team.json")) if (books / "team.json").is_file() else {}
+    due = [x.get("account") for x in mj.get("due") or []]
+    ok = mj.get("rep") == "mei" and mj.get("active") == 2 and mj.get("capacity") == 40 \
+        and mj.get("meetings") == 1 and mj.get("target") == 8 and mj.get("replies_7") == 1 \
+        and mj.get("sent_7") == 2 and due[:1] == ["harbourlight-foods"] and len(due) == 2 \
+        and len(mj.get("hot") or []) == 1 and len(mj.get("at_risk") or []) == 1 \
+        and "contract_ending_no_plan" in json.dumps(mj.get("at_risk"))
+    r.record("build_books: rep book as JSON data", ok, json.dumps(mj)[:300])
+    pool = tj.get("pool") or {}
+    row = next((x for x in tj.get("reps") or [] if x.get("rep") == "mei"), {})
+    ok = pool.get("count") == 2 and pool.get("tiers") == {"A": 0, "B": 1, "C": 1} and tj.get("review_open") == 1 \
+        and row.get("active") == 2 and row.get("capacity") == 40 and row.get("due") == 2 and row.get("at_risk") == 1
+    r.record("build_books: team book as JSON data", ok, json.dumps(tj)[:300])
+
+
+PRESENTATION = ("<svg", "<html", "<!doctype", "<table", "<div", "```mama-card", "```a2ui")
+PARSES_ONLY = {"eval.py": {"```a2ui"}}  # eval reads the skills' a2ui examples to check them; it never emits one
+
+
+def t_no_presentation(r: Runner) -> None:
+    """Scripts are tools: they compute and write data, never HTML, SVG or UI blocks (ADR-0009)."""
+    bad = []
+    for p in sorted((r.root / "scripts").glob("*.py")):
+        if p.name == "selftest.py":
+            continue
+        low = mc.read_text(p).lower()
+        bad += [f"{p.name}: {s}" for s in PRESENTATION if s in low and s not in PARSES_ONLY.get(p.name, set())]
+    r.record("scripts: no presentation code (HTML, SVG, UI blocks)", not bad, ", ".join(bad))
 
 
 def t_session(r: Runner) -> None:
@@ -864,6 +893,22 @@ def t_eval(r: Runner) -> None:
         and status.get("suppression") == "PASS" and status.get("golden") == "PASS" \
         and status.get("resolution") in ("PASS", "PENDING") and status.get("recommendation") == "PENDING"
     r.record("eval: demo passes, later phases pending", ok, f"exit {code}", out + err)
+    r.record("eval: A2UI surfaces in skills and fixtures pass", status.get("surfaces") == "PASS", str(status.get("surfaces")))
+    bad = r.root / "console" / "test" / "fixtures" / "a2ui" / "zz-planted.json"
+    mc.write_text(bad, json.dumps({"surfaceId": "planted", "dataRef": "log/weekly/x.json", "components": [
+        {"id": "root", "component": "Column", "children": ["k", "m"]},
+        {"id": "k", "component": "KpiTile", "label": "Sent", "value": 212},
+        {"id": "m", "component": "Marquee", "text": "hi"},
+        {"id": "go", "component": "ActionBar", "actions": [{"label": "Send all", "prompt": "/mama-send"}]}]}))
+    try:
+        code, out, err = r.py("eval.py", "--json")
+        sc = next((c for c in _json(out).get("checks", []) if c["key"] == "surfaces"), {})
+        det = " ".join(sc.get("details") or [])
+        r.record("eval: typed-in number, unknown component, send action -> surfaces FAIL",
+                 code == 1 and sc.get("status") == "FAIL" and "typed in" in det and "Marquee" in det and "send" in det,
+                 det[:300], out + err)
+    finally:
+        bad.unlink(missing_ok=True)
 
     acc = r.root / "wiki" / "accounts" / "copperleaf-retail.md"
     touches = r.root / "log" / "touches.csv"
@@ -1222,6 +1267,12 @@ def t_company_check(r: Runner) -> None:
     r.record("company_check: evidence -> Verified, report + log saved", d.get("verdict") == "Verified"
              and rep_md.is_file() and "Open Data Licence" in mc.read_text(rep_md)
              and "check | mei | company-check/202012345K" in mc.read_text(root / "wiki" / "log.md"), str(d.get("verdict")))
+    rep_text = mc.read_text(rep_md) if rep_md.is_file() else ""
+    r.record("company_check: .md is a short audit record (no emoji, data in .json)",
+             rep_md.with_suffix(".json").is_file() and "Verified" in rep_text and "C1" in rep_text
+             and not any(ch in rep_text for ch in "✅❌⚠❔ℹ"), "", rep_text[:400])
+    code, out, _ = r.py("company_check.py", "check", "202012345K", email=MEI)
+    r.record("company_check: JSON by default", _json(out).get("uen") == "202012345K", out[:200])
     bad = root.parent / "ev-bad.json"
     mc.write_text(bad, json.dumps({"adverse": [{"what": "police warning about a scam (news)", "date": "2026-10-01",
                                                  "about": "company"}]}))
@@ -1261,37 +1312,48 @@ def t_company_check(r: Runner) -> None:
 
 
 def t_company_analytics(r: Runner) -> None:
-    """company_analytics.py on the fixture index built by t_company_check."""
+    """company_analytics.py on the fixture index built by t_company_check: data sections only (ADR-0009)."""
     def spec(*args: str) -> dict:
-        return _json(r.py("company_analytics.py", *args, "--json", email=MEI)[1])
+        return _json(r.py("company_analytics.py", *args, email=MEI)[1])
 
-    def tiles(sp: dict) -> dict:
-        st = next((c for c in sp.get("cards", []) if c["type"] == "stats"), {})
-        return {t["label"]: t["value"] for t in st.get("tiles", [])}
+    def items(sp: dict, sid: str = "overview") -> dict:
+        sec = (sp.get("sections") or {}).get(sid) or {}
+        return {t["label"]: t["value"] for t in sec.get("items", [])} if sec.get("kind") == "metrics" else {}
+
+    def kinds(sp: dict) -> set:
+        return {x.get("kind") for x in (sp.get("sections") or {}).values()}
 
     sp = spec("segment", "--industry", "logistics")
     r.record("analytics: segment counts live companies in the industry",
-             tiles(sp).get("Live companies") == 1 and {c["type"] for c in sp.get("cards", [])} >= {"stats", "chart", "table"},
-             str(tiles(sp)))
+             items(sp).get("Live companies") == 1 and kinds(sp) >= {"metrics", "series", "rows"}
+             and sp.get("order", [None])[0] == "overview" and set(sp.get("order", [])) == set(sp.get("sections", {})),
+             str(items(sp)))
+    by_year = (sp.get("sections") or {}).get("by_year") or {}
+    r.record("analytics: series carry a dimension, never a chart type",
+             by_year.get("dimension") == "time" and "type" not in by_year and "kind" in by_year
+             and not any(k in json.dumps(sp) for k in ('"donut"', '"hbar"', '"tone"')), str(by_year)[:200])
     sp = spec("segment", "--ssic", "70")
-    r.record("analytics: shared-address share for the 21-company cluster", tiles(sp).get("Shared / virtual address") == 100.0,
-             str(tiles(sp)))
+    r.record("analytics: shared-address share for the 21-company cluster", items(sp).get("Shared / virtual address") == 100.0,
+             str(items(sp)))
     sp = spec("company", "202012345K")
-    first = (sp.get("cards") or [{}])[0]
-    r.record("analytics: company view = company card + peers", first.get("type") == "company"
-             and first.get("uen") == "202012345K" and any(c["type"] == "stats" for c in sp.get("cards", [])), str(first)[:200])
+    first = (sp.get("sections") or {}).get(sp.get("order", [""])[0]) or {}
+    r.record("analytics: company view = company + peers", first.get("kind") == "company"
+             and first.get("uen") == "202012345K" and bool(items(sp, "peers")), str(first)[:200])
     sp = spec("compare", "202012345K", "201811111A")
-    comp = (sp.get("cards") or [{}])[0]
-    r.record("analytics: compare lines up two companies", comp.get("type") == "compare" and len(comp.get("companies", [])) == 2
+    comp = (sp.get("sections") or {}).get("compare") or {}
+    r.record("analytics: compare lines up two companies", comp.get("kind") == "compare" and len(comp.get("companies", [])) == 2
              and comp["companies"][0]["verdict"] != comp["companies"][1]["verdict"], str(comp.get("companies")))
     sp = spec("book", "--file", str(r.root / "company-check" / "fixtures" / "acra" / "d_demo_acra.csv"))
-    r.record("analytics: book over a list", tiles(sp).get("Companies checked") == 29, str(tiles(sp)))
-    page = r.root / "company-check" / "reports" / "insights-test.html"
-    code, out, err = r.py("company_analytics.py", "segment", "--industry", "logistics", "--html", str(page), email=MEI)
-    text = mc.read_text(page) if page.is_file() else ""
-    r.record("analytics: --html writes a self-contained page", code == 0 and "<svg" not in text[:10] and "Open Data Licence" in text
-             and "<script" not in text and 'src="http' not in text and "stylesheet" not in text, (out + err)[-300:])
+    r.record("analytics: book over a list", items(sp).get("Companies checked") == 29, str(items(sp)))
+    out_rel = "company-check/reports/insights-test.json"
+    code, out, err = r.py("company_analytics.py", "segment", "--industry", "logistics", "--out", out_rel, email=MEI)
+    page = r.root / out_rel
+    saved = _json(mc.read_text(page)) if page.is_file() else {}
+    r.record("analytics: --out saves the data file for the console", code == 0 and saved.get("sections")
+             and "Open Data Licence" in saved.get("licence", "") and _json(out).get("data") == out_rel, (out + err)[-300:])
     page.unlink(missing_ok=True)
+    code, _, _ = r.py("company_analytics.py", "segment", "--industry", "logistics", "--html", "x.html", email=MEI)
+    r.record("analytics: --html and --cards are gone (views live in the console)", code == 2, f"exit {code}")
 
 
 def t_classify(r: Runner) -> None:
@@ -1533,6 +1595,13 @@ def t_allocate(r: Runner) -> None:
         and count.get("mei", 0) <= 15 and (d.get("path") or "").startswith("log/allocation/")
     r.record("allocate: constraints, continuity, quota, reasons", bool(ok),
              f"exit {code}, {len(rows)} rows", out + err)
+    md_path = grace.root / d.get("path", "x")
+    data = _json(mc.read_text(md_path.with_suffix(".json"))) if md_path.with_suffix(".json").is_file() else {}
+    page0 = mc.read_page(md_path, grace.root) if md_path.is_file() else None
+    body = page0.body if page0 else ""
+    ok = len(data.get("rows") or []) == len(rows) and data.get("checks") and "reps" in data \
+        and "## Rows" not in body and "| # |" not in body and d.get("data") == mc.rel_posix(md_path.with_suffix(".json"), grace.root)
+    r.record("allocate: proposal data in .json, .md is a short record", bool(ok), str(d.get("data")), body[:400])
     code, out, err = mei.py("allocate.py", "--dry-run", email=MEI)
     r.record("allocate: rep is refused", code == 1 and "manager" in out, f"exit {code}", out + err)
     code, out, err = grace.py("allocate.py", "--approve", "all", "--except", "1", "--json", email=GRACE)
@@ -1579,6 +1648,13 @@ def t_weekly(r: Runner) -> None:
         r.record("weekly: tier A < 2x tier C (n>=20) -> propose", ok, str(c), out + err)
         code, out, _ = r.py("weekly.py", "--week", "bad")
         r.record("weekly: bad --week refused", code == 1)
+        code, out, err = r.py("weekly.py", "--week", "2026-W45", "--save", email=GRACE)
+        saved = r.root / "log" / "weekly" / "2026-W45.json"
+        d = _json(out)
+        ok = code == 0 and d.get("week") == "2026-W45" and d.get("data") == "log/weekly/2026-W45.json" \
+            and saved.is_file() and _json(mc.read_text(saved)).get("calibration", {}).get("verdict") == "propose"
+        r.record("weekly: JSON by default, --save writes log/weekly/<week>.json", ok, f"exit {code}", out[:300] + err)
+        saved.unlink(missing_ok=True)
     finally:
         mc.write_text(touches, orig)
         for p in made:
@@ -1645,7 +1721,7 @@ def main(argv: list[str] | None = None) -> int:
     try:
         setup(src, root)
         sys.path.insert(0, str(root / "scripts"))
-        for test in (t_help, t_frontmatter, t_guard, t_lint, t_lint_secrets, t_find, t_index, t_books, t_session,
+        for test in (t_help, t_no_presentation, t_frontmatter, t_guard, t_lint, t_lint_secrets, t_find, t_index, t_books, t_session,
                      t_sync, t_skills, t_ingest, t_fetch, t_resolve, t_score, t_recommend, t_eval,
                      t_draft_check, t_send, t_company_check, t_company_analytics, t_classify, t_suppress, t_claim, t_claim_race, t_allocate,
                      t_weekly, t_crm_update):

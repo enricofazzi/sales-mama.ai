@@ -54,7 +54,7 @@ description: 'Research one owned account and update its wiki page with cited sig
 ## Finish
 - Summary, 1–3 lines: "Researched Harbourlight Foods: 3 signals (contract_win 28 Oct, hiring_ops_it, new_branch_opened), 2 contacts. Score 0.58 → 0.76, tier A. Next: /mama-recommend harbourlight-foods."
 - Log: `- [YYYY-MM-DD HH:MM] research | <user> | accounts/<id> | 3 signals, 2 contacts, 6 snapshots; score 0.76 (A)`
-- Only when the session contains `MAMA_CARDS=on`: one `account` card (signals with `ref` to their snapshot).
-```mama-card
-{"type":"account","title":"Harbourlight Foods","agent":"researcher","id":"harbourlight-foods","name":"Harbourlight Foods","market":"SG","tier":"A","score":0.76,"score_parts":{"fit":0.8,"intent":0.9,"propensity":0.4,"engagement":0},"stage":"researched","owner":"mei","signals":[{"term":"contract_win","evidence":"Awarded catering contract","date":"2026-10-28","ref":"raw/research/harbourlight-foods/2026-11-03-catering-award.md"}],"refs":["wiki/accounts/harbourlight-foods.md"],"actions":[{"label":"What should I pitch?","prompt":"/mama-recommend harbourlight-foods","style":"primary"}]}
+- Only when the session contains `MAMA_CARDS=on` (`a2ui` surfaces, docs/UI.md §2): one `AccountCard` (signals with `ref` to their snapshot).
+```a2ui
+{"surfaceId": "account", "components": [{"id": "root", "component": "AccountCard", "title": "Harbourlight Foods", "agent": "researcher", "account_id": "harbourlight-foods", "name": "Harbourlight Foods", "market": "SG", "tier": "A", "score": 0.76, "score_parts": {"fit": 0.8, "intent": 0.9, "propensity": 0.4, "engagement": 0}, "stage": "researched", "owner": "mei", "signals": [{"term": "contract_win", "evidence": "Awarded catering contract", "date": "2026-10-28", "ref": "raw/research/harbourlight-foods/2026-11-03-catering-award.md"}], "refs": ["wiki/accounts/harbourlight-foods.md"], "actions": [{"label": "What should I pitch?", "prompt": "/mama-recommend harbourlight-foods", "style": "primary"}]}]}
 ```

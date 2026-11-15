@@ -37,7 +37,7 @@ description: 'Recommend best-fit products for an owned account from its signals 
 ## Finish
 - Summary, 1–3 lines: "Harbourlight Foods → Branch Connect (SGD 6,000/yr), via contract_win 28 Oct → scale_up. Proof: Kopi Co case. Next: /mama-draft harbourlight-foods first."
 - Log: `- [YYYY-MM-DD HH:MM] recommend | <user> | accounts/<id> | branch-connect (contract_win → scale_up)`
-- Only when the session contains `MAMA_CARDS=on`: one `account` card with `recommendation` filled.
-```mama-card
-{"type":"account","title":"Harbourlight Foods","agent":"mama","id":"harbourlight-foods","name":"Harbourlight Foods","market":"SG","tier":"A","score":0.76,"stage":"researched","owner":"mei","recommendation":{"chain":["contract_win (2026-10-28)","Awarded catering contract","scale_up","branch-connect"],"product":"branch-connect","proof":"kopi-co-case","talk_track":"New contract means more sites to bring online fast."},"refs":["wiki/accounts/harbourlight-foods.md","knowledge/products/branch-connect.yaml"],"actions":[{"label":"Draft first email","prompt":"/mama-draft harbourlight-foods first","style":"primary"}]}
+- Only when the session contains `MAMA_CARDS=on` (`a2ui` surfaces, docs/UI.md §2): one `AccountCard` with `recommendation` filled.
+```a2ui
+{"surfaceId": "account", "components": [{"id": "root", "component": "AccountCard", "title": "Harbourlight Foods", "agent": "mama", "account_id": "harbourlight-foods", "name": "Harbourlight Foods", "market": "SG", "tier": "A", "score": 0.76, "stage": "researched", "owner": "mei", "recommendation": {"chain": ["contract_win (2026-10-28)", "Awarded catering contract", "scale_up", "branch-connect"], "product": "branch-connect", "proof": "kopi-co-case", "talk_track": "New contract means more sites to bring online fast."}, "refs": ["wiki/accounts/harbourlight-foods.md", "knowledge/products/branch-connect.yaml"], "actions": [{"label": "Draft first email", "prompt": "/mama-draft harbourlight-foods first", "style": "primary"}]}]}
 ```

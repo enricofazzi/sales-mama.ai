@@ -41,7 +41,7 @@ description: 'Run a rep''s whole morning: replies, VAM pre-drafts, follow-ups du
 ## Finish
 - Summary, 1–3 lines: "8 drafts in your mailbox (SG send window Tue 09:00–11:30). 1 meeting request: Harbourlight Foods. Hot 2 · at risk 3 · needs you: 2 objections to check."
 - Log (one line for the run; the chained skills log their own work): `- [YYYY-MM-DD HH:MM] draft | <rep> | day | 8 drafts, 1 meeting request, quota 8/15`
-- Only when the session contains `MAMA_CARDS=on`: a `plan` card, an `agents` card for the researcher lanes, then a `day_summary` card. Each draft is already a `draft` card from mama-draft.
-```mama-card
-{"type":"day_summary","title":"Your day, Tue 3 Nov","agent":"mama","drafts":8,"send_window":"SG 09:00-11:30","hot":[{"account":"harbourlight-foods","delta":0.22,"signal":"contract_win"}],"at_risk":3,"needs_you":[{"account":"kopi-co","text":"Meeting request: pick a slot"}],"refs":["wiki/books/mei.md"],"actions":[{"label":"Show my book","prompt":"/mama-book","style":"secondary"}]}
+- Only when the session contains `MAMA_CARDS=on` (`a2ui` surfaces, docs/UI.md §2): a `PlanCard`, an `AgentsCard` for the researcher lanes, then a `DaySummaryCard`. Each draft is already a `DraftCard` from mama-draft.
+```a2ui
+{"surfaceId": "day_summary", "components": [{"id": "root", "component": "DaySummaryCard", "title": "Your day, Tue 3 Nov", "agent": "mama", "drafts": 8, "send_window": "SG 09:00-11:30", "hot": [{"account": "harbourlight-foods", "delta": 0.22, "signal": "contract_win"}], "at_risk": 3, "needs_you": [{"account": "kopi-co", "text": "Meeting request: pick a slot"}], "refs": ["wiki/books/mei.md"], "actions": [{"label": "Show my book", "prompt": "/mama-book", "style": "secondary"}]}]}
 ```

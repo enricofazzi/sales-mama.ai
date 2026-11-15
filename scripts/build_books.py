@@ -1,4 +1,4 @@
-"""Rebuild the books: wiki/books/<rep>.md for every rep and wiki/books/team.md.
+"""Rebuild the books: wiki/books/<rep>.md + .json for every rep and wiki/books/team.md + .json.
 
 Books are generated views (gitignored) per PLAN.md §11. Each rep book shows:
 - active accounts vs max_active, tier mix
@@ -12,6 +12,9 @@ Books are generated views (gitignored) per PLAN.md §11. Each rep book shows:
 The team book has a per-rep table plus the pool (unowned accounts) by tier,
 the review-queue size and the funnel.
 
+The .md files are the agents' working view (mama-book, Codex). The .json files
+carry the same numbers as data for the console's A2UI surfaces (ADR-0009).
+
 Missing fields are tolerated everywhere. Env MAMA_TODAY=YYYY-MM-DD fixes
 "today" for tests.
 
@@ -22,6 +25,7 @@ from __future__ import annotations
 
 import argparse
 import datetime as dt
+import json
 import sys
 from collections import Counter
 from pathlib import Path
@@ -197,6 +201,65 @@ def render_team(reps: list[dict], stats: dict[str, dict], accounts: list, root: 
     return "\n".join(out)
 
 
+def _acc(p, on: dt.date, **extra) -> dict:
+    m = p.meta
+    return {"account": p.id, "name": norm(m.get("name")), "market": norm(m.get("market")),
+            "tier": norm(m.get("tier")), "stage": norm(m.get("stage")), "score": m.get("score"), **extra}
+
+
+def rep_data(rep: dict, s: dict, on: dt.date) -> dict:
+    """The rep book as data (same numbers as render_rep)."""
+    def due_row(p):
+        d = to_date(p.meta.get("next_action_due"))
+        return _acc(p, on, due=norm(p.meta.get("next_action_due")), overdue=bool(d and d < on),
+                    next_action=norm(p.meta.get("next_action")), nba=norm(p.meta.get("nba")),
+                    nba_reason=norm(p.meta.get("nba_reason")))
+    return {
+        "type": "book", "rep": norm(rep.get("id")), "name": norm(rep.get("name")),
+        "role": norm(rep.get("role")) or "rep", "markets": [str(m) for m in (rep.get("markets") or [])],
+        "date": on.isoformat(), "generated": now_stamp(),
+        "active": s["active"], "capacity": s["capacity"], "quota": s["quota"],
+        "tiers": {t: s["tiers"].get(t, 0) for t in TIERS} | ({"untiered": s["tiers"]["-"]} if s["tiers"].get("-") else {}),
+        "meetings": s["meetings"], "target": s["target"],
+        "sent_7": s["sent_7"], "replies_7": s["replies_7"], "meetings_7": s["meetings_7"], "touches_7": s["touches_7"],
+        "handed_over_month": len(s["handed"]),
+        "due": [due_row(p) for p in s["due"]],
+        "hot": [_acc(p, on, score_updated=norm(p.meta.get("score_updated"))) for p in s["hot"]],
+        "at_risk": [_acc(p, on, flags=risk_flags(p.meta)) for p in s["at_risk"]],
+        "vam_predrafts": [_acc(p, on, nba=norm(p.meta.get("nba"))) for p in s["vam"]],
+        "stages": {k: s["stages"][k] for k in sorted(s["stages"], key=lambda k: (stage_rank(k), k))},
+    }
+
+
+def team_data(reps: list[dict], stats: dict[str, dict], accounts: list, root: Path, on: dt.date) -> dict:
+    """The team book as data (same numbers as render_team)."""
+    pool = [p for p in accounts if not norm(p.meta.get("owner")) and is_active(p.meta)]
+    pool_t = Counter(norm(p.meta.get("tier")).upper() or "-" for p in pool)
+    review = [r for r in read_csv(root / "log" / "review.csv") if not norm(r.get("decision"))]
+    funnel = Counter(norm(p.meta.get("stage")) or "(none)" for p in accounts)
+    rows = []
+    for rep in reps:
+        s = stats[rep["id"]]
+        rows.append({"rep": rep["id"], "name": norm(rep.get("name")), "role": norm(rep.get("role")) or "rep",
+                     "markets": [str(m) for m in (rep.get("markets") or [])], "active": s["active"],
+                     "capacity": s["capacity"], "tiers": {t: s["tiers"].get(t, 0) for t in TIERS},
+                     "sent_7": s["sent_7"], "replies_7": s["replies_7"], "meetings": s["meetings"],
+                     "target": s["target"], "due": len(s["due"]), "at_risk": len(s["at_risk"]),
+                     "quota": s["quota"]})
+    return {
+        "type": "team_book", "date": on.isoformat(), "generated": now_stamp(), "reps": rows,
+        "pool": {"count": len(pool), "tiers": {t: pool_t.get(t, 0) for t in TIERS}
+                 | ({"untiered": pool_t["-"]} if pool_t.get("-") else {}),
+                 "top": [_acc(p, on) for p in sorted(pool, key=lambda p: (tier_rank(p.meta), p.id))[:20]]},
+        "review_open": len(review),
+        "funnel": {k: funnel[k] for k in sorted(funnel, key=lambda k: (stage_rank(k), k))},
+    }
+
+
+def _write_json(path: Path, data: dict) -> None:
+    write_text(path, json.dumps(data, indent=2, ensure_ascii=False, default=str) + "\n")
+
+
 def build(root: Path | None = None, only: str | None = None) -> list[Path]:
     """Write the books; return the paths written."""
     root = root or repo_root()
@@ -215,13 +278,15 @@ def build(root: Path | None = None, only: str | None = None) -> list[Path]:
             continue
         path = books / f"{rep['id']}.md"
         write_text(path, render_rep(rep, stats[rep["id"]], on))
-        written.append(path)
+        _write_json(path.with_suffix(".json"), rep_data(rep, stats[rep["id"]], on))
+        written += [path, path.with_suffix(".json")]
     team = books / "team.md"
     write_text(team, render_team(reps, stats, accounts, root, on))
-    written.append(team)
+    _write_json(team.with_suffix(".json"), team_data(reps, stats, accounts, root, on))
+    written += [team, team.with_suffix(".json")]
     if not only:  # remove books of reps that no longer exist
-        keep = {f"{r['id']}.md" for r in reps} | {"team.md"}
-        for p in books.glob("*.md"):
+        keep = {f"{r['id']}{ext}" for r in reps for ext in (".md", ".json")} | {"team.md", "team.json"}
+        for p in [*books.glob("*.md"), *books.glob("*.json")]:
             if p.name not in keep:
                 try:
                     p.unlink()
@@ -231,7 +296,7 @@ def build(root: Path | None = None, only: str | None = None) -> list[Path]:
 
 
 def main(argv: list[str] | None = None) -> int:
-    ap = argparse.ArgumentParser(description="Rebuild wiki/books/<rep>.md and wiki/books/team.md.")
+    ap = argparse.ArgumentParser(description="Rebuild wiki/books/<rep>.md/.json and wiki/books/team.md/.json.")
     ap.add_argument("--rep", help="rebuild only this rep's book (the team book is always rebuilt)")
     args = ap.parse_args(argv)
     setup_stdout()

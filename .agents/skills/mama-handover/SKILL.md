@@ -43,7 +43,7 @@ description: Log a meeting outcome and produce handover notes and a CRM update r
 ## Finish
 - Summary, 1–3 lines: "Meeting logged for Harbourlight Foods: handed over (2-site pilot, decision by 30 Nov). CRM row added to log/crm-updates/2026-11-05.csv."
 - Log: `- [YYYY-MM-DD HH:MM] handover | <rep> | accounts/<id> | meeting_held; stage handed_over; crm row written`
-- Only when the session contains `MAMA_CARDS=on`: one `account` card showing the new stage and `next`.
-```mama-card
-{"type":"account","title":"Harbourlight Foods","agent":"mama","id":"harbourlight-foods","name":"Harbourlight Foods","market":"SG","stage":"handed_over","owner":"mei","next":{"action":"Pilot scoping call with ops head","due":"2026-11-12"},"refs":["wiki/accounts/harbourlight-foods.md","raw/notes/2026-11-05-harbourlight-foods-call.md","log/crm-updates/2026-11-05.csv"]}
+- Only when the session contains `MAMA_CARDS=on` (`a2ui` surfaces, docs/UI.md §2): one `AccountCard` showing the new stage and `next`.
+```a2ui
+{"surfaceId": "account", "components": [{"id": "root", "component": "AccountCard", "title": "Harbourlight Foods", "agent": "mama", "account_id": "harbourlight-foods", "name": "Harbourlight Foods", "market": "SG", "stage": "handed_over", "owner": "mei", "next": {"action": "Pilot scoping call with ops head", "due": "2026-11-12"}, "refs": ["wiki/accounts/harbourlight-foods.md", "raw/notes/2026-11-05-harbourlight-foods-call.md", "log/crm-updates/2026-11-05.csv"]}]}
 ```

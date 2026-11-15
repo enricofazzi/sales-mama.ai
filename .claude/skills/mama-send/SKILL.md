@@ -34,7 +34,7 @@ description: 'Send the rep''s ready drafts (email and WhatsApp) after the rep ap
 ## Finish
 - Summary, 1–2 lines: "Sent 3: Harbourlight Foods (email), Kestrel Physio (email), Lotus Learning Hub (WhatsApp). 1 refused: Nimbus Clinics, outside the send window."
 - Log: `send.py` writes one `send` line per message; nothing more.
-- Only when the session contains `MAMA_CARDS=on`: a `plan` card with one step per item (status done for sent, failed for refused or error), refs to `log/approvals.csv` and the outbox file.
-```mama-card
-{"type":"plan","title":"Sent 3 of 4","agent":"writer","steps":[{"label":"Harbourlight Foods · email","status":"done","agent":"writer"},{"label":"Nimbus Clinics · email · outside the send window","status":"failed","agent":"writer"}],"refs":["log/approvals.csv"]}
+- Only when the session contains `MAMA_CARDS=on` (`a2ui` surfaces, docs/UI.md §2): a `PlanCard` with one step per item (status done for sent, failed for refused or error), refs to `log/approvals.csv` and the outbox file.
+```a2ui
+{"surfaceId": "plan", "components": [{"id": "root", "component": "PlanCard", "title": "Sent 3 of 4", "agent": "writer", "steps": [{"label": "Harbourlight Foods · email", "status": "done", "agent": "writer"}, {"label": "Nimbus Clinics · email · outside the send window", "status": "failed", "agent": "writer"}], "refs": ["log/approvals.csv"]}]}
 ```

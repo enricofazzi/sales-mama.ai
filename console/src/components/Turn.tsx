@@ -1,9 +1,10 @@
 import { Fragment } from 'react';
 import { describeTool, type Item, type Lane, type ToolItem } from '../../shared/stream';
-import { splitCards } from '../../shared/cards';
+import { splitParts } from '../../shared/a2ui';
 import type { ChatTurn } from '../useBridge';
 import { BadCard, CardView, PlanList, laneAgentClass, type CardCtx } from './Cards';
 import { Markdown } from './Markdown';
+import { SurfaceView } from '../a2ui/Surface';
 
 export function TurnView({ t, ctx }: { t: ChatTurn; ctx: CardCtx }) {
   const { turn } = t;
@@ -28,11 +29,11 @@ export function TurnView({ t, ctx }: { t: ChatTurn; ctx: CardCtx }) {
             <Fragment key={gi}>
               {g.kind === 'tools'
                 ? <Chips tools={g.tools} />
-                : splitCards(g.item.text).map((p, i) =>
+                : splitParts(g.item.text).map((p, i) =>
                     p.kind === 'md' ? <Markdown key={i} text={p.text} onSource={ctx.onSource} streaming={t.running && g.item === lastText && !g.item.done} />
-                    : p.kind === 'card' ? <CardView key={i} card={p.card} issues={p.issues} ctx={ctx} />
+                    : p.kind === 'surface' ? <SurfaceView key={`${i}-${p.block.surfaceId}`} block={p.block} issues={p.issues} ctx={ctx} />
                     : p.kind === 'bad' ? <BadCard key={i} raw={p.raw} issues={p.issues} />
-                    : <div key={i} className="pending-card">Building a card…</div>)}
+                    : <div key={i} className="pending-card">Building a view…</div>)}
             </Fragment>
           ))}
           {turn.denied.length > 0 && !t.running && <NeedsApproval denied={turn.denied} />}

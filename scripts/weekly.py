@@ -1,5 +1,6 @@
 """Numbers for mama-weekly: metrics, funnel, score calibration, allocation
-fairness, lapsed claims and retention. Read-only; the skill adds the judgement.
+fairness, lapsed claims and retention, as JSON. Read-only unless --save; the
+skill adds the judgement and the console draws it (A2UI, ADR-0009).
 
 - Week = ISO week (default: the one containing today); trailing = the 4 weeks
   before it; calibration = the 8 weeks ending with it.
@@ -12,12 +13,12 @@ fairness, lapsed claims and retention. Read-only; the skill adds the judgement.
 - Calibration: meeting rate by current tier over contacted accounts. Verdict
   `insufficient` (any of A or C under 20), `propose` (A < 2x C) or `ok`.
 - Allocation: each log/allocation/*.md proposal's status, EV spread vs limit
-  and any VIOLATED constraint; rep x industry conversion smoothed with
+  and any violated constraint (from its .json); rep x industry conversion smoothed with
   allocation.yaml prior_meeting_rate (allocate.Rates); lapsed claims (owned,
   no touch for 21 days).
 
-    python3 scripts/weekly.py                 # this week, markdown
-    python3 scripts/weekly.py --week 2026-W45 --json
+    python3 scripts/weekly.py                         # this week, JSON
+    python3 scripts/weekly.py --week 2026-W45 --save  # also write log/weekly/2026-W45.json
 """
 from __future__ import annotations
 
@@ -161,8 +162,16 @@ def allocation(root: Path, book: Book, touches: list[dict], on: dt.date) -> dict
             continue
         m = page.meta
         spread, limit = float(m.get("spread") or 0), float(m.get("limit") or 0)
-        violated = [ln.split("|")[1].strip() for ln in page.body.splitlines()
-                    if ln.startswith("|") and "VIOLATED" in ln]
+        data_file = p.with_suffix(".json")
+        if data_file.is_file():
+            try:
+                data = json.loads(mc.read_text(data_file))
+            except ValueError:
+                data = {}
+            violated = [c.get("check", "") for c in data.get("checks") or [] if not c.get("ok")]
+        else:  # proposals written before ADR-0009 kept the checks as a markdown table
+            violated = [ln.split("|")[1].strip() for ln in page.body.splitlines()
+                        if ln.startswith("|") and "VIOLATED" in ln]
         proposals.append({"file": page.rel, "date": mc.norm(m.get("date")), "status": mc.norm(m.get("status")),
                           "leads": m.get("leads"), "spread": spread, "limit": limit,
                           "spread_ok": spread <= limit, "violations": violated})
@@ -221,57 +230,12 @@ def build(root: Path, week: str | None = None) -> dict:
     }
 
 
-def _fmt(v) -> str:
-    return f"{v:.0%}" if isinstance(v, float) else str(v)
-
-
-def render(R: dict) -> str:
-    L = [f"# Weekly numbers · {R['week']} ({R['from']} to {R['to']})", ""]
-    for key, name in (("week", "This week"), ("trailing_4w", "Trailing 4 weeks")):
-        M = R["metrics"][key]
-        t = M["total"]
-        L += [f"## Metrics · {name} ({M['from']} to {M['to']})", "",
-              f"Sent {t['sent']}, replies {t['replies']} ({_fmt(t['reply_rate'])}), positive {t['positive']}, "
-              f"meetings {t['meetings']} ({_fmt(t['meeting_rate'])}).", ""]
-        for dim, cells in M["cuts"].items():
-            if not cells:
-                continue
-            L += [f"| {dim} | sent | replies | reply rate | meetings | meeting rate |", "|---|---|---|---|---|---|"]
-            L += [f"| {k} | {c['sent']} | {c['replies']} | {_fmt(c['reply_rate'])} | {c['meetings']} | "
-                  f"{_fmt(c['meeting_rate'])} |" for k, c in cells.items()]
-            L.append("")
-    F = R["funnel"]
-    L += ["## Funnel", "", f"| stage | now | week ago ({F['week_ago_rev'] or 'no history'}) |", "|---|---|---|"]
-    L += [f"| {s} | {v['now']} | {'-' if v['week_ago'] is None else v['week_ago']} |" for s, v in F["stages"].items()]
-    C = R["calibration"]
-    L += ["", f"## Calibration ({C['from']} to {C['to']})", "", "| tier | contacted | meetings | meeting rate |",
-          "|---|---|---|---|"]
-    L += [f"| {t} | {v['contacted']} | {v['meetings']} | {_fmt(v['meeting_rate'])} |" for t, v in C["tiers"].items()]
-    L += ["", f"Lift A/C: {C['lift_a_over_c'] if C['lift_a_over_c'] is not None else '-'} · verdict: **{C['verdict']}**", ""]
-    A = R["allocation"]
-    L += ["## Allocation", "", "| proposal | status | leads | EV spread | limit | violations |", "|---|---|---|---|---|---|"]
-    L += [f"| {p['file']} | {p['status']} | {p['leads']} | {p['spread']:.0%}{'' if p['spread_ok'] else ' OVER'} | "
-          f"{p['limit']:.0%} | {', '.join(p['violations']) or 0} |" for p in A["proposals"]]
-    L += ["", f"Team meeting rate (smoothed): {A['team_rate']:.1%}.", ""]
-    if A["conversion"]:
-        L += ["| rep | industry | contacted | meetings | smoothed rate |", "|---|---|---|---|---|"]
-        L += [f"| {c['rep']} | {c['industry']} | {c['contacted']} | {c['meetings']} | {c['smoothed_rate']:.1%} |"
-              for c in A["conversion"]]
-        L.append("")
-    L.append("Lapsed claims: " + (", ".join(f"{x['account']} ({x['owner']}, {x['idle_days']}d)" for x in A["lapsed"])
-                                  or "none"))
-    L += ["", "## Retention", ""]
-    for folder, v in R["retention"].items():
-        L.append(f"- {folder} ({v['days']} days): {len(v['expired'])} expired"
-                 + (f", e.g. {v['expired'][0]}" if v["expired"] else ""))
-    return "\n".join(L) + "\n"
-
-
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description="Weekly metrics, funnel, calibration, allocation fairness and "
                                              "retention for mama-weekly. Writes nothing.")
     ap.add_argument("--week", help="ISO week, e.g. 2026-W45 (default: this week)")
-    ap.add_argument("--json", action="store_true", help="print JSON")
+    ap.add_argument("--json", action="store_true", help="print JSON (the default; kept for old callers)")
+    ap.add_argument("--save", action="store_true", help="also write log/weekly/<week>.json for the console")
     args = ap.parse_args(argv)
     mc.setup_stdout()
     if mc.yaml is None:
@@ -282,7 +246,11 @@ def main(argv: list[str] | None = None) -> int:
     except ValueError as exc:
         print(exc)
         return 1
-    print(json.dumps(R, indent=2) if args.json else render(R), end="" if not args.json else "\n")
+    if args.save:
+        out = mc.repo_root() / "log" / "weekly" / f"{R['week']}.json"
+        mc.write_text(out, json.dumps(R, indent=2, ensure_ascii=False) + "\n")
+        R["data"] = f"log/weekly/{R['week']}.json"
+    print(json.dumps(R, indent=2, ensure_ascii=False))
     return 0
 
 

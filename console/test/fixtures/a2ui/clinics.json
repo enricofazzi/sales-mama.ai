@@ -1,0 +1,24 @@
+{
+  "surfaceId": "insights_clinics",
+  "title": "Clinics in Singapore",
+  "subtitle": "ACRA, BCA, GeBIZ and HDB open data",
+  "agent": "researcher",
+  "dataRef": "company-check/reports/insights-clinics-2026-11-15.json",
+  "components": [
+    { "id": "root", "component": "Column", "children": ["lead", "tiles", "grid", "leads"] },
+    { "id": "lead", "component": "Callout", "tone": "good", "text": "A mature, well-filed segment: most clinics file on time and few use virtual addresses, so registry checks will rarely block outreach." },
+    { "id": "tiles", "component": "StatGrid", "items": { "path": "/sections/overview/items" } },
+    { "id": "grid", "component": "Grid", "children": ["p_year", "p_age", "p_type", "p_where"] },
+    { "id": "p_year", "component": "Panel", "title": "New clinics per year", "subtitle": "still live today", "children": ["year"] },
+    { "id": "year", "component": "LineChart", "data": { "path": "/sections/by_year/items" }, "area": true },
+    { "id": "p_age", "component": "Panel", "title": "How old are they?", "children": ["age"] },
+    { "id": "age", "component": "BarChart", "data": { "path": "/sections/age/items" } },
+    { "id": "p_type", "component": "Panel", "title": "Entity types", "children": ["type"] },
+    { "id": "type", "component": "DonutChart", "data": { "path": "/sections/entity_types/items" }, "center": "clinics" },
+    { "id": "p_where", "component": "Panel", "title": "Where they are", "children": ["where"] },
+    { "id": "where", "component": "BarChart", "data": { "path": "/sections/districts/items" }, "orientation": "horizontal" },
+    { "id": "leads", "component": "Panel", "title": "Best new leads", "span": "full", "children": ["lt"] },
+    { "id": "lt", "component": "DataTable", "rows": { "path": "/sections/leads/rows" }, "columns": [
+      { "key": "name", "label": "Company" }, { "key": "reg_id", "label": "UEN" }, { "key": "why", "label": "Why" }, { "key": "rank", "label": "Rank", "numeric": true } ] }
+  ]
+}

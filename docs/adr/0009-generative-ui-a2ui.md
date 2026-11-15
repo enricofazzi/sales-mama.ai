@@ -1,0 +1,16 @@
+# ADR-0009: Scripts emit data; reports are generative A2UI surfaces
+
+- **Status:** accepted (2026-11-15). Extends ADR-0003 (deterministic maths) and ADR-0006 (the console only renders).
+- **Context:** Analysis and report views lived in three places. Scripts wrote markdown tables and a full HTML/SVG page (`weekly.render`, `allocate.render`, `company_analytics.to_html`). Skills retyped numbers into `mama-card` JSON. The console redrew the same charts in hand-made SVG and regex-parsed the book markdown back into numbers. Charts were drawn twice, and nothing stopped a typed-in number from drifting from the script's.
+- **Decision:**
+  1. **Scripts are tools.** They act (write state, check, send) and compute. Their output is JSON: they print it, and save it with `--save` or `--out` when a view needs a file. Examples: `log/weekly/<week>.json`, `log/allocation/<date>.json`, `wiki/books/<rep>.json`, `company-check/reports/*.json`. They never write HTML, SVG or UI blocks; selftest enforces this. Persisted markdown is kept only as a short audit record (the allocation proposal, the company check), or as the agents' working view (`wiki/books/*.md`, `wiki/index.md`). Terminal tool output, such as the `send.py` preview and the lint and eval tables, stays as text.
+  2. **Views are generative UI on Google's A2UI protocol.** With `MAMA_CARDS=on`, a skill ends with a ```` ```a2ui ```` block. The agent picks the layout, the charts and a one-sentence judgement from the Sales Mama catalog (`console/a2ui/catalog.json`: KPI tiles, line, bar, donut, funnel, heatmap, gauge, score breakdown, tables, checks), plus A2UI's basic catalog (rows, columns, tabs, pickers).
+  3. **Numbers are bound, never typed.** A surface names a `dataRef`, the script's JSON file. The console loads that file read-only from the allow-listed data folders and binds every data prop to it with `{"path": …}`. Validation and `eval.py` flag a typed-in number, an unknown component or a send action.
+  4. **Protocol v0.9, via `@a2ui/react`.** a2ui.org documents v1.0, but the published React renderer (0.14.0) implements v0.9. The version lives in one place (`console/shared/a2ui-api.ts`) and moves to v1.0 when the renderer does.
+  5. **Sharing never writes to the repo.** "Share as page" builds a self-contained HTML file in the browser: the viewer bundle, the surface and its data inlined, with no network calls. The user downloads it. Publishing it anywhere is the user's choice.
+- **Consequences:**
+  - One chart implementation, in the console.
+  - A report's numbers can always be traced to a file; the "data ·" chip opens it.
+  - Plain Claude Code and Codex lose nothing: without `MAMA_CARDS=on`, skills answer in markdown written from the same JSON.
+  - Operational cards are A2UI components too (`PlanCard`, `AgentsCard`, `DaySummaryCard`, `DraftCard`, `ReplyCard`, `AccountCard`, `BriefCard`, `ReviewQueueCard`, `RunStatusCard`, `ErrorCard`). They reuse the console's card renderer, so the design is unchanged, and their literal props are checked against `cards.schema.json`. Skills no longer emit `mama-card`. Old recordings and saved results still render, through a shim.
+  - New npm dependencies, pinned exactly: `@a2ui/react` and `@a2ui/web_core` 0.14.0, `zod` 3.25.76, `recharts` 3.10.1, `happy-dom` 21.0.4 (tests only).

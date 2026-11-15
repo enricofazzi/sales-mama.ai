@@ -122,9 +122,11 @@ If a skill needs a script that does not exist yet, say which build phase adds it
 
 ## Console mode (cards)
 When the session says `MAMA_CARDS=on` (the Sales Mama console adds this to the system
-prompt), end each skill's reply with one or more ```mama-card fenced JSON blocks as defined
-in `docs/UI.md`, after a one-line plain-text summary. Otherwise reply in plain markdown and
-never print card JSON.
+prompt), end each skill's reply, after a one-line plain-text summary, with ```a2ui surfaces
+as defined in `docs/UI.md` §2: report views bound to a script's JSON via `dataRef` (never
+type numbers) and card components (`DraftCard`, `PlanCard`, …) for operational results.
+Otherwise reply in plain markdown and never print surface JSON. Scripts are tools: they write data, never
+views (ADR-0009).
 
 ## Style
 Plain English, short. End each task with what changed and what needs a human

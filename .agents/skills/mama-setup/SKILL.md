@@ -55,7 +55,7 @@ Report each as ok or fix: prerequisites · `reps/<id>.md` matches `templates/rep
 ## Finish
 - Summary: "Set up Mei (SG). Gmail connected (mei@…), WhatsApp not needed. Sending is off until the manager turns it on. Next: /mama-day." Runner: "Runner scheduled 02:00 local; next run Tue 3 Nov 02:00."
 - Log: `- [YYYY-MM-DD HH:MM] setup | <user> | reps/<id> | profile created; gmail connected` (runner: target `runner`, summary `dry run ok; scheduled 02:00`).
-- Only when the session contains `MAMA_CARDS=on`: a `plan` card of the steps, plus an `error` card for any blocker.
-```mama-card
-{"type":"plan","title":"Setting up Mei","agent":"mama","steps":[{"label":"Prerequisites","status":"done","agent":"mama"},{"label":"Profile","status":"done","agent":"mama"},{"label":"Connect Gmail","status":"running","agent":"mama"}],"refs":["reps/mei.md"]}
+- Only when the session contains `MAMA_CARDS=on` (`a2ui` surfaces, docs/UI.md §2): a `PlanCard` of the steps, plus an `ErrorCard` for any blocker.
+```a2ui
+{"surfaceId": "plan", "components": [{"id": "root", "component": "PlanCard", "title": "Setting up Mei", "agent": "mama", "steps": [{"label": "Prerequisites", "status": "done", "agent": "mama"}, {"label": "Profile", "status": "done", "agent": "mama"}, {"label": "Connect Gmail", "status": "running", "agent": "mama"}], "refs": ["reps/mei.md"]}]}
 ```

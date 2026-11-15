@@ -44,7 +44,7 @@ description: 'Prepare a one-page brief for a call with an owned account, or a me
 ## Finish
 - Summary, 1–3 lines: "Call brief for Harbourlight Foods saved (Thu 10:00 with Jane Tan). Goal: agree a 2-site pilot." or "SME Expo 2026 meet-list: 7 of your accounts (A 2, B 3, C 2), saved to the event plan."
 - Log: `- [YYYY-MM-DD HH:MM] brief | <user> | accounts/<id> | call brief for 2026-11-05` (event: target `events/<id>`, summary `meet-list, 7 accounts`).
-- Only when the session contains `MAMA_CARDS=on`: one `brief` card (account briefs may add an `account` card).
-```mama-card
-{"type":"brief","title":"Call brief · Harbourlight Foods","agent":"mama","subject":"Thu 5 Nov 10:00 with Jane Tan","sections":[{"heading":"Why now","bullets":["contract_win: catering contract, 28 Oct"]},{"heading":"Questions","bullets":["How many new sites go live by March?"]}],"refs":["wiki/accounts/harbourlight-foods.md"]}
+- Only when the session contains `MAMA_CARDS=on` (`a2ui` surfaces, docs/UI.md §2): one `BriefCard` (account briefs may add an `AccountCard`).
+```a2ui
+{"surfaceId": "brief", "components": [{"id": "root", "component": "BriefCard", "title": "Call brief · Harbourlight Foods", "agent": "mama", "subject": "Thu 5 Nov 10:00 with Jane Tan", "sections": [{"heading": "Why now", "bullets": ["contract_win: catering contract, 28 Oct"]}, {"heading": "Questions", "bullets": ["How many new sites go live by March?"]}], "refs": ["wiki/accounts/harbourlight-foods.md"]}]}
 ```

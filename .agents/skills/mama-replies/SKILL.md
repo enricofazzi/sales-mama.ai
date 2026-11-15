@@ -47,7 +47,7 @@ description: 'Triage inbound replies for the current rep''s accounts: log, class
 ## Finish
 - Summary, 1–3 lines: "5 replies: 1 meeting request (Kopi Co, Thu 10:00), 2 objections (1 answer drafted), 1 unsubscribe suppressed, 1 out of office. 3 drafts marked sent."
 - Log: `- [YYYY-MM-DD HH:MM] reply | <rep> | replies | 5 replies: 1 meeting_request, 2 objection, 1 unsubscribe, 1 out_of_office`
-- Only when the session contains `MAMA_CARDS=on`: one `reply` card per reply (plus `draft` cards for answers).
-```mama-card
-{"type":"reply","title":"Meeting request · Kopi Co","agent":"mama","account":"kopi-co","from":"ravi@kopico.example","class":"meeting_request","summary":"Asks for a call Thursday 10:00 about branch connectivity.","refs":["raw/replies/2026-11-03-kopi-co-meeting.md","wiki/accounts/kopi-co.md"],"actions":[{"label":"Accept Thursday","prompt":"Draft an acceptance to Kopi Co for Thursday 10:00","style":"primary"}]}
+- Only when the session contains `MAMA_CARDS=on` (`a2ui` surfaces, docs/UI.md §2): one `ReplyCard` per reply (plus `DraftCard`s for answers).
+```a2ui
+{"surfaceId": "reply", "components": [{"id": "root", "component": "ReplyCard", "title": "Meeting request · Kopi Co", "agent": "mama", "account": "kopi-co", "from": "ravi@kopico.example", "class": "meeting_request", "summary": "Asks for a call Thursday 10:00 about branch connectivity.", "refs": ["raw/replies/2026-11-03-kopi-co-meeting.md", "wiki/accounts/kopi-co.md"], "actions": [{"label": "Accept Thursday", "prompt": "Draft an acceptance to Kopi Co for Thursday 10:00", "style": "primary"}]}]}
 ```

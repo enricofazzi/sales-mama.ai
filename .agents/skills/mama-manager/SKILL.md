@@ -20,9 +20,9 @@ description: 'The manager''s morning cockpit: last night''s status, hot accounts
    1. **Runner status**: the brief's `run_status` (ok or failed, started/finished, items, linked, review, new leads, errors). If the last two briefs both failed (or are missing), show the tail of the newest `runner/logs/` file and a fix from SETUP.md Part E.
    2. **Hot accounts**: score jumps and new tier A, with owner, the signal and its source.
    3. **At risk by rep**: counts and the top flags (`no_touch_14d`, `unanswered_reply`, `claim_lapsing`, ...).
-   4. **Allocation proposal**: today's `log/allocation/<date>.md` per market: rep, A/B counts, EV in the base currency, reason; EV spread vs limit; the `## Constraints holding` table; `## Rebalancing` items.
+   4. **Allocation proposal**: today's `log/allocation/<date>.json` (written next to the `.md` record) per market: `per_rep` (rep, A/B counts, EV in the base currency), each row's `reason`; `spread` vs `limit`; `checks`; `rebalance` items. A proposal from before 2026-11-15 has no `.json`: read its `.md` sections instead.
    5. **Review queue**: numbered undecided rows from `log/review.csv`: company text, source, best candidate, confidence.
-   6. **Team book**: from `wiki/books/team.md`: per rep active/capacity, A/B/C, sent and replies (7 days), meetings vs target, at risk; pool by tier; rising pool accounts from the house VAM.
+   6. **Team book**: from `wiki/books/team.json` (same numbers as `team.md`): per rep active/capacity, A/B/C, sent and replies (7 days), meetings vs target, at risk; pool by tier; rising pool accounts from the house VAM.
 3. Take decisions conversationally, and confirm each before acting:
    - Allocation ("approve all", "approve except 3 and 7", "give the logistics ones to Arun") → hand off to **mama-allocate**.
    - Review ("1 is Acme Trading, 2 is new, 3 reject") → `python3 scripts/resolve.py --decide <row> <account-id|new|reject>` per item. For a link, add the cited `## Signals` bullet to that account and run `python3 scripts/score.py --id <id>`; for `new`, create the `stage: new` lead page from `templates/account.md`; for a reject that was already attached, remove the bullet and re-score.
@@ -38,7 +38,7 @@ description: 'The manager''s morning cockpit: last night''s status, hot accounts
 ## Finish
 - Summary, 1–3 lines: "Runner ok (02:00–02:41). 3 hot, 7 at risk. Approved 12 leads to 4 reps; review queue cleared (2 linked, 1 new, 1 rejected)."
 - Log (decisions only; mama-allocate logs allocation): `- [YYYY-MM-DD HH:MM] resolve | <manager> | log/review.csv | 4 decided: 2 linked, 1 new, 1 rejected`
-- Only when the session contains `MAMA_CARDS=on`: `run_status`, `allocation`, `review_queue` and `team_book` cards, in that order.
-```mama-card
-{"type":"review_queue","title":"Entity matches to confirm","agent":"mama","items":[{"n":1,"text":"Harbour Light Foods wins catering tender","source":"sg-gov-procurement","candidate":"harbourlight-foods","confidence":0.84}],"refs":["log/review.csv"],"actions":[{"label":"1 is a match","prompt":"1 is harbourlight-foods","style":"primary"}]}
+- Only when the session contains `MAMA_CARDS=on` (`a2ui` surfaces, docs/UI.md §2): a `RunStatusCard`, then two report surfaces: the allocation (`"dataRef": "log/allocation/<date>.json"`: `Gauge` per rep, stacked `BarChart` of `/per_rep` by A/B/C, `DataTable` of `/rows` with `"format": "account"` and `"tier"`, `ActionBar` "approve all") and the team (`"dataRef": "wiki/books/team.json"`: `Heatmap` of `/reps` over `["A","B","C","due","at_risk"]`, `StatGrid` or `KpiTile`s for the pool), then a `ReviewQueueCard`. Examples: `console/test/fixtures/a2ui/allocation.json`. Bind every number with `{"path": …}`.
+```a2ui
+{"surfaceId": "review_queue", "components": [{"id": "root", "component": "ReviewQueueCard", "title": "Entity matches to confirm", "agent": "mama", "items": [{"n": 1, "text": "Harbour Light Foods wins catering tender", "source": "sg-gov-procurement", "candidate": "harbourlight-foods", "confidence": 0.84}], "refs": ["log/review.csv"], "actions": [{"label": "1 is a match", "prompt": "1 is harbourlight-foods", "style": "primary"}]}]}
 ```

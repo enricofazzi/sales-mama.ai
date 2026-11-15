@@ -3,7 +3,8 @@ import { execFileSync } from 'node:child_process';
 import { existsSync, readdirSync, readFileSync, realpathSync, statSync } from 'node:fs';
 import { join, normalize, resolve, sep } from 'node:path';
 import { parse as parseYaml } from 'yaml';
-import { parseBook, parseTeam } from '../shared/book';
+import { bookFromJson, teamFromJson } from '../shared/book';
+import { dataRefAllowed } from '../shared/a2ui';
 import { sendWindow, type MarketWindow } from '../shared/window';
 import type { Me, Rail } from '../shared/protocol';
 
@@ -60,8 +61,9 @@ export function readRail(root: string, now = new Date()): Rail {
   }
   const bookPath = `wiki/books/${me.id}.md`;
   const read = (p: string) => (existsSync(join(root, p)) ? readFileSync(join(root, p), 'utf8') : null);
-  const bookMd = read(bookPath);
-  const teamMd = me.role === 'manager' ? read('wiki/books/team.md') : null;
+  const json = (p: string) => { try { const t = read(p); return t ? JSON.parse(t) : null; } catch { return null; } };
+  const bookJson = json(`wiki/books/${me.id}.json`);
+  const teamJson = me.role === 'manager' ? json('wiki/books/team.json') : null;
   let windows: Rail['windows'] = [];
   try {
     const markets = parseYaml(read('knowledge/markets.yaml') ?? '')?.markets ?? {};
@@ -69,24 +71,41 @@ export function readRail(root: string, now = new Date()): Rail {
   } catch { /* leave the tile out */ }
   return {
     me, bookPath, windows,
-    book: bookMd ? parseBook(bookMd) : null,
-    team: teamMd ? parseTeam(teamMd) : null,
-    problem: bookMd ? undefined : `${bookPath} isn't built yet. It appears after the next session start or sync.`,
+    book: bookJson ? bookFromJson(bookJson) : null,
+    team: teamJson ? teamFromJson(teamJson) : null,
+    problem: bookJson ? undefined : `wiki/books/${me.id}.json isn't built yet. It appears after the next session start or sync.`,
   };
 }
 
-/** Read one repo file for a source chip. Returns null when the path is not allowed. */
-export function readSource(root: string, rel: string): { path: string; text: string; truncated: boolean } | null {
+/** Resolve a repo-relative path inside `allowed` folders, symlinks included. null when not allowed. */
+function safeFile(root: string, rel: string, allowed: string[]): { clean: string; real: string } | null {
   const clean = normalize(rel.replace(/\\/g, '/').replace(/^\/+/, '').replace(/#.*$/, '')).split(sep).join('/');
-  if (clean.split('/').includes('..') || !READABLE.some(p => clean.startsWith(p))) return null;
+  if (clean.split('/').includes('..') || !allowed.some(p => clean.startsWith(p))) return null;
   const full = resolve(root, clean);
   if (!existsSync(full)) return null;
   const real = realpathSync(full);
   const realRoot = realpathSync(root) + sep;
   // A symlink must land inside an allowed folder too (e.g. not wiki/x.md → .env).
-  if (!real.startsWith(realRoot) || !READABLE.some(p => real.slice(realRoot.length).split(sep).join('/').startsWith(p))) return null;
-  const st = statSync(real);
-  if (!st.isFile()) return null;
-  const buf = readFileSync(real);
-  return { path: clean, text: buf.subarray(0, MAX_BYTES).toString('utf8'), truncated: buf.length > MAX_BYTES };
+  if (!real.startsWith(realRoot) || !allowed.some(p => real.slice(realRoot.length).split(sep).join('/').startsWith(p))) return null;
+  return statSync(real).isFile() ? { clean, real } : null;
+}
+
+/** Read one repo file for a source chip. Returns null when the path is not allowed. */
+export function readSource(root: string, rel: string): { path: string; text: string; truncated: boolean } | null {
+  const f = safeFile(root, rel, READABLE);
+  if (!f) return null;
+  const buf = readFileSync(f.real);
+  return { path: f.clean, text: buf.subarray(0, MAX_BYTES).toString('utf8'), truncated: buf.length > MAX_BYTES };
+}
+
+const MAX_DATA_BYTES = 4 * 1024 * 1024;
+
+/** A surface's dataRef: a script's JSON output, read-only, inside the data folders (ADR-0009). */
+export function readData(root: string, rel: string): { ok: true; value: unknown } | { ok: false; status: number; error: string } {
+  if (!dataRefAllowed(rel)) return { ok: false, status: 404, error: 'Not a data file the console may read.' };
+  const f = safeFile(root, rel, READABLE);
+  if (!f) return { ok: false, status: 404, error: `${rel} not found. Run the script that writes it first.` };
+  if (statSync(f.real).size > MAX_DATA_BYTES) return { ok: false, status: 413, error: `${rel} is over 4 MB.` };
+  try { return { ok: true, value: JSON.parse(readFileSync(f.real, 'utf8')) }; }
+  catch (e) { return { ok: false, status: 422, error: `${rel} is not valid JSON: ${(e as Error).message}` }; }
 }
