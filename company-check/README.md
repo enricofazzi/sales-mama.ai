@@ -43,7 +43,8 @@ Verdicts: **Not found · Not active · Red flag · Verified · Likely legitimate
 ## Insights (generative analytics)
 Ask in chat and get stats, charts and tables back: `/company-insights` (or `python3 scripts/company_analytics.py`):
 `company <UEN|name>` (profile, checks, peers, evidence), `segment --industry clinics | --ssic 86 | --district 52 | --name kopi`,
-`book --owner me | --pool | --file leads.csv`, `compare A B [C …]`. Add `--cards` for the console, `--html <path>` for a shareable page.
+`book --owner me | --pool | --file leads.csv`, `compare A B [C …]`. It prints data sections as JSON; `--out <path>` saves them.
+The console draws them as an A2UI surface (charts, tiles, tables) with a "Share as page" download (ADR-0009).
 Every number comes from the script, as of the ACRA data date.
 
 ## Leads and data vendors
