@@ -57,3 +57,4 @@
 - [2026-11-05 18:55] check | praveen | company-check/201407736W | Caution (70/100)
 - [2026-11-08 19:09] allocate | praveen | log/allocation/2026-11-08 | proposal: 15 leads, 1 reps, spread 0%
 - [2026-11-16 09:52] allocate | praveen | log/allocation/2026-11-16 | proposal: 15 leads, 1 reps, spread 0%
+- [2026-11-16 10:21] brief | praveen | accounts/kestrel-physio | call brief for 2026-11-16 (refresh; expo 20–21 Nov)

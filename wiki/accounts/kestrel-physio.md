@@ -35,7 +35,7 @@ vam_updated:
 next_action:
 next_action_due:
 last_touch:
-updated: '2026-11-02'
+updated: '2026-11-16'
 ---
 # Kestrel Physio Pte Ltd
 ## Snapshot
@@ -61,19 +61,20 @@ updated: '2026-11-02'
 ## Touch history
 ## Open objections
 ## VAM notes
-## Call brief (2026-11-02)
-**Who** — Kestrel Physio, physiotherapy clinic operator, SG (CRM: [crm export](raw/crm/2026-11-01-demo-export-50.csv)). Contact: Marcus Teo, Head of Clinic Operations (ops_head). Number of clinic locations: unknown.
+## Call brief (2026-11-16)
+**Who**: Kestrel Physio is a physiotherapy clinic operator in SG with 191 staff (CRM: [crm export](raw/crm/2026-11-01-demo-export-50.csv)). It runs its clinic booking systems, devices and backups in-house ([source](raw/research/kestrel-physio/2026-11-02-careers.md)). Contact: Marcus Teo, Head of Clinic Operations (ops_head); the new IT hire reports to him. Number of clinics: unknown. Contract end: 2027-06-05 (CRM).
 **Why now**
-- hiring_ops_it — job post for an IT & Systems Executive for clinic booking systems, devices and backups (2026-10-28) — [source](raw/research/kestrel-physio/2026-11-02-careers.md)
-- exhibiting_at_event (hook) — booth B12, Allied Health Expo Singapore, 20–21 Nov 2026 (2026-10-27) — [source](raw/research/kestrel-physio/2026-11-02-event.md)
-**What we believe** — hiring_ops_it → it_stretch (ops carries IT load across clinics) → **IT Care** (SGD 5,000/yr typical) → no proof yet.
-**History** — 2026-11-02 first email drafted (pattern first-hiring-it-stretch), not yet sent. No replies.
-**Likely objections** — "We're hiring someone for this" and "already have an IT vendor": no approved answer yet (library empty; seeding in progress).
+- hiring_ops_it: job post for an IT & Systems Executive covering clinic booking systems, devices and backups (2026-10-28). [source](raw/research/kestrel-physio/2026-11-02-careers.md)
+- exhibiting_at_event (hook only): booth B12 at Allied Health Expo Singapore, 20–21 Nov 2026, this Fri–Sat (2026-10-27). [source](raw/research/kestrel-physio/2026-11-02-event.md)
+**What we believe**: hiring_ops_it → it_stretch (ops carries IT load across clinics) → **IT Care** (SGD 5,000/yr typical) → no proof in knowledge/proof/ yet. Score 0.68, tier B, hot (scored 2026-11-02).
+**History**: no touches in log/touches.csv and no replies. The 2026-11-02 brief mentioned a test draft, but no logged touch backs it.
+**Likely objections**: "We're hiring someone for this" and "we already have an IT vendor". No approved answer yet: the objection library is empty.
 **Questions**
 1. Until the IT & Systems Executive starts, who looks after booking systems, devices and backups?
-2. How many clinics and devices does that role cover?
+2. How many clinics and devices will that role cover?
 3. What happens today when the booking system or a device fails during clinic hours?
-4. Once the hire starts, which tasks do you want them off (helpdesk, backups, device setup)?
-**Goal and next step** — Confirm the it_stretch pain and size it (clinics, devices). Propose a 30-minute IT Care scoping call, or a hello at booth B12 on 20–21 Nov.
+4. Once the hire starts, which tasks do you want off their plate (helpdesk, backups, device setup)?
+5. How are backups checked and restored today?
+**Goal and next step**: confirm the it_stretch pain and size it (clinics, devices). Propose saying hello at booth B12 on 20–21 Nov, or a 30-minute IT Care scoping call the week after.
 ## Meeting log & handover
 ## Next step
