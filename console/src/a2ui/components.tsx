@@ -129,7 +129,8 @@ function Tile({ label, value, unit, of, delta, deltaLabel, spark, status, note, 
 export const KpiTile = createComponentImplementation({ name: 'KpiTile', schema: API.KpiTile.schema }, ({ props }) => <Tile {...(props as Row)} />);
 
 export const StatGrid = createComponentImplementation({ name: 'StatGrid', schema: API.StatGrid.schema }, ({ props }) => (
-  <div className="a2-tiles">{rows(props.items).slice(0, props.max ?? 12).map((t, i) => <Tile key={str(t.key ?? t.label) || i} {...t} />)}</div>
+  // Data items may carry their own "key" field (metrics sections do); React reserves `key`, so pass it apart.
+  <div className="a2-tiles">{rows(props.items).slice(0, props.max ?? 12).map(({ key, ...t }, i) => <Tile key={str(key ?? t.label) || i} {...t} />)}</div>
 ));
 
 export const Gauge = createComponentImplementation({ name: 'Gauge', schema: API.Gauge.schema }, ({ props }) => {
