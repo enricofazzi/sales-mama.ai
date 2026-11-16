@@ -1,35 +1,8 @@
 /* A2UI surfaces (ADR-0009). Tokens: docs/UI.md §4 — Bricolage/Geist, agent colours, no gradients, no emoji.
    Chart series follow the agent palette so a chart reads as part of the same system. */
-:root {
-  --c1: #6D28D9; --c2: #0F766E; --c3: #C2410C; --c4: #1D4ED8; --c5: #BE185D; --c6: #15803D; --c7: #A16207;
-  --good: #15803D; --good-t: #E2F6E8; --warn: #B45309; --warn-t: #FDF0DC; --risk-t: #FDE2E2; --neutral-t: #F1EEFA;
-  --night: #16131F;
-  /* A2UI basic catalog (Text, Row, Tabs, ChoicePicker, Button…) on our tokens */
-  --a2ui-color-primary: var(--mama); --a2ui-color-on-primary: #fff; --a2ui-color-secondary: var(--researcher);
-  --a2ui-color-background: transparent; --a2ui-color-on-background: var(--ink); --a2ui-color-surface: var(--surface);
-  --a2ui-color-on-surface: var(--ink); --a2ui-color-border: var(--line-2); --a2ui-color-input: var(--surface);
-  --a2ui-color-on-input: var(--ink); --a2ui-font-family-title: var(--display); --a2ui-font-family-monospace: var(--mono);
-  --a2ui-border-radius: 14px; --a2ui-spacing-m: 14px; --a2ui-spacing-l: 18px;
-}
 .surface-body a2ui-basic-column { display: flex; flex-direction: column; gap: 14px; }
 
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    color-scheme: dark;
-    --ground: #0F0D16; --surface: #1A1724; --ink: #F4F2FA; --muted: #A9A3BE; --line: #2D283B; --line-2: #3A3449;
-    --mama: #A78BFA; --mama-t: #2A2142; --mama-d: #DDD0FF;
-    --scout: #7DA2FF; --scout-t: #1B2540; --scout-d: #CFDCFF;
-    --researcher: #3CC4B0; --researcher-t: #12302C; --researcher-d: #BDEFE6;
-    --vam: #F472B6; --vam-t: #3A1A2B; --vam-d: #FFD0E6;
-    --writer: #FB923C; --writer-t: #3A2316; --writer-d: #FFD9BF;
-    --allocator: #4ADE80; --allocator-t: #15301F; --allocator-d: #C8F5D6;
-    --risk: #F87171; --good: #4ADE80; --good-t: #15301F; --warn: #FBBF24; --warn-t: #3A2E12; --risk-t: #3A1A1A; --neutral-t: #221E2E;
-    --c1: #A78BFA; --c2: #3CC4B0; --c3: #FB923C; --c4: #7DA2FF; --c5: #F472B6; --c6: #4ADE80; --c7: #FBBF24;
-    --night: #26212F; --dim-on-ink: #B9B4CC; --track-on-ink: #3A3449;
-  }
-}
-:root[data-theme="dark"] { color-scheme: dark; }
-.you, .md pre, .tile.dark, .lanes, .rcard.dark, .logo, .go.stop, .a2-dot.running { background: var(--night); }
+.you, .md pre, .tile.dark, .lanes, .rcard.dark, .logo, .go.stop, .dot.running { background: var(--night); }
 .rcard.dark { border-color: var(--night); }
 
 /* Frame */
@@ -53,10 +26,12 @@
 .a2-panel header h3 { margin: 0; font: 700 16px/1.3 var(--display); }
 .a2-panel header p { margin: 2px 0 0; color: var(--muted); font-size: 13px; }
 .a2-panel-body { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
-.a2-callout { display: flex; flex-direction: column; gap: 2px; padding: 12px 16px; border-radius: 16px; border-left: 4px solid var(--muted); background: var(--neutral-t); }
-.a2-callout.s-good { border-color: var(--good); background: var(--good-t); }
-.a2-callout.s-warn { border-color: var(--warn); background: var(--warn-t); }
-.a2-callout.s-risk { border-color: var(--risk); background: var(--risk-t); }
+.a2-callout { display: flex; align-items: flex-start; gap: 12px; padding: 12px 16px; border-radius: 16px; background: var(--neutral-t); --tone: var(--muted); }
+.a2-callout-ic { flex: 0 0 auto; width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; background: var(--tone); color: #fff; }
+.a2-callout-txt { display: flex; flex-direction: column; gap: 2px; min-width: 0; padding-top: 3px; }
+.a2-callout.s-good { background: var(--good-t); --tone: var(--good); }
+.a2-callout.s-warn { background: var(--warn-t); --tone: var(--warn); }
+.a2-callout.s-risk { background: var(--risk-t); --tone: var(--risk); }
 
 /* Tiles */
 .a2-tiles { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }

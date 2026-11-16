@@ -114,7 +114,7 @@ export const TierMix = ({ A, B, C, free }: { A: number; B: number; C: number; fr
   <>
     <div className="mix" role="img" aria-label={`Tier A ${A}, B ${B}, C ${C}`}>
       <span style={{ flex: A, background: 'var(--mama)' }} /><span style={{ flex: B, background: 'var(--scout)' }} />
-      <span style={{ flex: C, background: '#CFC9E0' }} />{free ? <span style={{ flex: free }} /> : null}
+      <span style={{ flex: C, background: 'var(--line-2)' }} />{free ? <span style={{ flex: free }} /> : null}
     </div>
     <div className="row muted"><span><b>A</b> {A}</span><span><b>B</b> {B}</span><span><b>C</b> {C}</span>{free != null && <span>{free} slots free</span>}</div>
   </>

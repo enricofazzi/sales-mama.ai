@@ -65,16 +65,36 @@ export function readRail(root: string, now = new Date()): Rail {
   const bookJson = json(`wiki/books/${me.id}.json`);
   const teamJson = me.role === 'manager' ? json('wiki/books/team.json') : null;
   let windows: Rail['windows'] = [];
+  let marketCfg: Record<string, MarketWindow> = {};
   try {
     const markets = parseYaml(read('knowledge/markets.yaml') ?? '')?.markets ?? {};
     windows = me.markets.filter(m => markets[m]).map(m => sendWindow(m, markets[m] as MarketWindow, now));
-  } catch { /* leave the tile out */ }
+    // Only what the header clocks need; holidays as YYYY-MM-DD strings.
+    marketCfg = Object.fromEntries(me.markets.filter(m => markets[m]).map(m => {
+      const c = markets[m];
+      const holidays = (c.holidays ?? []).map((h: unknown) => (h instanceof Date ? h.toISOString() : String(h)).slice(0, 10));
+      return [m, { tz: String(c.tz), send_windows: c.send_windows, holidays }];
+    }));
+  } catch { /* leave the clocks out */ }
   return {
-    me, bookPath, windows,
+    me, bookPath, windows, markets: marketCfg,
+    allocation: me.role === 'manager' ? pendingAllocation(root) : null,
     book: bookJson ? bookFromJson(bookJson) : null,
     team: teamJson ? teamFromJson(teamJson) : null,
     problem: bookJson ? undefined : `wiki/books/${me.id}.json isn't built yet. It appears after the next session start or sync.`,
   };
+}
+
+/** The newest allocation proposal still waiting for the manager (status empty or `proposed`). */
+function pendingAllocation(root: string): Rail['allocation'] {
+  const dir = join(root, 'log', 'allocation');
+  if (!existsSync(dir)) return null;
+  const latest = readdirSync(dir).filter(f => /^\d{4}-\d{2}-\d{2}(-\d+)?\.md$/.test(f)).sort().pop();
+  if (!latest) return null;
+  const meta = frontmatter(readFileSync(join(dir, latest), 'utf8'));
+  const status = String(meta.status ?? '').trim();
+  if (status && status !== 'proposed') return null;
+  return { path: `log/allocation/${latest}`, date: String(meta.date ?? latest.slice(0, 10)).slice(0, 10), leads: Number(meta.leads ?? 0) };
 }
 
 /** Resolve a repo-relative path inside `allowed` folders, symlinks included. null when not allowed. */

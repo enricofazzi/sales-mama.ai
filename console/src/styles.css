@@ -1,18 +1,5 @@
 /* Tokens: docs/UI.md §4. Layout: design/canvas/Main.dc.html. */
-:root {
-  --ground: #F6F4FF; --surface: #FFFFFF; --ink: #16131F; --muted: #5B5670; --line: #E6E1F5; --line-2: #D9D3EA;
-  --lime: #C8F031; --risk: #B91C1C; --dim-on-ink: #B9B4CC; --track-on-ink: #2C2838;
-  --mama: #6D28D9; --mama-t: #EFE8FF; --mama-d: #4C1D95;
-  --scout: #1D4ED8; --scout-t: #E5EDFF; --scout-d: #1E3A8A;
-  --researcher: #0F766E; --researcher-t: #DDF5F1; --researcher-d: #134E4A;
-  --vam: #BE185D; --vam-t: #FFE6F1; --vam-d: #831843;
-  --writer: #C2410C; --writer-t: #FFEDE0; --writer-d: #7C2D12;
-  --allocator: #15803D; --allocator-t: #E2F6E8; --allocator-d: #14532D;
-  --display: 'Bricolage Grotesque', 'Geist', system-ui, sans-serif;
-  --ui: 'Geist', system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --mono: 'Geist Mono', ui-monospace, 'SF Mono', Menlo, monospace;
-  color-scheme: light;
-}
+/* Tokens live in styles/tokens.css. */
 * { box-sizing: border-box; }
 html, body { margin: 0; background: var(--ground); color: var(--ink); font: 15px/1.5 var(--ui); }
 button { font: inherit; }
@@ -86,7 +73,7 @@ a { color: var(--mama); }
 .chip.running .s::before { content: '●'; animation: pulse 1.2s ease-in-out infinite; }
 .chip.ok .s::before { content: '✓'; color: var(--allocator); }
 .chip.error .s::before { content: '!'; color: var(--risk); }
-.chip.denied { background: #FFF1F1; border-color: #F5C2C2; color: var(--risk); }
+.chip.denied { background: var(--risk-t); border-color: var(--risk-t); color: var(--risk); }
 .chip.denied .s::before { content: '⊘'; }
 .chip.hook { background: var(--ground); }
 
@@ -137,7 +124,7 @@ a { color: var(--mama); }
 /* Plan + lanes */
 .plan { background: var(--surface); border-radius: 24px; padding: 18px 20px; border: 1px solid var(--line); display: flex; flex-direction: column; gap: 10px; }
 .step { display: flex; align-items: center; gap: 12px; }
-.dot { width: 24px; height: 24px; border-radius: 999px; flex: 0 0 auto; display: grid; place-items: center; font-size: 13px; font-weight: 700; border: 2px solid #CFC9E0; background: #fff; color: #8F89A6; }
+.dot { width: 24px; height: 24px; border-radius: 999px; flex: 0 0 auto; display: grid; place-items: center; font-size: 13px; font-weight: 700; border: 2px solid var(--line-2); background: var(--surface); color: var(--muted); }
 .dot.done { background: var(--mama); border-color: var(--mama); color: #fff; }
 .dot.running { background: var(--ink); border: 3px solid var(--lime); }
 .dot.failed { background: var(--risk); border-color: var(--risk); color: #fff; }
@@ -159,7 +146,7 @@ a { color: var(--mama); }
 .dim { color: var(--dim-on-ink); font-size: 13px; }
 
 /* Draft */
-.draft-body { margin: 0; color: #2E2A3B; white-space: pre-wrap; }
+.draft-body { margin: 0; color: var(--ink); white-space: pre-wrap; }
 
 /* Account */
 .chain { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
@@ -170,7 +157,7 @@ a { color: var(--mama); }
 .timeline .pin { width: 10px; height: 10px; margin-top: 7px; border-radius: 999px; background: var(--scout); flex: 0 0 auto; }
 
 /* Error + approval */
-.card.err .card-head { background: #FFF1F1; }
+.card.err .card-head { background: var(--risk-t); }
 .card.err .tag { background: var(--risk); }
 
 /* Quick replies + composer */
@@ -194,7 +181,7 @@ a { color: var(--mama); }
 .rcard.amber { background: var(--writer-t); border-color: var(--writer-t); color: var(--writer-d); }
 .rcard .h { font-weight: 700; }
 .ring { display: flex; align-items: center; gap: 16px; }
-.mix { display: flex; height: 14px; border-radius: 999px; overflow: hidden; background: #F1EEFA; }
+.mix { display: flex; height: 14px; border-radius: 999px; overflow: hidden; background: var(--neutral-t); }
 .mix span { display: block; }
 .hotrow { display: flex; justify-content: space-between; gap: 8px; }
 .hotrow b { color: var(--lime); }

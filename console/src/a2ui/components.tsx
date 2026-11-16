@@ -93,12 +93,27 @@ export const Grid = createComponentImplementation({ name: 'Grid', schema: API.Gr
   <div className="a2-grid" style={{ ['--min' as any]: `${Math.max(120, props.min ?? 320)}px` }}>{kids(props.children as Kids, buildChild)}</div>
 ));
 
-export const Callout = createComponentImplementation({ name: 'Callout', schema: API.Callout.schema }, ({ props }) => (
-  <div className={`a2-callout s-${statusOf(props.tone)}`} role="note">
-    {props.title && <strong>{str(props.title)}</strong>}
-    <span>{str(props.text)}</span>
-  </div>
-));
+// Status chip icons (UI.md §4: a tinted panel with an icon chip, never a left-border bar).
+const CALLOUT_ICON: Record<string, ReactNode> = {
+  good: <path d="m5 12.5 4.5 4.5L19 7.5" />,
+  warn: <><path d="M12 7v6" /><path d="M12 16.5v.01" /></>,
+  risk: <><path d="M12 7v6" /><path d="M12 16.5v.01" /></>,
+  neutral: <><path d="M12 11v5.5" /><path d="M12 7.5v.01" /></>,
+};
+export const Callout = createComponentImplementation({ name: 'Callout', schema: API.Callout.schema }, ({ props }) => {
+  const tone = statusOf(props.tone);
+  return (
+    <div className={`a2-callout s-${tone}`} role="note">
+      <span className="a2-callout-ic" aria-hidden="true">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round">{CALLOUT_ICON[tone]}</svg>
+      </span>
+      <div className="a2-callout-txt">
+        {props.title && <strong>{str(props.title)}</strong>}
+        <span>{str(props.text)}</span>
+      </div>
+    </div>
+  );
+});
 
 // ---------------------------------------------------------------------------------------------
 // Numbers

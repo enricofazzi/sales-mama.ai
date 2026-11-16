@@ -1,96 +1,62 @@
-import { useCallback, useRef, useState, type FormEvent, type KeyboardEvent } from 'react';
+// The app shell (spec §3–4): ink header with market clocks and the pulse bar, a slim nav rail, the
+// routed main pane and the context panel. The document never scrolls; each pane owns its scroll.
+import { useCallback, useMemo, useState } from 'react';
 import { useBridge } from './useBridge';
-import { useStickToBottom } from './useStickToBottom';
-import { TurnView } from './components/Turn';
+import { useRoute } from './app/router';
+import { useTheme } from './hooks/useTheme';
+import { Header, type PulseLane } from './app/Header';
+import { NavRail, TabBar } from './app/Nav';
+import { ChatView } from './app/ChatView';
+import { TodayView } from './app/TodayView';
+import { BookView } from './app/BookView';
 import { Rail } from './components/Rail';
 import { SourceDrawer } from './components/SourceDrawer';
 
-const REP_SKILLS = ['/mama-day', '/mama-book', '/company-check', '/company-insights', '/mama-draft', '/mama-send', '/mama-replies'];
-const MANAGER_SKILLS = ['/mama-manager', '/mama-allocate', '/company-check', '/company-insights', '/mama-weekly', '/mama-day'];
-
 export function App() {
   const { turns, rail, connected, busy, replay, saved, ask, stop, newChat } = useBridge();
-  const [draft, setDraft] = useState('');
+  const { route, go } = useRoute();
+  const { theme, cycle } = useTheme();
   const [source, setSource] = useState<string | null>(null);
-  const chatRef = useRef<HTMLElement>(null);
-  const inputRef = useRef<HTMLTextAreaElement>(null);
+  const [seed, setSeed] = useState<string | null>(null);
   const me = rail?.me;
   const manager = me?.role === 'manager';
-  const skills = manager ? MANAGER_SKILLS : REP_SKILLS;
   const canAsk = connected && !busy;
+  const live = busy && !replay && !saved;
 
-  const { showJump, jump } = useStickToBottom(chatRef, turns.length);
+  // Every button anywhere is a prompt: send it, then show the conversation (ADR-0006).
+  const askAndShow = useCallback((text: string) => {
+    if (!canAsk || !text.trim()) return;
+    ask(text);
+    go('chat');
+  }, [ask, canAsk, go]);
+  const ctx = useMemo(() => ({ onPrompt: askAndShow, onSource: setSource, disabled: !canAsk }), [askAndShow, canAsk]);
 
-  const prompt = useCallback((text: string) => { if (canAsk) ask(text); }, [ask, canAsk]);
-  const ctx = { onPrompt: prompt, onSource: setSource, disabled: !canAsk };
+  const lanes: PulseLane[] = useMemo(() => {
+    const running = turns.find(t => t.running);
+    return (running?.turn.lanes ?? []).map(l => ({ id: l.id, agent: l.agent.toLowerCase(), running: l.status === 'running' }));
+  }, [turns]);
 
-  const submit = (e?: FormEvent) => {
-    e?.preventDefault();
-    if (!draft.trim() || !canAsk) return;
-    ask(draft);
-    setDraft('');
-  };
-  const onKey = (e: KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key === 'Enter' && !e.shiftKey && !e.nativeEvent.isComposing) { e.preventDefault(); submit(); }
-  };
-  const pickSkill = (s: string) => { setDraft(s + ' '); inputRef.current?.focus(); };
-
-  const window0 = rail?.windows[0];
-  const initials = (me?.name || me?.id || '?').split(/\s+/).map(w => w[0]).slice(0, 2).join('').toUpperCase();
+  const status = replay ? 'Replay' : saved ? 'Saved result' : !connected ? 'Reconnecting…' : live ? 'Working…' : 'Ready';
+  const onNewChat = useCallback(() => { newChat(); go('chat'); }, [newChat, go]);
 
   return (
-    <>
-      <header className="top">
-        <div className="brand"><span className="logo" aria-hidden="true">SM</span>Sales Mama</div>
-        <div className="top-right">
-          <span className="pill status" role="status">{replay ? 'Replay · recorded stream' : saved ? 'Saved result' : !connected ? 'Reconnecting…' : busy ? 'Working…' : 'Ready'}</span>
-          {window0 && <span className={`pill window${window0.open ? ' open' : ''}`}>{window0.market} · {window0.label}</span>}
-          <button type="button" className="ghost" onClick={newChat} disabled={busy}>New chat</button>
-          {me && <span className="avatar" title={`${me.name} · ${me.role}`} aria-label={`${me.name}, ${me.role}`}>{initials}</span>}
-        </div>
-      </header>
-
-      <div className="shell">
-        <main className="chat" ref={chatRef}>
-          {turns.length === 0 && (
-            <div className="empty-state">
-              <h1>{me ? `Morning, ${me.name.split(' ')[0]}.` : 'Sales Mama'}</h1>
-              <p>{manager ? 'Start with your cockpit, check a company, or ask about the team.' : 'Run your day, check a company, or ask about your book.'}</p>
-              <div className="quick" style={{ justifyContent: 'center' }}>
-                {(manager ? ['/mama-manager', '/company-check', '/company-insights segment --industry clinics', 'What changed overnight?'] : ['/mama-day', '/company-check', '/mama-book', 'What changed overnight?'])
-                  .map(q => <button key={q} type="button" disabled={!canAsk} onClick={() => prompt(q)}>{q}</button>)}
-              </div>
-            </div>
-          )}
-          {turns.map(t => <TurnView key={t.id} t={t} ctx={ctx} />)}
-          {showJump && (
-            <button type="button" className="jump" onClick={jump} aria-label="Jump to the latest message">
-              <svg aria-hidden="true" width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="2"><path d="M7 2v9M3 7.5 7 11.5l4-4" /></svg>
-              {busy ? 'New activity' : 'Jump to latest'}
-            </button>
-          )}
-
-          <form className="composer" onSubmit={submit}>
-            <div className="slash" aria-label="Skills">
-              {skills.map(s => <button key={s} type="button" onClick={() => pickSkill(s)}>{s}</button>)}
-            </div>
-            <div className="compose-row">
-              <label htmlFor="composer" className="sr">Ask Sales Mama</label>
-              <textarea id="composer" ref={inputRef} rows={1} value={draft} onChange={e => setDraft(e.target.value)} onKeyDown={onKey}
-                placeholder={manager ? 'Approve, edit in a sentence, or ask about the team' : 'Ask anything, or type / for a skill'} />
-              {busy && !replay && !saved
-                ? <button type="button" className="go stop" aria-label="Stop the run" onClick={stop}>
-                    <svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16"><rect x="3" y="3" width="10" height="10" rx="2" fill="currentColor" /></svg>
-                  </button>
-                : <button type="submit" className="go" aria-label="Ask Sales Mama" disabled={!canAsk || !draft.trim()}>
-                    <svg aria-hidden="true" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2.2"><path d="M4 10h11M10 5l5 5-5 5" /></svg>
-                  </button>}
-            </div>
-          </form>
+    <div className="app">
+      <Header rail={rail} status={status} live={live} theme={theme} onTheme={cycle} onNewChat={onNewChat} newChatDisabled={busy} lanes={lanes} />
+      <div className={`body r-${route}`}>
+        <NavRail route={route} go={go} busy={live} />
+        <main className="main" id="main">
+          {route === 'today' && <TodayView rail={rail} canAsk={canAsk} busy={busy} live={live} ask={askAndShow} stop={stop} openSource={setSource} />}
+          {/* Chat stays mounted so its scroll position and draft survive a trip to Today or Book. */}
+          <div className="route-chat" hidden={route !== 'chat'}>
+            <ChatView turns={turns} ctx={ctx} manager={manager} firstName={me?.name.split(' ')[0] ?? ''} busy={busy} canAsk={canAsk}
+              live={live} ask={ask} stop={stop} seed={seed} onSeedUsed={() => setSeed(null)} />
+          </div>
+          {route === 'book' && <BookView rail={rail} ctx={ctx} />}
         </main>
-        <Rail rail={rail} onSource={setSource} onPrompt={prompt} disabled={!canAsk} />
+        {route !== 'today' && <Rail rail={rail} onSource={setSource} onPrompt={askAndShow} disabled={!canAsk} />}
       </div>
+      <TabBar route={route} go={go} busy={live} />
       {source && <SourceDrawer path={source} onClose={() => setSource(null)} />}
-    </>
+    </div>
   );
 }

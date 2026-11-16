@@ -3,6 +3,7 @@
 import { createRoot } from 'react-dom/client';
 import { SurfaceView } from './a2ui/Surface';
 import type { ExportPayload } from './a2ui/exportPage';
+import './styles/tokens.css';
 import './styles.css';
 import './a2ui/a2ui.css';
 

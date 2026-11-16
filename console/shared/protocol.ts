@@ -1,7 +1,7 @@
 // Messages between the browser and the console server over the WebSocket.
 import type { StreamEvent } from './stream';
 import type { Book, TeamBook } from './book';
-import type { WindowStatus } from './window';
+import type { MarketWindow, WindowStatus } from './window';
 
 export interface Me {
   id: string;
@@ -16,6 +16,8 @@ export interface Rail {
   book: Book | null;
   team: TeamBook | null;
   windows: WindowStatus[];
+  markets?: Record<string, MarketWindow>;  // the user's markets from knowledge/markets.yaml, for live clocks
+  allocation?: { path: string; date: string; leads: number } | null;  // manager: a proposal awaiting approval
   bookPath: string | null;
   problem?: string;       // e.g. "No rep profile for you@x.com: run /mama-setup"
 }
