@@ -50,6 +50,7 @@
 - raw/notes: 180
 - raw/lists: 90
 - raw/crm: 365
+- raw/calendar: 90
 
 ## <ADV> policy
 <!-- Team decision (Phase 1 interview, 2026-11-01); confirm with the DPO. -->

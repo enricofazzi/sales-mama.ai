@@ -1798,6 +1798,88 @@ def t_appointments(r: Runner) -> None:
         tmp_contact.unlink(missing_ok=True)
 
 
+EVENTS_FIXTURE = {"items": [
+    {"summary": "Dentist (private)", "attendees": [{"email": "me@home.example"}], "description": "x", "location": "Clinic",
+     "start": {"dateTime": "2026-11-05T09:00:00+08:00"}, "end": {"dateTime": "2026-11-05T10:00:00+08:00"}},
+    {"summary": "Team sync", "start": {"dateTime": "2026-11-05T09:30:00+08:00"}, "end": {"dateTime": "2026-11-05T10:30:00+08:00"}},
+    {"summary": "Declined thing", "attendees": [{"self": True, "responseStatus": "declined"}],
+     "start": {"dateTime": "2026-11-06T15:00:00+08:00"}, "end": {"dateTime": "2026-11-06T16:00:00+08:00"}},
+    {"summary": "Public holiday (free)", "transparency": "transparent", "start": {"date": "2026-11-09"}, "end": {"date": "2026-11-10"}},
+    {"summary": "Offsite", "start": {"dateTime": "2026-11-12T13:00:00+08:00"}, "end": {"dateTime": "2026-11-12T17:00:00+08:00"}},
+]}
+FREEBUSY_FIXTURE = {"calendars": {"primary": {"busy": [{"start": "2026-11-10T02:00:00Z", "end": "2026-11-10T03:00:00Z"}]}}}
+
+
+def t_busy(r: Runner) -> None:
+    """busy_import.py (Google Calendar busy blocks, rule 8) and their use in the calendar and appointments."""
+    root = r.root
+    log, apts, touches = root / "wiki" / "log.md", root / "log" / "appointments.csv", root / "log" / "touches.csv"
+    orig = {pth: (mc.read_text(pth) if pth.is_file() else None) for pth in (log, apts, touches)}
+    cal_dir = root / "raw" / "calendar"
+    ev, fb = root.parent / "events.json", root.parent / "freebusy.json"
+    mc.write_text(ev, json.dumps(EVENTS_FIXTURE))
+    mc.write_text(fb, json.dumps(FREEBUSY_FIXTURE))
+    planted = cal_dir / "mei" / "2026-11-01-0900.json"
+    try:
+        code, out, _ = r.py("busy_import.py", "--file", str(ev), "--json", email=MEI)
+        r.record("busy: import without --approved is refused", code == 1 and "Refused" in out, out[-160:])
+        code, out, _ = r.py("busy_import.py", "--file", str(ev), "--approved", "--json", email="nobody@example.com")
+        r.record("busy: unknown user refused", code == 1 and "Refused" in out, out[-160:])
+
+        code, out, err = r.py("busy_import.py", "--file", str(ev), "--approved", "--json", email=MEI)
+        d = _json(out)
+        path = root / d.get("file", "nope")
+        text = mc.read_text(path) if path.is_file() else ""
+        saved = _json(text)
+        blocks = saved.get("busy") or []
+        ok = code == 0 and path.is_file() and str(d.get("file", "")).startswith("raw/calendar/mei/") \
+            and blocks == [{"start": "2026-11-05T09:00:00+08:00", "end": "2026-11-05T10:30:00+08:00"},
+                           {"start": "2026-11-12T13:00:00+08:00", "end": "2026-11-12T17:00:00+08:00"}] \
+            and not any(w in text for w in ("Dentist", "summary", "attendees", "Clinic", "description", "home.example")) \
+            and {"summary", "attendees", "description", "location"} <= set(d.get("dropped_fields") or []) \
+            and saved.get("approved_by") == "mei" and "calendar | mei | raw/calendar/mei/" in mc.read_text(log)
+        r.record("busy: events become merged start/end blocks; titles and attendees never stored", ok, str(blocks)[:200], out + err)
+
+        mc.write_text(planted, "{}")  # an older file: the newest import must win
+        code, out, _ = r.py("busy_import.py", "--file", str(fb), "--approved", "--json", email=MEI)
+        d2 = _json(out)
+        latest = mc.load_busy(root, "mei")
+        r.record("busy: free/busy shape imports; a new file each time; the latest wins",
+                 code == 0 and d2.get("file") != d.get("file") and latest == [{"start": "2026-11-10T10:00:00+08:00", "end": "2026-11-10T11:00:00+08:00"}],
+                 str(latest))
+        planted.unlink(missing_ok=True)
+
+        r.py("build_books.py")
+        books = root / "wiki" / "books"
+        cal = _json(mc.read_text(books / "mei.calendar.json")) if (books / "mei.calendar.json").is_file() else {}
+        team = _json(mc.read_text(books / "team.calendar.json")) if (books / "team.calendar.json").is_file() else {}
+        busy_mine = [x for x in cal.get("items") or [] if x.get("kind") == "busy"]
+        busy_team = [x for x in team.get("items") or [] if x.get("kind") == "busy" and x.get("rep") == "mei"]
+        r.record("busy: calendar JSON shows anonymous busy blocks (mine and team)",
+                 len(busy_mine) == 1 and busy_mine[0].get("title") == "Busy" and not busy_mine[0].get("live") and len(busy_team) == 1,
+                 str(busy_mine)[:200])
+
+        code, out, _ = r.py("appointments.py", "add", "--account", "harbourlight-foods", "--start", "2026-11-10 10:30", "--json", email=MEI)
+        r.record("busy: booking over a busy block warns", code == 0 and "busy block" in " ".join(_json(out).get("warnings") or []), out[-200:])
+
+        bad = cal_dir / "mei" / "2026-11-02-0800.json"
+        mc.write_text(bad, json.dumps({"type": "busy", "rep": "mei", "busy": [{"start": "2026-11-11T09:00:00+08:00", "end": "2026-11-11T10:00:00+08:00", "summary": "Doctor"}]}))
+        code, out, _ = r.py("lint.py", "--json")
+        errs = {(i["check"], i["path"]) for i in _json(out).get("items", []) if i["level"] == "error"}
+        r.record("busy: lint errors on a calendar file that keeps event details (rule 8)",
+                 code == 1 and ("calendar", "raw/calendar/mei/2026-11-02-0800.json") in errs, str(errs)[:200])
+        bad.unlink(missing_ok=True)
+    finally:
+        for pth, text in orig.items():
+            if text is None:
+                pth.unlink(missing_ok=True)
+            else:
+                mc.write_text(pth, text)
+        _rmtree(cal_dir) if cal_dir.exists() else None
+        for f in (ev, fb):
+            f.unlink(missing_ok=True)
+
+
 def t_help(r: Runner) -> None:
     bad = []
     for s in ("mama_common.py", "session_start.py", "sync.py", "build_index.py",
@@ -1805,7 +1887,7 @@ def t_help(r: Runner) -> None:
               "ingest.py", "eval.py", "fetch_dataset.py", "resolve.py", "score.py", "recommend.py",
               "draft_check.py", "classify_reply.py", "suppress.py", "claim.py", "allocate.py",
               "weekly.py", "crm_update.py", "channels.py", "connect.py", "send.py", "registry_data.py",
-              "company_check.py", "company_analytics.py", "appointments.py"):
+              "company_check.py", "company_analytics.py", "appointments.py", "busy_import.py"):
         code, out, _ = r.py(s, "--help")
         if code != 0 or "usage" not in out.lower():
             bad.append(s)
@@ -1832,7 +1914,7 @@ def main(argv: list[str] | None = None) -> int:
         for test in (t_help, t_no_presentation, t_frontmatter, t_guard, t_lint, t_lint_secrets, t_find, t_index, t_books, t_session,
                      t_sync, t_skills, t_ingest, t_fetch, t_resolve, t_score, t_recommend, t_eval,
                      t_draft_check, t_send, t_company_check, t_company_analytics, t_classify, t_suppress, t_claim, t_claim_race, t_allocate,
-                     t_weekly, t_crm_update, t_appointments):
+                     t_weekly, t_crm_update, t_appointments, t_busy):
             try:
                 test(runner)
             except Exception as exc:  # noqa: BLE001

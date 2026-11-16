@@ -226,3 +226,8 @@
 .ev.short span { flex: 0 0 auto; }
 .agenda.compact { gap: 4px; }
 .agenda.compact .ag-row { padding: 5px 8px; grid-template-columns: 46px 3px minmax(0, 1fr) auto; }
+/* Google Calendar busy blocks (Phase 6): anonymous, hatched, never movable. */
+.ev.k-busy { background-color: var(--surface-2); background-image: var(--hatch); box-shadow: inset 0 0 0 1px var(--line-2); color: var(--muted); z-index: 0; }
+.ev.k-busy b { font-weight: 600; color: var(--muted); }
+.ev.k-busy:hover { box-shadow: inset 0 0 0 1px var(--muted); }
+.ev.k-busy.sel { background: var(--muted); color: #fff; }

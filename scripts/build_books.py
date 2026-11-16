@@ -283,7 +283,7 @@ def _day_item(kind: str, iid: str, day: dt.date, title: str, **extra) -> dict:
 def calendar_items(root: Path, reps: list[dict], accounts: list, touches: list[dict], on: dt.date) -> list[dict]:
     """Every dated item for the given reps (their accounts and appointments), plus their markets' holidays."""
     import lint
-    from mama_common import LIVE_APPOINTMENT, load_appointments, market_cfg, market_holidays, read_page, to_date
+    from mama_common import LIVE_APPOINTMENT, busy_file, load_appointments, load_busy, market_cfg, market_holidays, read_page, rel_posix, to_date
     lo, hi = on - dt.timedelta(days=CAL_BEFORE), on + dt.timedelta(days=CAL_AFTER)
     inside = lambda d: d is not None and lo <= d <= hi
     rep_ids = {r["id"] for r in reps}
@@ -307,6 +307,14 @@ def calendar_items(root: Path, reps: list[dict], accounts: list, touches: list[d
                       "tz": norm(row.get("tz")), "rep": rep, "account": _acc_ref(page) if page else {"id": norm(row.get("account"))},
                       "contact": contact, "contact_name": cname, "location": norm(row.get("location")),
                       "live": norm(row.get("status")) in LIVE_APPOINTMENT, "ref": "log/appointments.csv"})
+
+    # Google Calendar busy blocks: anonymous "Busy", start/end only (rule 8), never live or movable.
+    for r in reps:
+        f = busy_file(root, r["id"])
+        for b in load_busy(root, r["id"]):
+            if inside(to_date(b["start"][:10])):
+                items.append({"id": f"busy-{r['id']}-{b['start']}", "kind": "busy", "status": "", "title": "Busy", "start": b["start"],
+                              "end": b["end"], "all_day": False, "rep": r["id"], "live": False, "ref": rel_posix(f, root) if f else ""})
 
     last = lint.last_touch_dates(touches)
     for p in accounts:

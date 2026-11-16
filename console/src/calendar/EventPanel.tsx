@@ -29,6 +29,8 @@ export function EventPanel({ item, tz, now, onClose, act }: { item: CalItem; tz:
     actions.push({ label: 'Book a renewal call', run: () => act.prefill(`/mama-schedule book @${acc.id} `) });
   } else if (item.kind === 'claim_lapse' && acc?.id) {
     actions.push({ label: 'Plan the next touch', run: () => act.ask(`/mama-recommend ${acc.id}`), primary: true });
+  } else if (item.kind === 'busy') {
+    actions.push({ label: 'Resync my calendar', run: () => act.prefill('/mama-schedule sync my Google Calendar busy times'), primary: true });
   } else if (item.kind === 'event') {
     actions.push({ label: 'Who should I meet?', run: () => act.ask(`/mama-brief ${item.id.replace(/^ev-/, '')}`), primary: true });
   }
@@ -64,7 +66,9 @@ export function EventPanel({ item, tz, now, onClose, act }: { item: CalItem; tz:
         ))}
       </div>
       {item.ref && <button type="button" className="ref" onClick={() => act.openSource(item.ref!)}>{item.ref}</button>}
-      <p className="evp-note">Changes go through Sales Mama in chat: it checks ownership, clashes and holidays, then asks you to confirm.</p>
+      <p className="evp-note">{item.kind === 'busy'
+        ? 'From your Google Calendar: busy times only. No titles, attendees or details are stored, and Sales Mama never changes your calendar.'
+        : 'Changes go through Sales Mama in chat: it checks ownership, clashes and holidays, then asks you to confirm.'}</p>
     </aside>
   );
 }

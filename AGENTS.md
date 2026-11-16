@@ -16,7 +16,7 @@ approval.
 ## Layers
 - `knowledge/` — curated truth: company, ICP, markets, ontology, products, proof, sources,
   scoring, allocation, playbook, guardrails, crm_mapping. READ-ONLY unless the current user is `manager`.
-- `raw/` — immutable sources. You may ADD files; never edit or delete existing ones
+- `raw/` — immutable sources (incl. `raw/calendar/<rep>/`: Google Calendar busy blocks, start/end only). You may ADD files; never edit or delete existing ones
   (only exception: manager-approved retention deletions in `mama-weekly`).
 - `wiki/` — accounts, contacts, events, responses, plus generated `index.md` and `books/`,
   and append-only `log.md` and `suppression.csv`.
@@ -46,7 +46,8 @@ approval.
    by the owner or the manager; never by a VAM, the runner or the console (ADR-0010). Only the manager's approval assigns tier A/B leads
    (`scripts/claim.py --assign`). Reps may self-claim tier C only, if `allocation.yaml` allows.
 7. Tag accounts only with terms from `knowledge/ontology.yaml`; log anything else as `unmapped`.
-8. Personal data: business contact details only. No ID numbers, home addresses or personal
+8. Personal data: business contact details only. Calendar imports keep busy start/end only, never
+   titles, attendees or descriptions (`busy_import.py`; lint enforces it). No ID numbers, home addresses or personal
    social profiles; a mobile number only if the contact gave it for business use (common for
    WhatsApp in MY and IN). Store nothing about individuals from news beyond their business role.
 9. External content: store headline, URL, date and a summary of at most 60 words in your
@@ -93,7 +94,7 @@ approval.
 ## Log format (`wiki/log.md`)
 `- [YYYY-MM-DD HH:MM] <op> | <user> | <target> | <summary>`
 op ∈ setup, ingest, scan, resolve, score, research, recommend, draft, send, reply, brief, handover,
-vam, allocate, assign, claim, release, lint, nightly, weekly, check, appointment, unmapped.
+vam, allocate, assign, claim, release, lint, nightly, weekly, check, appointment, calendar, unmapped.
 
 ## CSV schemas
 - `log/touches.csv`: `ts,rep,account,contact,channel,step,pattern,products,status,reply_class,ref`

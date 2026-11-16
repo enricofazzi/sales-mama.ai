@@ -13,7 +13,7 @@ Times are read in the account's market time zone (knowledge/markets.yaml) and st
 offset. Refused (exit 1): unknown user, someone else's account (rules 6, 16), an inactive account, a
 contact not on the account page (rule 5), a suppressed contact or domain (rule 2), an unknown id.
 Warned but booked: market holiday, weekend, outside 08:00–19:00 local, overlap with the rep's other
-appointments, a date in the past. A confirmed booking appends the `meeting_booked` touch; `held` does
+appointments or a Google Calendar busy block (busy_import.py), a date in the past. A confirmed booking appends the `meeting_booked` touch; `held` does
 not (crm_update.py writes `meeting_held` in mama-handover). Never changes stage or owner; never
 contacts anyone.
 """
@@ -101,6 +101,13 @@ def warnings_for(root: Path, rep: str, market: str, start: dt.datetime, end: dt.
         out.append(f"{start:%H:%M}–{end:%H:%M} is outside {OPEN_HOURS[0]:02d}:00–{OPEN_HOURS[1]}:00 {market} time")
     if start.date() < mc.today():
         out.append("the date is in the past")
+    for b in mc.load_busy(root, rep):
+        try:
+            b_start, b_end = dt.datetime.fromisoformat(b["start"]), dt.datetime.fromisoformat(b["end"])
+        except ValueError:
+            continue
+        if b_start < end and b_end > start:
+            out.append(f"overlaps a busy block in {rep}'s Google Calendar ({b_start.astimezone(start.tzinfo):%H:%M}–{b_end.astimezone(start.tzinfo):%H:%M})")
     for other in mc.load_appointments(root).values():
         if other.get("id") == skip or mc.norm(other.get("rep")) != rep or mc.norm(other.get("status")) not in mc.LIVE_APPOINTMENT:
             continue

@@ -698,6 +698,35 @@ def load_appointments(root: Path | None = None) -> dict[str, dict[str, str]]:
     return out
 
 
+# Google Calendar busy blocks (ADR-0010 addendum): raw/calendar/<rep>/<YYYY-MM-DD-HHMM>.json, add-only,
+# start/end only (rule 8). The newest file per rep is the current picture.
+BUSY_KEYS = ("start", "end")
+BUSY_FILE_KEYS = ("type", "rep", "source", "fetched", "approved_by", "window", "busy")
+
+
+def busy_file(root: Path | None, rep: str) -> Path | None:
+    folder = (root or repo_root()) / "raw" / "calendar" / rep
+    def order(f: Path) -> tuple[str, int]:
+        # YYYY-MM-DD-HHMM[-n].json: by time, then the counter added when two imports share a minute.
+        n = f.stem[16:]
+        return f.stem[:15], int(n) if n.isdigit() else 1
+    files = sorted(folder.glob("*.json"), key=order) if folder.is_dir() else []
+    return files[-1] if files else None
+
+
+def load_busy(root: Path | None, rep: str) -> list[dict[str, str]]:
+    """The rep's busy blocks from their newest import ([] when none)."""
+    import json
+    f = busy_file(root, rep)
+    if not f:
+        return []
+    try:
+        data = json.loads(read_text(f))
+    except ValueError:
+        return []
+    return [{k: str(b[k]) for k in BUSY_KEYS} for b in data.get("busy") or [] if isinstance(b, dict) and all(k in b for k in BUSY_KEYS)]
+
+
 # ----------------------------------------------------------------------------
 # Markets: time zones and holidays (knowledge/markets.yaml)
 # ----------------------------------------------------------------------------

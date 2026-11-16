@@ -64,4 +64,11 @@ describe('calendar time', () => {
     expect(valid({ ...appt('day', '2026-12-02', '2026-12-03'), all_day: true })).toBe(true);
     expect(() => place(appt('bad', 'nope', 'nope'), 'Asia/Singapore')).not.toThrow();
   });
+
+  it('Google Calendar busy blocks are placed like meetings but are never live', () => {
+    const b = { id: 'busy-praveen-1', kind: 'busy', status: '', title: 'Busy', start: '2026-11-17T13:00:00+08:00', end: '2026-11-17T14:00:00+08:00', all_day: false, live: false };
+    const p = place(b, 'Asia/Singapore');
+    expect([p.day, p.startMin, p.endMin, p.allDay]).toEqual(['2026-11-17', 780, 840, false]);
+    expect(nextAppointment({ tz: 'Asia/Singapore', items: [b] } as any, new Date('2026-11-17T09:00:00+08:00'))).toBeNull();
+  });
 });

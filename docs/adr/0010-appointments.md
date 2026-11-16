@@ -25,3 +25,12 @@
   - The calendar is the same data in chat (A2UI surfaces), the console views and plain Claude Code.
   - `lint.py` warns about malformed appointment rows. `eval.py` checks that every live appointment is owned, valid and not suppressed.
   - Google Calendar (Phase 6) will add read-only **busy blocks only**: start and end, never titles or attendees of personal events (rule 8). Invites to prospects are outward contact and go through drafts and approval (ADR-0007).
+
+## Addendum (2026-11-16): Google Calendar busy blocks (Phase 6)
+- **Read-only, busy only.** A rep runs "sync my calendar" in **mama-schedule**. The agent reads their primary calendar through the claude.ai Google Calendar connector's read tools, preferring free/busy. `scripts/busy_import.py --approved` then keeps **only start and end** of each busy period. Titles, attendees, descriptions and locations are dropped before anything is written, and the result lists the dropped field names. Declined, free (transparent) and all-day events are skipped, and overlaps are merged.
+- **Add-only files.** Each import is a new `raw/calendar/<rep>/<YYYY-MM-DD-HHMM>.json`, and the newest one per rep wins. Retention is 90 days (`knowledge/guardrails.md`).
+- **Enforced.** `lint.py` raises an **error** for any calendar file holding more than the busy schema (rule 8).
+- **Used, never written back.**
+  - `build_books.py` shows the blocks as anonymous "Busy" items in the rep's and the team calendar.
+  - `appointments.py` warns when a booking overlaps one.
+  - Nothing ever creates, changes or deletes a Google Calendar event: invites to prospects are outward contact and go through drafts and approval (ADR-0007).

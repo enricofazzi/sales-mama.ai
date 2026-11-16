@@ -99,14 +99,14 @@ export function Week({ cal, days, items, ctx }: { cal: Calendar; days: string[];
                   const h = Math.max(22, top(p.endMin) - top(p.startMin) - 2);
                   return (
                     <button key={p.item.id} type="button"
-                      className={`ev ${statusClass(p.item.status)}${h < 36 ? ' short' : ''}${clash ? ' clash' : ''}${ctx.selected === p.item.id ? ' sel' : ''}${ctx.pending.has(p.item.id) ? ' pending' : ''}${dragging ? ' dragging' : ''}${movable(p.item) && !ctx.readOnly ? ' movable' : ''}`}
+                      className={`ev k-${p.item.kind} ${statusClass(p.item.status)}${h < 36 ? ' short' : ''}${clash ? ' clash' : ''}${ctx.selected === p.item.id ? ' sel' : ''}${ctx.pending.has(p.item.id) ? ' pending' : ''}${dragging ? ' dragging' : ''}${movable(p.item) && !ctx.readOnly ? ' movable' : ''}`}
                       style={{ top: top(p.startMin) + 1, height: h, left: `calc(${(100 / cols) * col}% + 2px)`, width: `calc(${100 / cols}% - 4px)`,
                         ['--k' as any]: k.color, ['--kt' as any]: k.tint, transform: dragging ? `translate(${drag!.dx}px, ${drag!.dy}px)` : undefined }}
                       onPointerDown={e => down(e, p)} onPointerMove={move} onPointerUp={e => up(e, p)}
                       aria-label={`${k.label} ${p.item.title}, ${fmtMin(p.startMin)} to ${fmtMin(p.endMin)}${p.item.status ? `, ${p.item.status}` : ''}`}>
                       <b>{p.item.account?.name ?? p.item.title}</b>
                       <span>{fmtMin(p.startMin)}–{fmtMin(p.endMin)}{p.item.account?.tier ? ` · ${p.item.account.tier}` : ''}</span>
-                      {h > 56 && <small>{p.item.title}</small>}
+                      {h > 56 && p.item.account?.name && p.item.title !== p.item.account.name && <small>{p.item.title}</small>}
                     </button>
                   );
                 })}

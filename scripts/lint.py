@@ -23,6 +23,7 @@ Checks (E = error, W = warning):
   skills       E .claude/skills out of sync with .agents/skills
   dedupe       W same registry id or domain twice within a market
   appointments W log/appointments.csv rows with an unknown account, kind or status, or bad times
+  calendar     E raw/calendar files that keep anything beyond busy start/end (rule 8)
 
 Missing or empty knowledge files and an empty wiki are fine (exit 0).
 Exit 1 only when there are errors. Env MAMA_TODAY=YYYY-MM-DD fixes "today".
@@ -533,6 +534,26 @@ def check_appointments(root: Path, account_ids: set[str], rep: "Report") -> None
             rep.warn("appointments", path, f"{aid}: starts/ends must be ISO with an offset and end after start")
 
 
+def check_calendar_privacy(root: Path, rep: "Report") -> None:
+    """Google Calendar imports keep busy start/end only: never titles, attendees, descriptions (rule 8)."""
+    base = root / "raw" / "calendar"
+    for p in sorted(base.rglob("*.json")) if base.is_dir() else []:
+        rel = mc.rel_posix(p, root)
+        try:
+            data = json.loads(mc.read_text(p))
+        except ValueError:
+            rep.err("calendar", rel, "not valid JSON")
+            continue
+        extra = set(data) - set(mc.BUSY_FILE_KEYS) if isinstance(data, dict) else {"(not an object)"}
+        if extra:
+            rep.err("calendar", rel, f"fields beyond the busy schema: {', '.join(sorted(extra))} (rule 8)")
+        for b in (data.get("busy") or []) if isinstance(data, dict) else []:
+            more = set(b) - set(mc.BUSY_KEYS) if isinstance(b, dict) else {"(not an object)"}
+            if more:
+                rep.err("calendar", rel, f"a busy block keeps {', '.join(sorted(more))}; only start/end are allowed (rule 8)")
+                break
+
+
 def run(root: Path) -> Report:
     rep = Report()
     on = mc.today()
@@ -565,6 +586,7 @@ def run(root: Path) -> Report:
     check_secrets(root, rep)
     check_skills(root, rep)
     check_appointments(root, {p.id for p in accounts}, rep)
+    check_calendar_privacy(root, rep)
     return rep
 
 

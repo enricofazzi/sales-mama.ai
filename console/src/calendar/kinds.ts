@@ -11,6 +11,7 @@ export const KINDS: Record<string, KindMeta> = {
   renewal_window: { label: 'Renewal window', color: 'var(--k-renewal)', tint: 'var(--k-renewal-t)', glyph: '↻', timed: false },
   claim_lapse: { label: 'Claim lapse', color: 'var(--risk)', tint: 'var(--risk-t)', glyph: '!', timed: false },
   holiday: { label: 'Holiday', color: 'var(--muted)', tint: 'var(--neutral-t)', glyph: '▨', timed: false },
+  busy: { label: 'Busy (Google Calendar)', color: 'var(--muted)', tint: 'var(--neutral-t)', glyph: '▧', timed: true },
 };
 export const kindOf = (k: string): KindMeta => KINDS[k] ?? KINDS.meeting;
 export const FILTERS: { key: string; label: string; kinds: string[] }[] = [
@@ -20,6 +21,7 @@ export const FILTERS: { key: string; label: string; kinds: string[] }[] = [
   { key: 'events', label: 'Events', kinds: ['event'] },
   { key: 'risks', label: 'Claim lapses', kinds: ['claim_lapse'] },
   { key: 'holidays', label: 'Holidays', kinds: ['holiday'] },
+  { key: 'busy', label: 'Busy (Google)', kinds: ['busy'] },
 ];
 /** Status as a class name: tentative = dashed, cancelled = struck through, held = checked, no_show = risk dot. */
 export const statusClass = (s: string) => (s ? `st-${s.replace(/_/g, '-')}` : '');

@@ -11,7 +11,7 @@ description: 'Book, move, confirm or cancel appointments (meetings, calls, demos
 
 ## Before you start
 - Who: the account's `owner`, or the manager (rules 6, 16). A rep sees and books only their own accounts.
-- Scripts: `appointments.py` and `build_books.py` (calendar Phase 3). If missing, say which phase adds them and stop.
+- Scripts: `appointments.py` and `build_books.py` (calendar Phase 3), `busy_import.py` (Phase 6, for calendar sync). If missing, say which phase adds them and stop.
 - Re-read the account page and the contact page now (rule 17). The contact must be on the account page (rule 5) and not suppressed (rule 2); the script refuses otherwise.
 - Times are the **account's market time** (`knowledge/markets.yaml` tz: SG/MY UTC+8, IN UTC+5:30). If the rep gives a time in another zone, convert it and say both.
 
@@ -21,12 +21,17 @@ description: 'Book, move, confirm or cancel appointments (meetings, calls, demos
 3. On the rep's "yes", run the same command without `--dry-run`. A confirmed booking appends the `meeting_booked` touch and the `appointment` log line itself; never write either by hand.
 4. Changes: `appointments.py confirm|cancel <apt-id>` (cancel takes `--reason`) or `reschedule <apt-id> --start "<YYYY-MM-DD HH:MM>" [--minutes n]`, each with `--dry-run` first when warnings are possible. Outcomes (`held`, `no-show`) belong to **mama-handover**.
 5. "What's on": `python3 scripts/appointments.py list [--from <date>] [--to <date>] --json` (the manager may add `--rep <id>|all`). After any write, refresh the calendar data: `python3 scripts/build_books.py --rep <me>`; `wiki/books/<me>.calendar.json` also holds follow-ups due, renewals, claim lapses, events and holidays for the same window.
-6. Offer the obvious next step: **mama-brief** for an appointment in the next 24 hours; a confirmation note through **mama-draft** (never sent from here; the rep approves sending in **mama-send**).
+6. "Sync my Google Calendar" (busy times only, ADR-0010 addendum):
+   - Ask first: "Import your busy times (start and end only, no titles) for the next 30 days?" Continue only on yes.
+   - Use the claude.ai **Google Calendar connector's read tools only** on the rep's own primary calendar, from yesterday to +30 days, preferring a free/busy query over listing events. If the connector isn't authenticated, run its `authenticate` tool, give the rep the link, and stop until they're done.
+   - Save the tool's raw JSON to a temporary file **outside the repo** (the session scratch folder), then run `python3 scripts/busy_import.py --file <that file> --approved --json`. Report the block count and the `dropped_fields` (names only, never values), then delete the temp file and run `python3 scripts/build_books.py --rep <me>`.
+   - Never quote event titles, attendees or descriptions, even in chat; never import a teammate's calendar.
+7. Offer the obvious next step: **mama-brief** for an appointment in the next 24 hours; a confirmation note through **mama-draft** (never sent from here; the rep approves sending in **mama-send**).
 
 ## Never
 - Book, move or cancel without the rep's explicit yes for that change.
 - Book for an account you don't own unless you are the manager (rules 6, 16), or with a contact who isn't on the account page (rule 5) or is suppressed (rule 2).
-- Send invites or messages from here, or touch a calendar connector to create events: that is outward contact and goes through drafts and **mama-send** (ADR-0007). Google Calendar is read-only busy blocks only, later (Phase 6).
+- Send invites or messages from here, or use any calendar connector tool that creates, changes or deletes events: that is outward contact and goes through drafts and **mama-send** (ADR-0007). Google Calendar is read-only busy blocks only (step 6).
 - Change `stage` or `owner`; edit `log/appointments.csv` or `log/touches.csv` by hand.
 
 ## Finish
