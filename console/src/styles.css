@@ -46,7 +46,16 @@ a { color: var(--mama); }
 /* Layout */
 .shell { display: flex; flex-wrap: wrap; gap: 24px; padding: 24px; max-width: 1520px; margin: 0 auto; align-items: flex-start; }
 .chat { flex: 999 1 640px; min-width: 0; display: flex; flex-direction: column; gap: 16px; }
-.rail { flex: 1 1 300px; max-width: 380px; display: flex; flex-direction: column; gap: 14px; position: sticky; top: 84px; }
+.rail { flex: 1 1 300px; max-width: 380px; display: flex; flex-direction: column; gap: 14px; position: sticky; top: 84px;
+  /* Taller than the window on a laptop: give it its own scroll so its bottom is always reachable. */
+  max-height: calc(100dvh - 96px); overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; padding-bottom: 12px; }
+.jump { position: sticky; bottom: 150px; align-self: center; z-index: 4; display: inline-flex; align-items: center; gap: 6px;
+  min-height: 36px; padding: 6px 14px; border-radius: 999px; border: 1px solid var(--line-2); background: var(--surface);
+  color: var(--ink); font-size: 13px; font-weight: 600; cursor: pointer; box-shadow: 0 6px 20px rgba(22,19,31,.14);
+  animation: jump-in .22s cubic-bezier(.2,.8,.2,1); }
+.jump:hover { background: var(--mama-t); }
+@keyframes jump-in { from { opacity: 0; transform: translateY(8px) scale(.96); } }
+@media (prefers-reduced-motion: reduce) { .jump { animation: none; } }
 
 /* Turns */
 .you { align-self: flex-end; max-width: 80%; padding: 12px 18px; border-radius: 20px 20px 6px 20px; background: var(--ink); color: #fff; white-space: pre-wrap; overflow-wrap: anywhere; }
@@ -203,7 +212,7 @@ a { color: var(--mama); }
 
 @media (max-width: 900px) {
   .shell { padding: 16px; gap: 16px; }
-  .rail { order: 2; position: static; max-width: none; flex-direction: row; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 6px; }
+  .rail { order: 2; position: static; max-width: none; max-height: none; overflow-y: visible; flex-direction: row; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 6px; }
   .rail > * { flex: 0 0 min(300px, 82vw); scroll-snap-align: start; }
   .top { padding-left: 16px; padding-right: 16px; }
   .you { max-width: 92%; }

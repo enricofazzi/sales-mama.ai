@@ -1,5 +1,6 @@
-import { useCallback, useEffect, useRef, useState, type FormEvent, type KeyboardEvent } from 'react';
+import { useCallback, useRef, useState, type FormEvent, type KeyboardEvent } from 'react';
 import { useBridge } from './useBridge';
+import { useStickToBottom } from './useStickToBottom';
 import { TurnView } from './components/Turn';
 import { Rail } from './components/Rail';
 import { SourceDrawer } from './components/SourceDrawer';
@@ -11,14 +12,14 @@ export function App() {
   const { turns, rail, connected, busy, replay, saved, ask, stop, newChat } = useBridge();
   const [draft, setDraft] = useState('');
   const [source, setSource] = useState<string | null>(null);
-  const endRef = useRef<HTMLDivElement>(null);
+  const chatRef = useRef<HTMLElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const me = rail?.me;
   const manager = me?.role === 'manager';
   const skills = manager ? MANAGER_SKILLS : REP_SKILLS;
   const canAsk = connected && !busy;
 
-  useEffect(() => { endRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' }); }, [turns]);
+  const { showJump, jump } = useStickToBottom(chatRef, turns.length);
 
   const prompt = useCallback((text: string) => { if (canAsk) ask(text); }, [ask, canAsk]);
   const ctx = { onPrompt: prompt, onSource: setSource, disabled: !canAsk };
@@ -50,7 +51,7 @@ export function App() {
       </header>
 
       <div className="shell">
-        <main className="chat">
+        <main className="chat" ref={chatRef}>
           {turns.length === 0 && (
             <div className="empty-state">
               <h1>{me ? `Morning, ${me.name.split(' ')[0]}.` : 'Sales Mama'}</h1>
@@ -62,7 +63,12 @@ export function App() {
             </div>
           )}
           {turns.map(t => <TurnView key={t.id} t={t} ctx={ctx} />)}
-          <div ref={endRef} />
+          {showJump && (
+            <button type="button" className="jump" onClick={jump} aria-label="Jump to the latest message">
+              <svg aria-hidden="true" width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="2"><path d="M7 2v9M3 7.5 7 11.5l4-4" /></svg>
+              {busy ? 'New activity' : 'Jump to latest'}
+            </button>
+          )}
 
           <form className="composer" onSubmit={submit}>
             <div className="slash" aria-label="Skills">
