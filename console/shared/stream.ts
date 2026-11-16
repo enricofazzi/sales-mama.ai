@@ -264,7 +264,8 @@ export function describeTool(name: string, input: Record<string, any>, root?: st
       const cmd = String(input.command ?? '');
       const script = /(scripts\/[\w.-]+\.py)/.exec(cmd);
       if (script) return `Running ${script[1]}`;
-      return input.description ? String(input.description) : `Running ${cmd.split('\n')[0].slice(0, 60)}`;
+      const first = cmd.trim().split('\n')[0].trim();
+      return input.description ? String(input.description) : first ? `Running ${first.slice(0, 60)}` : 'Running a command';
     }
     case 'WebSearch': return `Searching the web: ${input.query ?? ''}`;
     case 'WebFetch': {

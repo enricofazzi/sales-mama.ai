@@ -37,10 +37,10 @@ body { overflow: hidden; background-color: var(--ground); background-image: var(
 .clock .win { color: var(--dim-on-ink); }
 .clock.open .win { color: #E6F7B0; }
 .hdr-right { margin-left: auto; display: flex; align-items: center; gap: 8px; flex: 0 0 auto; }
-.run-status { display: inline-flex; align-items: center; gap: 7px; font-size: 13px; color: var(--dim-on-ink); padding: 0 6px; }
+.run-status { flex: 0 0 auto; white-space: nowrap; display: inline-flex; align-items: center; gap: 7px; font-size: 13px; color: var(--dim-on-ink); padding: 0 6px; }
 .run-status i { width: 8px; height: 8px; border-radius: 50%; background: #5E5873; }
-.run-status.live { color: #E6F7B0; }
-.run-status.live i { background: var(--lime); animation: breathe 1.2s ease-in-out infinite; }
+.run-status.is-live { color: #E6F7B0; }
+.run-status.is-live i { background: var(--lime); animation: breathe 1.2s ease-in-out infinite; }
 .icon-btn { width: 36px; height: 36px; border-radius: 50%; border: 0; background: transparent; color: #fff; display: grid; place-items: center; cursor: pointer;
   transition: background var(--t-fast) var(--ease-out); }
 .icon-btn:hover { background: var(--night-2); }

@@ -9,7 +9,7 @@ import { WebSocketServer, type WebSocket } from 'ws';
 import { createServer as createVite } from 'vite';
 import { buildViewer } from './viewer';
 import { Run } from './engine';
-import { findRepoRoot, readData, readRail, readSource } from './repo';
+import { findRepoRoot, listAccounts, listSkills, readData, readRail, readSource } from './repo';
 import type { ClientMsg, ServerMsg } from '../shared/protocol';
 
 const HOST = '127.0.0.1';
@@ -54,6 +54,11 @@ const http = createServer((req, res) => {
     buildViewer(consoleDir).then(
       b => res.writeHead(200, { 'content-type': 'application/json' }).end(JSON.stringify(b)),
       e => res.writeHead(500, { 'content-type': 'text/plain' }).end(`viewer build failed: ${(e as Error).message}`));
+    return;
+  }
+  if (url.pathname === '/api/skills' || url.pathname === '/api/accounts') {
+    const body = url.pathname === '/api/skills' ? listSkills(root) : listAccounts(root);
+    res.writeHead(200, { 'content-type': 'application/json', 'cache-control': 'no-store' }).end(JSON.stringify(body));
     return;
   }
   if (url.pathname === '/api/replay') {

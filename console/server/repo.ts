@@ -129,3 +129,41 @@ export function readData(root: string, rel: string): { ok: true; value: unknown 
   try { return { ok: true, value: JSON.parse(readFileSync(f.real, 'utf8')) }; }
   catch (e) { return { ok: false, status: 422, error: `${rel} is not valid JSON: ${(e as Error).message}` }; }
 }
+
+// ---------------------------------------------------------------------------------------------
+// Composer and palette data (read-only, spec §5.2–5.3)
+// ---------------------------------------------------------------------------------------------
+const MANAGER_SKILLS = new Set(['mama-manager', 'mama-allocate', 'mama-scan', 'mama-vam', 'mama-nightly', 'mama-weekly', 'mama-ingest']);
+export interface SkillInfo { name: string; description: string; role: 'rep' | 'manager' | 'anyone' }
+
+/** Skills from .agents/skills/<name>/SKILL.md frontmatter, first sentence of the description. */
+export function listSkills(root: string): SkillInfo[] {
+  const dir = join(root, '.agents', 'skills');
+  if (!existsSync(dir)) return [];
+  return readdirSync(dir).filter(d => existsSync(join(dir, d, 'SKILL.md'))).sort().map(name => {
+    const meta = frontmatter(readFileSync(join(dir, name, 'SKILL.md'), 'utf8'));
+    const desc = String(meta.description ?? '').replace(/\s+/g, ' ').trim();
+    const first = (/^(.+?[.!?])(\s|$)/.exec(desc)?.[1] ?? desc).slice(0, 160);
+    const role: SkillInfo['role'] = MANAGER_SKILLS.has(name) ? 'manager' : name.startsWith('company-') ? 'anyone' : 'rep';
+    return { name, description: first, role };
+  });
+}
+
+export interface AccountInfo { id: string; name: string; market: string; tier: string; stage: string; owner: string; score: number | null }
+
+/** Accounts for @-mentions. A rep sees only their own (rule 16); the manager sees all. */
+export function listAccounts(root: string): AccountInfo[] {
+  const { me } = currentUser(root);
+  const dir = join(root, 'wiki', 'accounts');
+  if (!me || !existsSync(dir)) return [];
+  const out: AccountInfo[] = [];
+  for (const f of readdirSync(dir).filter(f => f.endsWith('.md'))) {
+    const m = frontmatter(readFileSync(join(dir, f), 'utf8'));
+    const owner = String(m.owner ?? '').trim();
+    if (me.role !== 'manager' && owner !== me.id) continue;
+    const score = Number(m.score);
+    out.push({ id: String(m.id ?? f.replace(/\.md$/, '')), name: String(m.name ?? ''), market: String(m.market ?? ''),
+      tier: String(m.tier ?? ''), stage: String(m.stage ?? ''), owner, score: Number.isFinite(score) ? score : null });
+  }
+  return out.sort((a, b) => (b.score ?? -1) - (a.score ?? -1) || a.name.localeCompare(b.name));
+}

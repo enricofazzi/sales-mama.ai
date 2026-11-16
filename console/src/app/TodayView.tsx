@@ -6,7 +6,8 @@ import type { Rail } from '../../shared/protocol';
 import { sendWindow } from '../../shared/window';
 import { Ring, TierMix } from '../components/Cards';
 import { clock, dayLabel, hourIn, useNow } from '../hooks/useNow';
-import { Composer } from './ChatView';
+import { Composer } from '../chat/Composer';
+import type { AccountInfo, SkillInfo } from '../../server/repo';
 import { IconAlert, IconArrow, IconBolt, IconFire, IconFlag, IconMail, IconSpark, IconUsers } from './Icons';
 
 interface Action { key: string; tone: string; icon: ReactNode; title: string; sub: string; prompt: string; cta: string }
@@ -45,8 +46,9 @@ function actions(rail: Rail, manager: boolean): Action[] {
   return out.slice(0, 6);
 }
 
-export function TodayView({ rail, canAsk, busy, live, ask, stop, openSource }: {
-  rail: Rail | null; canAsk: boolean; busy: boolean; live: boolean; ask: (t: string) => void; stop: () => void; openSource: (p: string) => void;
+export function TodayView({ rail, canAsk, live, ask, stop, openSource, skills, accounts }: {
+  rail: Rail | null; canAsk: boolean; live: boolean; ask: (t: string) => void; stop: () => void; openSource: (p: string) => void;
+  skills: SkillInfo[]; accounts: AccountInfo[];
 }) {
   const now = useNow(30_000);
   const me = rail?.me;
@@ -128,7 +130,7 @@ export function TodayView({ rail, canAsk, busy, live, ask, stop, openSource }: {
         </ol>
 
         <h2 className="sec">Ask anything</h2>
-        <Composer manager={manager} busy={busy} canAsk={canAsk} live={live} ask={ask} stop={stop} compact />
+        <Composer inputId="composer-today" manager={manager} skills={skills} accounts={accounts} live={false} canAsk={canAsk} ask={ask} stop={stop} compact />
       </div>
     </section>
   );

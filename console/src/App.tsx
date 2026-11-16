@@ -1,29 +1,51 @@
-// The app shell (spec §3–4): ink header with market clocks and the pulse bar, a slim nav rail, the
-// routed main pane and the context panel. The document never scrolls; each pane owns its scroll.
-import { useCallback, useMemo, useState } from 'react';
+// The app shell (spec §3–5): ink header with market clocks, search and the pulse bar, a slim nav
+// rail, the routed main pane and the context panel. The document never scrolls; each pane owns its
+// scroll. Every button anywhere is a prompt (ADR-0006).
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import type { AccountInfo, SkillInfo } from '../server/repo';
 import { useBridge } from './useBridge';
-import { useRoute } from './app/router';
+import { useRoute, type Route } from './app/router';
 import { useTheme } from './hooks/useTheme';
+import { useHotkeys } from './hooks/useHotkeys';
 import { Header, type PulseLane } from './app/Header';
 import { NavRail, TabBar } from './app/Nav';
 import { ChatView } from './app/ChatView';
 import { TodayView } from './app/TodayView';
 import { BookView } from './app/BookView';
+import { IconAuto, IconBook, IconBolt, IconChat, IconFire, IconPlus, IconToday } from './app/Icons';
 import { Rail } from './components/Rail';
 import { SourceDrawer } from './components/SourceDrawer';
+import { CommandPalette, ShortcutSheet, type PaletteItem } from './palette/CommandPalette';
+import { loadChats, useSaveChat, type SavedChat } from './chat/history';
+
+function useCatalog(connected: boolean) {
+  const [skills, setSkills] = useState<SkillInfo[]>([]);
+  const [accounts, setAccounts] = useState<AccountInfo[]>([]);
+  useEffect(() => {
+    if (!connected) return;
+    fetch('/api/skills').then(r => r.json()).then(setSkills).catch(() => {});
+    fetch('/api/accounts').then(r => r.json()).then(setAccounts).catch(() => {});
+  }, [connected]);
+  return { skills, accounts };
+}
 
 export function App() {
-  const { turns, rail, connected, busy, replay, saved, ask, stop, newChat } = useBridge();
+  const { turns, rail, connected, busy, replay, replaying, saved, sessionId, chatId, ask, stop, newChat, loadChat } = useBridge();
   const { route, go } = useRoute();
   const { theme, cycle } = useTheme();
+  const { skills, accounts } = useCatalog(connected);
   const [source, setSource] = useState<string | null>(null);
   const [seed, setSeed] = useState<string | null>(null);
+  const [queued, setQueued] = useState<string | null>(null);
+  const [palette, setPalette] = useState(false);
+  const [help, setHelp] = useState(false);
   const me = rail?.me;
   const manager = me?.role === 'manager';
   const canAsk = connected && !busy;
-  const live = busy && !replay && !saved;
+  const live = (busy && !replay && !saved) || replaying;
 
-  // Every button anywhere is a prompt: send it, then show the conversation (ADR-0006).
+  useSaveChat(chatId, turns, sessionId, !replay && !saved);
+
   const askAndShow = useCallback((text: string) => {
     if (!canAsk || !text.trim()) return;
     ask(text);
@@ -31,31 +53,74 @@ export function App() {
   }, [ask, canAsk, go]);
   const ctx = useMemo(() => ({ onPrompt: askAndShow, onSource: setSource, disabled: !canAsk }), [askAndShow, canAsk]);
 
+  // A prompt typed during a run is sent as soon as the run ends.
+  useEffect(() => {
+    if (queued && canAsk) { ask(queued); setQueued(null); }
+  }, [queued, canAsk, ask]);
+
   const lanes: PulseLane[] = useMemo(() => {
     const running = turns.find(t => t.running);
     return (running?.turn.lanes ?? []).map(l => ({ id: l.id, agent: l.agent.toLowerCase(), running: l.status === 'running' }));
   }, [turns]);
 
-  const status = replay ? 'Replay' : saved ? 'Saved result' : !connected ? 'Reconnecting…' : live ? 'Working…' : 'Ready';
-  const onNewChat = useCallback(() => { newChat(); go('chat'); }, [newChat, go]);
+  const status = replay ? (replaying ? 'Replaying…' : 'Replay') : saved ? 'Saved result' : !connected ? 'Reconnecting…' : live ? 'Working…' : 'Ready';
+  const onNewChat = useCallback(() => { newChat(); setQueued(null); go('chat'); }, [newChat, go]);
+  const prefill = useCallback((text: string) => { go('chat'); setSeed(text); }, [go]);
+  const openChat = useCallback((c: SavedChat) => { if (!busy) { loadChat(c); go('chat'); } }, [busy, loadChat, go]);
+
+  useHotkeys({
+    palette: () => setPalette(p => !p),
+    slash: () => prefill('/'),
+    jump: () => { go('chat'); window.dispatchEvent(new Event('mama:jump')); },
+    help: () => setHelp(true),
+    go: k => go(({ t: 'today', c: 'chat', b: 'book' } as Record<string, Route>)[k]),
+  });
+
+  const paletteItems = useMemo<PaletteItem[]>(() => {
+    if (!palette) return [];
+    const items: PaletteItem[] = [
+      { id: 'new', group: 'Actions', label: 'New chat', icon: <IconPlus size={16} />, run: onNewChat },
+      { id: 'theme', group: 'Actions', label: `Switch theme (now ${theme})`, icon: <IconAuto size={16} />, run: cycle },
+      { id: 'keys', group: 'Actions', label: 'Keyboard shortcuts', keys: '?', icon: <IconBolt size={16} />, run: () => setHelp(true) },
+      { id: 'go-today', group: 'Go to', label: 'Today', keys: 'g t', icon: <IconToday size={16} />, run: () => go('today') },
+      { id: 'go-chat', group: 'Go to', label: 'Chat', keys: 'g c', icon: <IconChat size={16} />, run: () => go('chat') },
+      { id: 'go-book', group: 'Go to', label: 'Book', keys: 'g b', icon: <IconBook size={16} />, run: () => go('book') },
+    ];
+    for (const s of skills) {
+      if (!manager && s.role === 'manager') continue;
+      items.push({ id: `skill-${s.name}`, group: 'Skills', label: `/${s.name}`, hint: s.description, icon: <span className="pal-slash">/</span>, run: () => prefill(`/${s.name} `) });
+    }
+    for (const a of accounts) {
+      items.push({ id: `acc-${a.id}`, group: 'Accounts', label: a.name || a.id, hint: `${a.market} · tier ${a.tier || '–'} · ${a.stage || 'new'} · brief me`,
+        icon: <IconFire size={16} />, run: () => prefill(`/mama-brief ${a.id}`) });
+    }
+    for (const c of loadChats()) {
+      items.push({ id: `chat-${c.id}`, group: 'Recent chats', label: c.title, hint: new Date(c.updated).toLocaleString(), icon: <IconChat size={16} />, run: () => openChat(c) });
+    }
+    return items;
+  }, [palette, skills, accounts, manager, theme, cycle, go, onNewChat, prefill, openChat]);
 
   return (
     <div className="app">
-      <Header rail={rail} status={status} live={live} theme={theme} onTheme={cycle} onNewChat={onNewChat} newChatDisabled={busy} lanes={lanes} />
+      <Header rail={rail} status={status} live={live} theme={theme} onTheme={cycle} onNewChat={onNewChat} newChatDisabled={busy} lanes={lanes}
+        onSearch={() => setPalette(true)} />
       <div className={`body r-${route}`}>
         <NavRail route={route} go={go} busy={live} />
         <main className="main" id="main">
-          {route === 'today' && <TodayView rail={rail} canAsk={canAsk} busy={busy} live={live} ask={askAndShow} stop={stop} openSource={setSource} />}
+          {route === 'today' && <TodayView rail={rail} canAsk={canAsk} live={live} ask={askAndShow} stop={stop} openSource={setSource} skills={skills} accounts={accounts} />}
           {/* Chat stays mounted so its scroll position and draft survive a trip to Today or Book. */}
           <div className="route-chat" hidden={route !== 'chat'}>
-            <ChatView turns={turns} ctx={ctx} manager={manager} firstName={me?.name.split(' ')[0] ?? ''} busy={busy} canAsk={canAsk}
-              live={live} ask={ask} stop={stop} seed={seed} onSeedUsed={() => setSeed(null)} />
+            <ChatView turns={turns} ctx={ctx} manager={manager} firstName={me?.name.split(' ')[0] ?? ''} canAsk={canAsk} live={live}
+              ask={ask} stop={stop} seed={seed} onSeedUsed={() => setSeed(null)} skills={skills} accounts={accounts}
+              queued={queued} onQueue={setQueued} onCancelQueue={() => setQueued(null)} onOpenChat={openChat} />
           </div>
           {route === 'book' && <BookView rail={rail} ctx={ctx} />}
         </main>
         {route !== 'today' && <Rail rail={rail} onSource={setSource} onPrompt={askAndShow} disabled={!canAsk} />}
       </div>
       <TabBar route={route} go={go} busy={live} />
+      <CommandPalette open={palette} onClose={() => setPalette(false)} items={paletteItems} />
+      <ShortcutSheet open={help} onClose={() => setHelp(false)} />
       {source && <SourceDrawer path={source} onClose={() => setSource(null)} />}
     </div>
   );

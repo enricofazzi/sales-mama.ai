@@ -34,9 +34,9 @@ export function MarketClocks({ rail }: { rail: Rail | null }) {
   );
 }
 
-export function Header({ rail, status, live, theme, onTheme, onNewChat, newChatDisabled, lanes }: {
+export function Header({ rail, status, live, theme, onTheme, onNewChat, newChatDisabled, lanes, onSearch }: {
   rail: Rail | null; status: string; live: boolean; theme: Theme; onTheme: () => void;
-  onNewChat: () => void; newChatDisabled: boolean; lanes: PulseLane[];
+  onNewChat: () => void; newChatDisabled: boolean; lanes: PulseLane[]; onSearch: () => void;
 }) {
   const me = rail?.me;
   const initials = (me?.name || me?.id || '?').split(/\s+/).map(w => w[0]).slice(0, 2).join('').toUpperCase();
@@ -46,8 +46,12 @@ export function Header({ rail, status, live, theme, onTheme, onNewChat, newChatD
       <header className="hdr">
         <div className="brand"><span className="logo" aria-hidden="true">SM</span><span className="word">Sales Mama</span></div>
         <MarketClocks rail={rail} />
+        <button type="button" className="hdr-search" onClick={onSearch} aria-label="Search or run (Command K)">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" aria-hidden="true"><circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" /></svg>
+          <span>Search or run…</span><kbd>⌘K</kbd>
+        </button>
         <div className="hdr-right">
-          <span className={`run-status${live ? ' live' : ''}`} role="status"><i aria-hidden="true" />{status}</span>
+          <span className={`run-status${live ? ' is-live' : ''}`} role="status"><i aria-hidden="true" />{status}</span>
           <button type="button" className="icon-btn" onClick={onTheme} aria-label={`Theme: ${theme}. Switch theme`} title={`Theme: ${theme}`}><ThemeIcon size={18} /></button>
           <button type="button" className="hdr-btn" onClick={onNewChat} disabled={newChatDisabled}><IconPlus size={16} /><span>New chat</span></button>
           {me && <span className="avatar" title={`${me.name} · ${me.role}`} aria-label={`${me.name}, ${me.role}`}>{initials}</span>}
@@ -62,7 +66,7 @@ export function Header({ rail, status, live, theme, onTheme, onNewChat, newChatD
 export function PulseBar({ live, lanes }: { live: boolean; lanes: PulseLane[] }) {
   const running = lanes.filter(l => l.running);
   return (
-    <div className={`pulse${live ? ' live' : ''}`} aria-hidden="true">
+    <div className={`pulse${live ? ' is-live' : ''}`} aria-hidden="true">
       {live && running.length === 0 && <i className="comet" />}
       {running.map((l, i) => (
         <i key={l.id} className={`comet a-${l.agent}`} style={{ animationDelay: `${(i * 0.37) % 2.2}s`, animationDuration: `${2.2 + (i % 3) * 0.35}s` }} />

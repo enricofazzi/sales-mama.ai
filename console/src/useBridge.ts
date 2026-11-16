@@ -9,6 +9,7 @@ export interface ChatTurn {
   turn: Turn;
   text: string;                                   // main agent text, joined
   running: boolean;
+  startedAt?: number;                             // ms epoch, for the live timer
   error?: { message: string; fix?: string };
 }
 
@@ -24,19 +25,48 @@ export function useBridge() {
   const [connected, setConnected] = useState(false);
   const [busy, setBusy] = useState(false);
   const [sessionId, setSessionId] = useState<string | undefined>(store.get);
+  // One id per conversation, for the local chat history (spec §5.5).
+  const [chatId, setChatId] = useState(() => `c-${Date.now().toString(36)}`);
   const ws = useRef<WebSocket | null>(null);
   const builders = useRef(new Map<string, TurnBuilder>());
 
-  // Replay recorded streams: /?replay=mama-day,mama-manager
+  // Replay recorded streams: /?replay=mama-day,mama-manager. Add &speed=1 to stream them at a
+  // readable pace (demos, design review, motion tests); without it they appear at once.
   const replay = new URLSearchParams(location.search).get('replay');
+  const [replaying, setReplaying] = useState(false);
   useEffect(() => {
     if (!replay) return;
-    Promise.all(replay.split(',').map(async name => {
-      const events = parseLines(await (await fetch(`/api/replay?name=${encodeURIComponent(name)}`)).text());
-      const b = new TurnBuilder();
-      b.applyAll(events);
-      return { id: `replay-${name}`, prompt: name.startsWith('mama-') ? `/${name}` : name, turn: { ...b.turn }, text: b.text(), running: false };
-    })).then(setTurns);
+    const speed = Number(new URLSearchParams(location.search).get('speed') ?? 0);
+    let cancelled = false;
+    (async () => {
+      const recs = await Promise.all(replay.split(',').map(async name => ({
+        name, events: parseLines(await (await fetch(`/api/replay?name=${encodeURIComponent(name)}`)).text()),
+      })));
+      if (!speed) {
+        setTurns(recs.map(({ name, events }) => {
+          const b = new TurnBuilder();
+          b.applyAll(events);
+          return { id: `replay-${name}`, prompt: name.startsWith('mama-') ? `/${name}` : name, turn: { ...b.turn }, text: b.text(), running: false };
+        }));
+        return;
+      }
+      setReplaying(true);
+      for (const { name, events } of recs) {
+        const id = `replay-${name}`, b = new TurnBuilder();
+        const fresh: ChatTurn = { id, prompt: name.startsWith('mama-') ? `/${name}` : name, turn: { ...b.turn }, text: '', running: true, startedAt: Date.now() };
+        // StrictMode runs this effect twice in development; replace rather than duplicate the turn.
+        setTurns(ts => (ts.some(t => t.id === id) ? ts.map(t => (t.id === id ? fresh : t)) : [...ts, fresh]));
+        for (const e of events) {
+          if (cancelled) return;
+          b.apply(e);
+          setTurns(ts => ts.map(t => (t.id === id ? { ...t, turn: { ...b.turn }, text: b.text() } : t)));
+          await new Promise(r => setTimeout(r, Math.max(4, 28 / speed)));
+        }
+        setTurns(ts => ts.map(t => (t.id === id ? { ...t, running: false } : t)));
+      }
+      setReplaying(false);
+    })();
+    return () => { cancelled = true; };
   }, [replay]);
 
   // A saved result shown as a chat turn: /?result=company-check/reports/<date>-<uen>.view.md&ask=/company-check%20<uen>
@@ -82,7 +112,7 @@ export function useBridge() {
         builders.current.set(msg.turnId, b);
         setBusy(true);
         setTurns(ts => ts.some(t => t.id === msg.turnId) ? ts
-          : [...ts, { id: msg.turnId, prompt: msg.text, turn: b.turn, text: '', running: true }]);
+          : [...ts, { id: msg.turnId, prompt: msg.text, turn: b.turn, text: '', running: true, startedAt: Date.now() }]);
         break;
       }
       case 'event': {
@@ -118,7 +148,16 @@ export function useBridge() {
     store.set(undefined);
     setSessionId(undefined);
     setTurns([]);
+    setChatId(`c-${Date.now().toString(36)}`);
   }, []);
 
-  return { turns, rail, connected, busy: busy || !!replay || !!result, replay: !!replay, saved: !!result, sessionId, ask, stop, newChat };
+  /** Reopen a conversation from the local history; the next prompt resumes its Claude session. */
+  const loadChat = useCallback((c: { id: string; sessionId?: string; turns: ChatTurn[] }) => {
+    store.set(c.sessionId);
+    setSessionId(c.sessionId);
+    setTurns(c.turns.map(t => ({ ...t, running: false })));
+    setChatId(c.id);
+  }, []);
+
+  return { turns, rail, connected, busy: busy || !!replay || !!result, replay: !!replay, replaying, saved: !!result, sessionId, chatId, ask, stop, newChat, loadChat };
 }
