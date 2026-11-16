@@ -10,6 +10,9 @@ import { API, CARDS, CARD_NAMES, type CardName } from '../../shared/a2ui-api';
 import { safeActions } from '../../shared/cards';
 import { fromCardProps } from '../../shared/a2ui';
 import { CardView } from '../components/Cards';
+import { Agenda } from '../calendar/Views';
+import { Week, weekDays } from '../calendar/Week';
+import { weekStart, ymd, type CalItem, type Calendar } from '../calendar/time';
 
 export interface SurfaceCtx { onPrompt: (p: string) => void; onSource: (p: string) => void; disabled: boolean; readOnly?: boolean }
 export const SurfaceContext = createContext<SurfaceCtx>({ onPrompt: () => {}, onSource: () => {}, disabled: true });
@@ -463,6 +466,31 @@ function cardComponent(name: CardName) {
 }
 export const OPERATIONAL_CARDS = CARD_NAMES.map(cardComponent);
 
+export const AgendaList = createComponentImplementation({ name: 'AgendaList', schema: API.AgendaList.schema }, ({ props }) => {
+  const { onSource } = useCtx();
+  const items = rows(props.items) as unknown as CalItem[];
+  const tz = str(props.tz) || items.find(i => i.tz)?.tz || 'Asia/Singapore';
+  return <Agenda items={items.slice(0, props.max ?? 50)} tz={tz} day={str(props.day) || undefined} empty={str(props.empty) || undefined} compact
+    select={i => i.ref && onSource(i.ref)} />;
+});
+
+export const CalendarWeek = createComponentImplementation({ name: 'CalendarWeek', schema: API.CalendarWeek.schema }, ({ props }) => {
+  const { onSource } = useCtx();
+  const cal = (isObj(props.calendar) ? props.calendar : null) as unknown as Calendar | null;
+  if (!cal?.items) return <p className="muted">No calendar data.</p>;
+  const now = new Date();
+  const start = weekStart(str(props.start) || ymd(now, cal.tz));
+  const days = weekDays(start);
+  const items = cal.items.filter(i => i.start.slice(0, 10) >= days[0] && i.start.slice(0, 10) <= days[6] || i.end.slice(0, 10) >= days[0] && i.start.slice(0, 10) <= days[6]);
+  const nowParts = new Intl.DateTimeFormat('en-GB', { timeZone: cal.tz, hour: '2-digit', minute: '2-digit', hour12: false }).format(now).split(':').map(Number);
+  return (
+    <div className="a2-calweek">
+      <Week cal={cal} days={days} items={items} ctx={{ tz: cal.tz, today: ymd(now, cal.tz), nowMin: nowParts[0] * 60 + nowParts[1], selected: null, pending: new Set(), readOnly: true,
+        select: i => i.ref && onSource(i.ref), onSlot: () => {}, onMove: () => {} }} />
+    </div>
+  );
+});
+
 export const LegacyCard = createComponentImplementation({ name: 'LegacyCard', schema: API.LegacyCard.schema }, ({ props }) => {
   const ctx = useCtx();
   return <CardView card={props.card as any} issues={(props.issues as string[]) ?? []} ctx={ctx} />;
@@ -470,6 +498,6 @@ export const LegacyCard = createComponentImplementation({ name: 'LegacyCard', sc
 
 export const SALES_MAMA_COMPONENTS = [
   Panel, Grid, Callout, KpiTile, StatGrid, Gauge, BarChartView, LineChartView, DonutChart, Funnel, Heatmap,
-  ScoreBreakdown, DataTable, Verdict, CheckList, CompareTable, FactList, SourceChips, ActionBar, LegacyCard,
+  ScoreBreakdown, DataTable, Verdict, CheckList, CompareTable, FactList, SourceChips, ActionBar, LegacyCard, AgendaList, CalendarWeek,
   ...OPERATIONAL_CARDS,
 ];

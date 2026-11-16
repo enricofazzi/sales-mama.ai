@@ -89,6 +89,23 @@ describe('rendering surfaces', () => {
     expect(html).toContain('0.68');
   });
 
+  it('AgendaList and CalendarWeek render a calendar file bound through dataRef', async () => {
+    const cal = { type: 'calendar', date: '2026-11-16', generated: 'x', tz: 'Asia/Singapore', window: { from: '2026-11-02', to: '2027-01-15' },
+      markets: { SG: { tz: 'Asia/Singapore', send_windows: { days: ['mon', 'tue', 'wed', 'thu'], hours: '09:00-11:30' } } }, next_up: null,
+      items: [{ id: 'apt-1', kind: 'meeting', status: 'confirmed', title: 'Discovery call', start: '2026-11-16T14:00:00+08:00', end: '2026-11-16T14:45:00+08:00',
+        all_day: false, live: true, rep: 'praveen', account: { id: 'kestrel-physio', name: 'Kestrel Physio' }, ref: 'log/appointments.csv' }] };
+    const block = { surfaceId: 'sched', dataRef: 'wiki/books/praveen.calendar.json', components: [
+      { id: 'root', component: 'Column', children: ['ag', 'wk'] },
+      { id: 'ag', component: 'AgendaList', items: { path: '/items' }, day: '2026-11-16' },
+      { id: 'wk', component: 'CalendarWeek', calendar: { path: '/' }, start: '2026-11-16' }] };
+    const { html, part } = await render('```a2ui\n' + JSON.stringify(block) + '\n```', cal);
+    expect(part.kind === 'surface' && part.issues).toEqual([]);
+    expect(html).toContain('Kestrel Physio');
+    expect(html).toContain('14:00');
+    expect(html).toMatch(/class="wk"/);
+    expect(html).toMatch(/class="ev /);
+  });
+
   it('renders a legacy mama-card through the shim', async () => {
     const text = '```mama-card\n{"type":"stats","title":"Book","tiles":[{"label":"Active","value":3}]}\n```';
     const { html } = await render(text, undefined);

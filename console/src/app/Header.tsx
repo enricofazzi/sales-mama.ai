@@ -1,5 +1,6 @@
 // The ink header: brand, live market clocks with send-window state, run status, theme, new chat.
 // Underneath, the pulse bar: one gliding dot per running agent, visible from every screen (spec §2).
+import type { ReactNode } from 'react';
 import type { Rail } from '../../shared/protocol';
 import { sendWindow } from '../../shared/window';
 import { clock, useNow } from '../hooks/useNow';
@@ -34,9 +35,9 @@ export function MarketClocks({ rail }: { rail: Rail | null }) {
   );
 }
 
-export function Header({ rail, status, live, theme, onTheme, onNewChat, newChatDisabled, lanes, onSearch }: {
+export function Header({ rail, status, live, theme, onTheme, onNewChat, newChatDisabled, lanes, onSearch, nextUp }: {
   rail: Rail | null; status: string; live: boolean; theme: Theme; onTheme: () => void;
-  onNewChat: () => void; newChatDisabled: boolean; lanes: PulseLane[]; onSearch: () => void;
+  onNewChat: () => void; newChatDisabled: boolean; lanes: PulseLane[]; onSearch: () => void; nextUp?: ReactNode;
 }) {
   const me = rail?.me;
   const initials = (me?.name || me?.id || '?').split(/\s+/).map(w => w[0]).slice(0, 2).join('').toUpperCase();
@@ -50,6 +51,7 @@ export function Header({ rail, status, live, theme, onTheme, onNewChat, newChatD
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" aria-hidden="true"><circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" /></svg>
           <span>Search or run…</span><kbd>⌘K</kbd>
         </button>
+        {nextUp}
         <div className="hdr-right">
           <span className={`run-status${live ? ' is-live' : ''}`} role="status"><i aria-hidden="true" />{status}</span>
           <button type="button" className="icon-btn" onClick={onTheme} aria-label={`Theme: ${theme}. Switch theme`} title={`Theme: ${theme}`}><ThemeIcon size={18} /></button>

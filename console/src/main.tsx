@@ -6,5 +6,6 @@ import './styles.css';
 import './a2ui/a2ui.css';
 import './styles/shell.css';
 import './styles/chat.css';
+import './styles/calendar.css';
 
 createRoot(document.getElementById('root')!).render(<StrictMode><App /></StrictMode>);

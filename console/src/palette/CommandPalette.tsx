@@ -82,7 +82,8 @@ export const SHORTCUTS: [string, string][] = [
   ['Enter · Shift Enter', 'Send · new line'],
   ['Esc', 'Stop the run, or close a menu or panel'],
   ['⌘↓ / Ctrl ↓', 'Jump to the latest message'],
-  ['g then t · c · b', 'Go to Today · Chat · Book'],
+  ['g then t · c · k · b', 'Go to Today · Chat · Calendar · Book'],
+  ['t · d · w · m · ← →', 'In the calendar: today, day, week, month, previous / next'],
   ['?', 'This sheet'],
 ];
 

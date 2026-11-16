@@ -678,6 +678,59 @@
       ],
       "unevaluatedProperties": false
     },
+    "AgendaList": {
+      "type": "object",
+      "properties": {
+        "component": {
+          "const": "AgendaList"
+        },
+        "items": {
+          "$ref": "common_types.json#/$defs/DynamicValue",
+          "description": "A value that can be a literal, a path, or a function call returning any type."
+        },
+        "day": {
+          "$ref": "common_types.json#/$defs/DynamicString",
+          "description": "Represents a string"
+        },
+        "max": {
+          "type": "number"
+        },
+        "tz": {
+          "$ref": "common_types.json#/$defs/DynamicString",
+          "description": "Represents a string"
+        },
+        "empty": {
+          "$ref": "common_types.json#/$defs/DynamicString",
+          "description": "Represents a string"
+        }
+      },
+      "required": [
+        "component",
+        "items"
+      ],
+      "unevaluatedProperties": false
+    },
+    "CalendarWeek": {
+      "type": "object",
+      "properties": {
+        "component": {
+          "const": "CalendarWeek"
+        },
+        "calendar": {
+          "$ref": "common_types.json#/$defs/DynamicValue",
+          "description": "A value that can be a literal, a path, or a function call returning any type."
+        },
+        "start": {
+          "$ref": "common_types.json#/$defs/DynamicString",
+          "description": "Represents a string"
+        }
+      },
+      "required": [
+        "component",
+        "calendar"
+      ],
+      "unevaluatedProperties": false
+    },
     "PlanCard": {
       "type": "object",
       "properties": {
@@ -3399,6 +3452,12 @@
           "$ref": "#/components/ActionBar"
         },
         {
+          "$ref": "#/components/AgendaList"
+        },
+        {
+          "$ref": "#/components/CalendarWeek"
+        },
+        {
           "$ref": "#/components/PlanCard"
         },
         {
@@ -3557,6 +3616,8 @@
       "FactList",
       "SourceChips",
       "ActionBar",
+      "AgendaList",
+      "CalendarWeek",
       "PlanCard",
       "AgentsCard",
       "DaySummaryCard",
@@ -3638,6 +3699,12 @@
       ],
       "Verdict": [
         "score"
+      ],
+      "AgendaList": [
+        "items"
+      ],
+      "CalendarWeek": [
+        "calendar"
       ]
     },
     "docs": {
@@ -3660,6 +3727,8 @@
       "FactList": "Key–value facts. data = {label: value} map.",
       "SourceChips": "Buttons that open repo files read-only (wiki/, log/, raw/, knowledge/, company-check/reports/).",
       "ActionBar": "Up to 4 buttons; each sends its prompt as the next turn. Never a send action (ADR-0007).",
+      "AgendaList": "A day agenda from a calendar file (wiki/books/<rep>.calendar.json): items = {\"path\": \"/items\"}; day = YYYY-MM-DD to show one day (default: all items), max = rows. Read-only; each row opens its source.",
+      "CalendarWeek": "A week time grid (the console calendar look) from a calendar file: calendar = {\"path\": \"/\"} (the whole file), start = YYYY-MM-DD Monday (default: this week). Read-only.",
       "PlanCard": "Steps of a multi-step skill. steps = [{label, status: pending|running|done|failed, agent?, note?}].",
       "AgentsCard": "Subagent lanes. lanes = [{agent, label, done, total, status}].",
       "DaySummaryCard": "The rep's morning: drafts ready, send window, hot accounts, at-risk count, what needs the rep.",

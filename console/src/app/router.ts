@@ -2,8 +2,8 @@
 // refreshed. Route changes use the View Transitions API where the browser has it.
 import { useCallback, useEffect, useState } from 'react';
 
-export type Route = 'today' | 'chat' | 'book';
-export const ROUTES: Route[] = ['today', 'chat', 'book'];
+export type Route = 'today' | 'chat' | 'calendar' | 'book';
+export const ROUTES: Route[] = ['today', 'chat', 'calendar', 'book'];
 
 function current(): Route {
   const q = new URLSearchParams(location.search);
@@ -22,7 +22,7 @@ export function useRoute() {
   const go = useCallback((to: Route) => {
     if (to === current()) return;
     const q = new URLSearchParams(location.search);
-    const keep = ['replay', 'result', 'ask'].some(k => q.has(k)) && to === 'chat' ? location.search : '';
+    const keep = (['replay', 'result', 'ask'].some(k => q.has(k)) && to === 'chat') || (to === 'calendar' && q.has('view')) ? location.search : '';
     const apply = () => { history.pushState(null, '', `/${to === 'today' ? '' : to}${keep}`); setRoute(to); };
     const reduce = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
     const vt = (document as any).startViewTransition;

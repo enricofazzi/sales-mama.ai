@@ -12,11 +12,17 @@ import { NavRail, TabBar } from './app/Nav';
 import { ChatView } from './app/ChatView';
 import { TodayView } from './app/TodayView';
 import { BookView } from './app/BookView';
-import { IconAuto, IconBook, IconBolt, IconChat, IconFire, IconPlus, IconToday } from './app/Icons';
+import { IconAuto, IconBook, IconBolt, IconCalendar, IconChat, IconFire, IconPlus, IconToday } from './app/Icons';
 import { Rail } from './components/Rail';
 import { SourceDrawer } from './components/SourceDrawer';
 import { CommandPalette, ShortcutSheet, type PaletteItem } from './palette/CommandPalette';
 import { loadChats, useSaveChat, type SavedChat } from './chat/history';
+import { useCalendar } from './calendar/useCalendar';
+import { CalendarView } from './calendar/CalendarView';
+import { NextUpCapsule } from './calendar/NextUp';
+import { useReminders } from './calendar/reminders';
+import type { CalItem } from './calendar/time';
+import { useNow } from './hooks/useNow';
 
 function useCatalog(connected: boolean) {
   const [skills, setSkills] = useState<SkillInfo[]>([]);
@@ -39,6 +45,10 @@ export function App() {
   const [queued, setQueued] = useState<string | null>(null);
   const [palette, setPalette] = useState(false);
   const [help, setHelp] = useState(false);
+  const [focus, setFocus] = useState<string | null>(null);
+  const cal = useCalendar(rail);
+  const reminders = useReminders(cal.mine);
+  const now = useNow(30_000);
   const me = rail?.me;
   const manager = me?.role === 'manager';
   const canAsk = connected && !busy;
@@ -67,13 +77,14 @@ export function App() {
   const onNewChat = useCallback(() => { newChat(); setQueued(null); go('chat'); }, [newChat, go]);
   const prefill = useCallback((text: string) => { go('chat'); setSeed(text); }, [go]);
   const openChat = useCallback((c: SavedChat) => { if (!busy) { loadChat(c); go('chat'); } }, [busy, loadChat, go]);
+  const openEvent = useCallback((i: CalItem) => { setFocus(i.id); go('calendar'); }, [go]);
 
   useHotkeys({
     palette: () => setPalette(p => !p),
     slash: () => prefill('/'),
     jump: () => { go('chat'); window.dispatchEvent(new Event('mama:jump')); },
     help: () => setHelp(true),
-    go: k => go(({ t: 'today', c: 'chat', b: 'book' } as Record<string, Route>)[k]),
+    go: k => go(({ t: 'today', c: 'chat', k: 'calendar', b: 'book' } as Record<string, Route>)[k]),
   });
 
   const paletteItems = useMemo<PaletteItem[]>(() => {
@@ -84,6 +95,7 @@ export function App() {
       { id: 'keys', group: 'Actions', label: 'Keyboard shortcuts', keys: '?', icon: <IconBolt size={16} />, run: () => setHelp(true) },
       { id: 'go-today', group: 'Go to', label: 'Today', keys: 'g t', icon: <IconToday size={16} />, run: () => go('today') },
       { id: 'go-chat', group: 'Go to', label: 'Chat', keys: 'g c', icon: <IconChat size={16} />, run: () => go('chat') },
+      { id: 'go-cal', group: 'Go to', label: 'Calendar', keys: 'g k', icon: <IconCalendar size={16} />, run: () => go('calendar') },
       { id: 'go-book', group: 'Go to', label: 'Book', keys: 'g b', icon: <IconBook size={16} />, run: () => go('book') },
     ];
     for (const s of skills) {
@@ -103,11 +115,13 @@ export function App() {
   return (
     <div className="app">
       <Header rail={rail} status={status} live={live} theme={theme} onTheme={cycle} onNewChat={onNewChat} newChatDisabled={busy} lanes={lanes}
-        onSearch={() => setPalette(true)} />
+        onSearch={() => setPalette(true)} nextUp={<NextUpCapsule cal={cal.mine} now={now} onOpen={openEvent} />} />
       <div className={`body r-${route}`}>
         <NavRail route={route} go={go} busy={live} />
         <main className="main" id="main">
-          {route === 'today' && <TodayView rail={rail} canAsk={canAsk} live={live} ask={askAndShow} stop={stop} openSource={setSource} skills={skills} accounts={accounts} />}
+          {route === 'today' && <TodayView rail={rail} canAsk={canAsk} live={live} ask={askAndShow} stop={stop} openSource={setSource} skills={skills} accounts={accounts} cal={cal.mine} openEvent={openEvent} />}
+          {route === 'calendar' && <CalendarView mine={cal.mine} team={cal.team} manager={manager} error={cal.error} focus={focus} onFocused={() => setFocus(null)}
+            reminders={reminders} act={{ ask: askAndShow, prefill, openSource: setSource, disabled: !canAsk }} />}
           {/* Chat stays mounted so its scroll position and draft survive a trip to Today or Book. */}
           <div className="route-chat" hidden={route !== 'chat'}>
             <ChatView turns={turns} ctx={ctx} manager={manager} firstName={me?.name.split(' ')[0] ?? ''} canAsk={canAsk} live={live}
@@ -116,7 +130,7 @@ export function App() {
           </div>
           {route === 'book' && <BookView rail={rail} ctx={ctx} />}
         </main>
-        {route !== 'today' && <Rail rail={rail} onSource={setSource} onPrompt={askAndShow} disabled={!canAsk} />}
+        {route !== 'today' && route !== 'calendar' && <Rail rail={rail} onSource={setSource} onPrompt={askAndShow} disabled={!canAsk} />}
       </div>
       <TabBar route={route} go={go} busy={live} />
       <CommandPalette open={palette} onClose={() => setPalette(false)} items={paletteItems} />

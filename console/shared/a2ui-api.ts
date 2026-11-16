@@ -160,6 +160,14 @@ export const API = {
     doc: 'Up to 4 buttons; each sends its prompt as the next turn. Never a send action (ADR-0007).',
     schema: z.object({ actions: z.array(actionSchema) }),
   },
+  AgendaList: {
+    doc: 'A day agenda from a calendar file (wiki/books/<rep>.calendar.json): items = {"path": "/items"}; day = YYYY-MM-DD to show one day (default: all items), max = rows. Read-only; each row opens its source.',
+    schema: z.object({ items: DV, day: opt(DS), max: opt(z.number()), tz: opt(DS), empty: opt(DS) }),
+  },
+  CalendarWeek: {
+    doc: 'A week time grid (the console calendar look) from a calendar file: calendar = {"path": "/"} (the whole file), start = YYYY-MM-DD Monday (default: this week). Read-only.',
+    schema: z.object({ calendar: DV, start: opt(DS) }),
+  },
   ...cardApi,
   LegacyCard: {
     doc: 'Internal: renders a retired report card (book, allocation, stats, chart, …) from an old saved result. Do not emit.',
@@ -177,7 +185,7 @@ export const DATA_PROPS: Partial<Record<ComponentName, string[]>> = {
   BarChart: ['data'], LineChart: ['data'], DonutChart: ['data'], Funnel: ['data', 'compare'],
   Heatmap: ['data'], Gauge: ['value', 'max'], ScoreBreakdown: ['parts', 'total'],
   DataTable: ['rows'], CheckList: ['checks', 'groups'], CompareTable: ['companies', 'rows'],
-  FactList: ['data'], Verdict: ['score'],
+  FactList: ['data'], Verdict: ['score'], AgendaList: ['items'], CalendarWeek: ['calendar'],
 };
 
 export const INSTRUCTIONS = `Sales Mama catalog (A2UI ${PROTOCOL}). Build report surfaces for a B2B sales team.

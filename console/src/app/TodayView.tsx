@@ -9,6 +9,8 @@ import { clock, dayLabel, hourIn, useNow } from '../hooks/useNow';
 import { Composer } from '../chat/Composer';
 import type { AccountInfo, SkillInfo } from '../../server/repo';
 import { IconAlert, IconArrow, IconBolt, IconFire, IconFlag, IconMail, IconSpark, IconUsers } from './Icons';
+import type { Calendar, CalItem } from '../calendar/time';
+import { DayRibbon, NextUpCard } from '../calendar/NextUp';
 
 interface Action { key: string; tone: string; icon: ReactNode; title: string; sub: string; prompt: string; cta: string }
 
@@ -46,9 +48,9 @@ function actions(rail: Rail, manager: boolean): Action[] {
   return out.slice(0, 6);
 }
 
-export function TodayView({ rail, canAsk, live, ask, stop, openSource, skills, accounts }: {
+export function TodayView({ rail, canAsk, live, ask, stop, openSource, skills, accounts, cal, openEvent }: {
   rail: Rail | null; canAsk: boolean; live: boolean; ask: (t: string) => void; stop: () => void; openSource: (p: string) => void;
-  skills: SkillInfo[]; accounts: AccountInfo[];
+  skills: SkillInfo[]; accounts: AccountInfo[]; cal: Calendar | null; openEvent: (i: CalItem) => void;
 }) {
   const now = useNow(30_000);
   const me = rail?.me;
@@ -78,6 +80,12 @@ export function TodayView({ rail, canAsk, live, ask, stop, openSource, skills, a
           <p className="today-sum">{rail.problem ?? summary}</p>
         </header>
 
+        {cal && (
+          <div className="bento bento-time">
+            <NextUpCard cal={cal} now={now} onOpen={openEvent} onBrief={i => ask(i.account?.id ? `/mama-brief ${i.account.id}` : '/mama-day')} />
+            <DayRibbon cal={cal} now={now} onOpen={openEvent} />
+          </div>
+        )}
         <div className="bento">
           {b && (
             <article className="tile-x t-ring">
