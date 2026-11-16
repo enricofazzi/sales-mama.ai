@@ -7,7 +7,7 @@
   <img alt="Codex compatible" src="https://img.shields.io/badge/Codex-compatible-16131F?style=flat-square">
   <img alt="Approve-then-send" src="https://img.shields.io/badge/sending-approve%20then%20send-C2410C?style=flat-square">
   <img alt="Gmail and WhatsApp" src="https://img.shields.io/badge/channels-Gmail%20%C2%B7%20WhatsApp-0F766E?style=flat-square">
-  <img alt="Self-test 180 of 180" src="https://img.shields.io/badge/self--test-180%2F180-15803D?style=flat-square">
+  <img alt="Self-test 213 of 213" src="https://img.shields.io/badge/self--test-213%2F213-15803D?style=flat-square">
   <a href="LICENSE"><img alt="Apache 2.0" src="https://img.shields.io/badge/licence-Apache%202.0-5B5670?style=flat-square"></a>
 </p>
 
@@ -18,8 +18,8 @@
 </p>
 
 <p align="center">
-  <b>New:</b> <a href="#-company-check"><code>/company-check</code></a> is this company real? ·
-  <a href="#-company-insights"><code>/company-insights</code></a> ask for stats, get charts ·
+  <b>New:</b> the console: Today, chat with live agents, ⌘K, calendar and appointments, generative reports ·
+  <a href="#-company-check"><code>/company-check</code></a> is this company real? ·
   <a href="#-send-review"><code>/mama-send</code></a> approve-then-send
 </p>
 
@@ -27,6 +27,30 @@
   <img src="docs/assets/demo.gif" alt="Console tour, then /mama-send: preview, approve, one email and one WhatsApp sent" width="92%">
   <br><sub>Console tour, then a real <code>/mama-send</code> run: one email and one WhatsApp, approved and sent. Demo data, fake transport.</sub>
 </p>
+
+<p align="center">
+  <a href="docs/assets/video/sales-mama-2min-720p.mp4"><img src="docs/assets/video/thumbnail.jpg" alt="Sales Mama film: the next-gen sales buddy" width="92%"></a>
+  <br><sub><b>Sales Mama, the next-gen sales buddy.</b> <a href="docs/assets/video/sales-mama-2min-720p.mp4">2-minute film</a> · <a href="docs/assets/video/sales-mama-5min-720p.mp4">5-minute tour</a> · music and on-screen words, fictional demo data.</sub>
+</p>
+
+## 🎬 Films
+
+Music and on-screen words, no voice-over; fictional demo data. Each episode opens on a sales problem and shows, step by step, how a rep or manager fixes it.
+
+<table>
+<tr>
+<td width="33%"><a href="docs/assets/video/install-setup-720p.mp4"><img src="docs/assets/video/install-thumb.jpg" alt="Install and set up Sales Mama"></a><br><sub><b>Install and set up</b> · 4:33 · a real install recorded on a laptop: clone, 213 checks, set-up with Claude Code, first console.</sub></td>
+<td width="33%"><a href="docs/assets/video/ep1-where-do-i-start-720p.mp4"><img src="docs/assets/video/ep1-thumb.jpg" alt="Episode 1: Where do I start?"></a><br><sub><b>1 · Where do I start?</b> · 5:01 · plan the morning: Today, "run my day", briefs, send in the window.</sub></td>
+<td width="33%"><a href="docs/assets/video/ep2-chasing-the-wrong-leads-720p.mp4"><img src="docs/assets/video/ep2-thumb.jpg" alt="Episode 2: Chasing the wrong leads"></a><br><sub><b>2 · Chasing the wrong leads</b> · 5:01 · reasons to call, company checks, market sizing.</sub></td>
+</tr>
+<tr>
+<td width="33%"><a href="docs/assets/video/ep3-outreach-that-gets-ignored-720p.mp4"><img src="docs/assets/video/ep3-thumb.jpg" alt="Episode 3: Outreach that gets ignored"></a><br><sub><b>3 · Outreach that gets ignored</b> · 5:01 · research, the right offer, cited drafts, WhatsApp with consent, replies.</sub></td>
+<td width="33%"><a href="docs/assets/video/ep4-meetings-that-slip-720p.mp4"><img src="docs/assets/video/ep4-thumb.jpg" alt="Episode 4: Meetings and follow-ups that slip"></a><br><sub><b>4 · Meetings that slip</b> · 5:01 · book from a reply, fix clashes, renewals, log the outcome.</sub></td>
+<td width="33%"><a href="docs/assets/video/ep5-managing-blind-720p.mp4"><img src="docs/assets/video/ep5-thumb.jpg" alt="Episode 5: Managing blind"></a><br><sub><b>5 · Managing blind</b> · 5:01 · morning cockpit, fair allocation, team calendar, weekly review.</sub></td>
+</tr>
+</table>
+
+GitHub opens these as downloads; they play in any browser or video player.
 
 ## 🎯 Why
 
@@ -107,16 +131,40 @@ Verdicts: **Verified · Likely legitimate · Registry OK · Caution · Red flag 
 
 Also: *"how clean is my book?"* and *"compare SIA, Singtel and DBS"*. Real ACRA data (14 Oct 2026); numbers come from scripts, never the model.
 
-## 🖥️ Screens
+## 🖥️ The console
+
+`npm run console` opens a local web console on the same repo. It only reads: every change still goes through a skill in chat, and every send through `/mama-send` (ADR-0006, ADR-0007).
+
+- **Today.** Your next meeting with a countdown, today's ribbon, live send windows for SG · MY · IN, and only what needs you.
+- **Chat with live agents.** Researchers, VAMs and writers work in parallel lanes; answers arrive as cards with numbered sources and follow-up chips. `/` for skills, `@` for accounts, `⌘K` for anything.
+- **Calendar and appointments.** Day, week, month and (for managers) team views of meetings, follow-ups, renewals, claim lapses, events and holidays. Clashes are flagged; drag to ask for a move. Google Calendar adds busy times only: start and end, no titles (ADR-0010).
+- **Generative reports.** Python scripts write JSON; the console draws it as A2UI views: KPI tiles, funnels, charts, tables and verdicts, opened in a side canvas or shared as a page (ADR-0009).
+- **Light or dark**, desktop or phone.
 
 <table>
 <tr>
-<td width="50%"><img src="docs/assets/screens/manager-run.jpg" alt="Manager cockpit"><br><sub><b>Manager cockpit.</b> Last night's run and the allocation to approve.</sub></td>
-<td width="50%"><img src="docs/assets/screens/book.jpg" alt="Rep book"><br><sub><b>Rep book.</b> Capacity, meetings, hot accounts, next steps.</sub></td>
+<td width="50%"><img src="docs/assets/screens/today.jpg" alt="Today: next meeting, today's ribbon, send windows and what needs you"><br><sub><b>Today.</b> Next up, the day's ribbon, send windows, what needs you.</sub></td>
+<td width="50%"><img src="docs/assets/screens/chat-agents.jpg" alt="Chat: researcher and VAM agents working in parallel lanes"><br><sub><b>Agents in parallel.</b> "Run my day" researches, rescores and drafts at once.</sub></td>
 </tr>
 <tr>
-<td width="50%"><img src="docs/assets/screens/source.jpg" alt="Source drawer"><br><sub><b>Grounded.</b> Every card opens the page behind it.</sub></td>
-<td width="50%" align="center"><img src="docs/assets/screens/mobile-day.jpg" width="44%" alt="Mobile">&nbsp;<img src="docs/assets/screens/mobile-manager.jpg" width="44%" alt="Mobile allocation"><br><sub><b>On the go.</b> Same cards on a phone.</sub></td>
+<td width="50%"><img src="docs/assets/screens/chat-draft.jpg" alt="Chat answer: day summary and a cited follow-up draft"><br><sub><b>Cited drafts.</b> Signal, pattern and checks on every draft; sources below.</sub></td>
+<td width="50%"><img src="docs/assets/screens/brief.jpg" alt="Call brief for Harbourlight Foods"><br><sub><b>Walk in prepared.</b> A one-page brief before each call.</sub></td>
+</tr>
+<tr>
+<td width="50%"><img src="docs/assets/screens/calendar-week.jpg" alt="Week calendar with appointments, a clash, busy blocks and send windows"><br><sub><b>Week.</b> Appointments, a flagged clash, Google busy times, send windows.</sub></td>
+<td width="50%"><img src="docs/assets/screens/calendar-team.jpg" alt="Team calendar for the manager with a clash highlighted"><br><sub><b>Team.</b> Every rep's load per day; double bookings in red.</sub></td>
+</tr>
+<tr>
+<td width="50%"><img src="docs/assets/screens/reports-canvas.jpg" alt="Reports list with a company insights report open in the canvas"><br><sub><b>Reports.</b> Weekly reviews, allocations, checks and insights in the canvas.</sub></td>
+<td width="50%"><img src="docs/assets/screens/manager-cockpit.jpg" alt="Manager cockpit: funnel and an entity match to confirm"><br><sub><b>Manager cockpit.</b> Last night's run, the funnel, matches to confirm.</sub></td>
+</tr>
+<tr>
+<td width="50%"><img src="docs/assets/screens/command-palette.jpg" alt="Command palette searching accounts"><br><sub><b>⌘K.</b> Accounts, skills, reports and views, one keystroke away.</sub></td>
+<td width="50%"><img src="docs/assets/screens/today-dark.jpg" alt="Today in dark mode"><br><sub><b>Dark mode.</b> Follows your system, or pick one.</sub></td>
+</tr>
+<tr>
+<td width="50%"><img src="docs/assets/screens/send-preview.jpg" alt="Send preview: two drafts ready, one held"><br><sub><b>Send review.</b> Two ready for the SG window, one held. You say which.</sub></td>
+<td width="50%" align="center"><img src="docs/assets/screens/mobile-today.jpg" width="44%" alt="Today on a phone">&nbsp;<img src="docs/assets/screens/mobile-calendar.jpg" width="44%" alt="Calendar day on a phone"><br><sub><b>On the go.</b> Today and the calendar on a phone.</sub></td>
 </tr>
 </table>
 
@@ -124,8 +172,9 @@ Also: *"how clean is my book?"* and *"compare SIA, Singtel and DBS"*. Real ACRA 
 
 ```bash
 git clone https://github.com/neam-lang/sales-mama.ai.git && cd sales-mama.ai
-python3 -m pip install --user pyyaml
-python3 scripts/selftest.py                 # 180/180 passed
+python3 -c "import yaml" 2>/dev/null || python3 -m pip install --user pyyaml \
+  || python3 -m pip install --user --break-system-packages pyyaml   # Homebrew Python (PEP 668)
+python3 scripts/selftest.py                 # 213/213 passed
 claude                                      # then type: Set me up for Sales Mama
 ```
 
@@ -194,7 +243,7 @@ Codex reads `AGENTS.md` and `.agents/skills/` (`$mama-day`). It has no hooks or 
 ## 📊 Quality
 
 ```bash
-python3 scripts/selftest.py   # 180/180
+python3 scripts/selftest.py   # 213/213
 python3 scripts/eval.py       # 13 pass · 0 fail · 8 pending
 python3 scripts/lint.py       # 0 errors
 ```
@@ -219,6 +268,7 @@ Every pilot mistake becomes a failing eval case before it is fixed.
 | 7 · Nightly + weekly | 🟡 schedule + 5 nights |
 | 8 · Codex parity + SG pilot | 🟡 in progress |
 | 9 · Console | ✅ |
+| 9b · Console v2: Today, chat, calendar, generative reports | ✅ |
 
 </details>
 
