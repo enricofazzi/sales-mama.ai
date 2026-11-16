@@ -135,11 +135,17 @@ Also: *"how clean is my book?"* and *"compare SIA, Singtel and DBS"*. Real ACRA 
 
 `npm run console` opens a local web console on the same repo. It only reads: every change still goes through a skill in chat, and every send through `/mama-send` (ADR-0006, ADR-0007).
 
-- **Today.** Your next meeting with a countdown, today's ribbon, live send windows for SG · MY · IN, and only what needs you.
+- **Today.** Your next meeting with a countdown, today's ribbon, live send windows for SG · MY · IN, and only what needs you. Managers get their own Today: the team, the pool and matches to confirm.
 - **Chat with live agents.** Researchers, VAMs and writers work in parallel lanes; answers arrive as cards with numbered sources and follow-up chips. `/` for skills, `@` for accounts, `⌘K` for anything.
+- **Email and WhatsApp drafts.** Each draft opens with a cited signal and shows its checks: owner, opt-in, facts cited, send window. WhatsApp only to contacts with recorded opt-in.
+- **Replies, meetings and handover.** A reply becomes an appointment in one line; after the meeting, one line logs the outcome, the CRM row and the next step.
 - **Calendar and appointments.** Day, week, month and (for managers) team views of meetings, follow-ups, renewals, claim lapses, events and holidays. Clashes are flagged; drag to ask for a move. Google Calendar adds busy times only: start and end, no titles (ADR-0010).
-- **Generative reports.** Python scripts write JSON; the console draws it as A2UI views: KPI tiles, funnels, charts, tables and verdicts, opened in a side canvas or shared as a page (ADR-0009).
+- **Generative reports.** Python scripts write JSON; the console draws it as A2UI views: allocation proposals, weekly reviews with the funnel and calibration, company insights. Opened in a side canvas or shared as a page (ADR-0009).
 - **Light or dark**, desktop or phone.
+
+<sub>Screens below are stills from the films: fictional demo data (Mei, Grace, Arun, Harbourlight Foods…), except public ACRA registry figures.</sub>
+
+**A rep's day**
 
 <table>
 <tr>
@@ -148,23 +154,57 @@ Also: *"how clean is my book?"* and *"compare SIA, Singtel and DBS"*. Real ACRA 
 </tr>
 <tr>
 <td width="50%"><img src="docs/assets/screens/chat-draft.jpg" alt="Chat answer: day summary and a cited follow-up draft"><br><sub><b>Cited drafts.</b> Signal, pattern and checks on every draft; sources below.</sub></td>
-<td width="50%"><img src="docs/assets/screens/brief.jpg" alt="Call brief for Harbourlight Foods"><br><sub><b>Walk in prepared.</b> A one-page brief before each call.</sub></td>
+<td width="50%"><img src="docs/assets/screens/whatsapp-draft.jpg" alt="WhatsApp follow-up draft for an opted-in contact in Malaysia"><br><sub><b>WhatsApp, with consent.</b> Opted-in contacts only, inside the market's send window.</sub></td>
 </tr>
+<tr>
+<td width="50%"><img src="docs/assets/screens/brief.jpg" alt="Call brief for Harbourlight Foods"><br><sub><b>Walk in prepared.</b> A one-page brief before each call.</sub></td>
+<td width="50%"><img src="docs/assets/screens/send-preview.jpg" alt="Send preview: drafts ready and held"><br><sub><b>Send review.</b> Every check re-run; you pick what goes and approve.</sub></td>
+</tr>
+<tr>
+<td width="50%"><img src="docs/assets/screens/reply-to-meeting.jpg" alt="A reply asking for Thursday becomes a meeting request"><br><sub><b>Replies.</b> "Thursday works" becomes a booking in one line.</sub></td>
+<td width="50%"><img src="docs/assets/screens/handover.jpg" alt="Handover after a meeting: outcome, next steps and CRM row"><br><sub><b>Handover.</b> Outcome, next steps and the CRM row, logged in one line.</sub></td>
+</tr>
+</table>
+
+**Calendar**
+
+<table>
 <tr>
 <td width="50%"><img src="docs/assets/screens/calendar-week.jpg" alt="Week calendar with appointments, a clash, busy blocks and send windows"><br><sub><b>Week.</b> Appointments, a flagged clash, Google busy times, send windows.</sub></td>
+<td width="50%"><img src="docs/assets/screens/calendar-move.jpg" alt="Dragging an appointment asks Sales Mama to move it"><br><sub><b>Drag to move.</b> The console asks; Sales Mama checks clashes and holidays first.</sub></td>
+</tr>
+<tr>
+<td width="50%"><img src="docs/assets/screens/calendar-renewal.jpg" alt="Renewal window on the calendar with a brief and a booking action"><br><sub><b>Renewals.</b> Contract windows show up before they lapse.</sub></td>
 <td width="50%"><img src="docs/assets/screens/calendar-team.jpg" alt="Team calendar for the manager with a clash highlighted"><br><sub><b>Team.</b> Every rep's load per day; double bookings in red.</sub></td>
 </tr>
+</table>
+
+**The manager**
+
+<table>
 <tr>
-<td width="50%"><img src="docs/assets/screens/reports-canvas.jpg" alt="Reports list with a company insights report open in the canvas"><br><sub><b>Reports.</b> Weekly reviews, allocations, checks and insights in the canvas.</sub></td>
-<td width="50%"><img src="docs/assets/screens/manager-cockpit.jpg" alt="Manager cockpit: funnel and an entity match to confirm"><br><sub><b>Manager cockpit.</b> Last night's run, the funnel, matches to confirm.</sub></td>
+<td width="50%"><img src="docs/assets/screens/manager-today.jpg" alt="Manager's Today: team, pool, send windows and an entity match to confirm"><br><sub><b>Manager's Today.</b> Team, pool, three send windows, decisions waiting.</sub></td>
+<td width="50%"><img src="docs/assets/screens/manager-cockpit.jpg" alt="Manager cockpit: funnel and an entity match to confirm"><br><sub><b>Morning cockpit.</b> Last night's run, the funnel, matches to confirm.</sub></td>
 </tr>
+</table>
+<table>
+<tr>
+<td width="33%"><img src="docs/assets/screens/canvas-allocation.jpg" alt="Allocation proposal in the canvas: load per rep and hard constraints"><br><sub><b>Allocation.</b> Load per rep, every hard constraint, a reason per lead.</sub></td>
+<td width="33%"><img src="docs/assets/screens/canvas-weekly.jpg" alt="Weekly review in the canvas: funnel and calibration"><br><sub><b>Weekly review.</b> Funnel, smoothed meeting rate, calibration.</sub></td>
+<td width="33%"><img src="docs/assets/screens/canvas-insights.jpg" alt="Company insights for Singapore clinics in the canvas"><br><sub><b>Insights.</b> 9,618 live clinics, filing on time, growth by year.</sub></td>
+</tr>
+</table>
+
+**Anywhere**
+
+<table>
 <tr>
 <td width="50%"><img src="docs/assets/screens/command-palette.jpg" alt="Command palette searching accounts"><br><sub><b>⌘K.</b> Accounts, skills, reports and views, one keystroke away.</sub></td>
-<td width="50%"><img src="docs/assets/screens/today-dark.jpg" alt="Today in dark mode"><br><sub><b>Dark mode.</b> Follows your system, or pick one.</sub></td>
+<td width="50%"><img src="docs/assets/screens/chat-dark.jpg" alt="Chat in dark mode"><br><sub><b>Dark mode.</b> Follows your system, or pick one.</sub></td>
 </tr>
 <tr>
-<td width="50%"><img src="docs/assets/screens/send-preview.jpg" alt="Send preview: two drafts ready, one held"><br><sub><b>Send review.</b> Two ready for the SG window, one held. You say which.</sub></td>
-<td width="50%" align="center"><img src="docs/assets/screens/mobile-today.jpg" width="44%" alt="Today on a phone">&nbsp;<img src="docs/assets/screens/mobile-calendar.jpg" width="44%" alt="Calendar day on a phone"><br><sub><b>On the go.</b> Today and the calendar on a phone.</sub></td>
+<td width="50%"><img src="docs/assets/screens/today-dark.jpg" alt="Today in dark mode"><br><sub><b>Today, dark.</b> The same day at a glance.</sub></td>
+<td width="50%" align="center"><img src="docs/assets/screens/mobile-today.jpg" width="31%" alt="Today on a phone">&nbsp;<img src="docs/assets/screens/mobile-calendar.jpg" width="31%" alt="Calendar day on a phone">&nbsp;<img src="docs/assets/screens/mobile-brief.jpg" width="31%" alt="Call brief on a phone"><br><sub><b>On the go.</b> Today, the calendar and a brief on a phone.</sub></td>
 </tr>
 </table>
 
@@ -244,7 +284,7 @@ Codex reads `AGENTS.md` and `.agents/skills/` (`$mama-day`). It has no hooks or 
 
 ```bash
 python3 scripts/selftest.py   # 213/213
-python3 scripts/eval.py       # 13 pass · 0 fail · 8 pending
+python3 scripts/eval.py       # 15 pass · 0 fail · 8 pending
 python3 scripts/lint.py       # 0 errors
 ```
 
