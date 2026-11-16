@@ -7,25 +7,28 @@
   <img alt="Codex compatible" src="https://img.shields.io/badge/Codex-compatible-16131F?style=flat-square">
   <img alt="Approve-then-send" src="https://img.shields.io/badge/sending-approve%20then%20send-C2410C?style=flat-square">
   <img alt="Gmail and WhatsApp" src="https://img.shields.io/badge/channels-Gmail%20%C2%B7%20WhatsApp-0F766E?style=flat-square">
+  <img alt="21 skills and 4 subagents" src="https://img.shields.io/badge/skills-21%20%C2%B7%204%20subagents-6D28D9?style=flat-square">
+  <img alt="Markets SG MY IN" src="https://img.shields.io/badge/markets-SG%20%C2%B7%20MY%20%C2%B7%20IN-0F766E?style=flat-square">
   <img alt="Self-test 213 of 213" src="https://img.shields.io/badge/self--test-213%2F213-15803D?style=flat-square">
   <a href="LICENSE"><img alt="Apache 2.0" src="https://img.shields.io/badge/licence-Apache%202.0-5B5670?style=flat-square"></a>
 </p>
 
 <p align="center">
-  <b>An AI sales Harness for small B2B teams in Singapore, Malaysia and India.</b><br>
+  <b>An AI sales harness for small B2B teams in Singapore, Malaysia and India.</b><br>
   Skills, subagents, hooks and rules that turn Claude Code into a disciplined sales team.<br>
   You approve every message.
 </p>
 
 <p align="center">
-  <b>New:</b> the console: Today, chat with live agents, ⌘K, calendar and appointments, generative reports ·
-  <a href="#-company-check"><code>/company-check</code></a> is this company real? ·
-  <a href="#-send-review"><code>/mama-send</code></a> approve-then-send
+  <b>New:</b> <a href="#-films">eight films</a> ·
+  console v2: Today for reps and managers, chat with live agents, ⌘K, calendar and appointments with Google busy times, generative reports ·
+  <a href="#-send-review"><code>/mama-send</code></a> email and WhatsApp, approve-then-send ·
+  <a href="#-company-check"><code>/company-check</code></a> and <a href="#-company-insights"><code>/company-insights</code></a> on live ACRA data
 </p>
 
 <p align="center">
-  <img src="docs/assets/demo.gif" alt="Console tour, then /mama-send: preview, approve, one email and one WhatsApp sent" width="92%">
-  <br><sub>Console tour, then a real <code>/mama-send</code> run: one email and one WhatsApp, approved and sent. Demo data, fake transport.</sub>
+  <img src="docs/assets/demo.gif" alt="Console tour: Today, command palette, run my day with agents in parallel, the week calendar, the manager's morning and the send review" width="92%">
+  <br><sub>Console tour: Today, ⌘K, "run my day" with agents in parallel, the week calendar and a move, the manager's morning, and <code>/mama-send</code>. Fictional demo data, recorded from the live console.</sub>
 </p>
 
 <p align="center">
@@ -62,7 +65,33 @@ Small teams lose deals to busywork, not to competitors.
 | Research eats the morning | Researches accounts in parallel; every fact links a source |
 | Leads handed out by gut feel | Explainable scores and a fair allocation the manager approves |
 | Follow-ups slip | A virtual account manager watches every book |
-| Generic messages | Each draft opens with a real signal, in the rep's voice |
+| Generic messages | Each draft opens with a real signal, in the rep's voice, by email or WhatsApp |
+| Meetings and renewals slip | Replies become appointments; clashes, holidays and renewal windows are flagged |
+| Is this company even real? | `/company-check` runs 18 registry and web checks before anyone sells |
+| The manager is managing blind | A morning cockpit, a team calendar and a weekly review with calibration |
+
+## ✨ Everything it does
+
+**For reps**
+- **Plan the day.** Today shows the next meeting, the day's ribbon, live send windows for SG · MY · IN, hot and at-risk accounts, and only what needs you. `/mama-day` runs the whole morning in one sentence.
+- **Find the right leads.** Overnight signals from news, tenders, registries and events, matched to accounts by registry ID, domain or name (≥0.90 links; 0.70–0.90 goes to the manager). Explainable scores with tiers A · B · C. `/mama-target` works your allocated queue.
+- **Research and pitch.** Researcher subagents study accounts in parallel and cite every fact. `/mama-recommend` picks the product from your catalogue, with the chain from signal to pain to product.
+- **Write and send.** `/mama-draft` writes email or WhatsApp in your voice; every name is checked against the account page. `/mama-send` previews the batch with every check and sends only what you approve.
+- **Replies, meetings, handover.** `/mama-replies` classifies replies and suppresses unsubscribes at once. `/mama-schedule` books, moves and cancels appointments. `/mama-brief` prepares a call or an event meet-list. `/mama-handover` logs the outcome and the CRM row.
+- **A virtual account manager** watches your book overnight: risk flags, the next best action, and follow-ups pre-drafted for you to approve.
+
+**For managers**
+- **Morning cockpit** (`/mama-manager`): last night's run, hot accounts, risks, the review queue and the team book.
+- **Fair allocation** (`/mama-allocate`): expected value per rep and lead, hard constraints, a fairness pass and a reason for every lead. Nothing is assigned until you approve.
+- **Team calendar:** every rep's load per day, double bookings in red.
+- **Weekly review** (`/mama-weekly`): funnel, reply and meeting rates, score calibration (tier A should meet at least 2× tier C), library promotions, as a PR.
+- **Market sizing and checks:** `/company-insights` for segments, books and comparisons; `/company-check` for any Singapore company.
+
+**Under the hood**
+- **21 skills** (19 `mama-*` plus `company-check` and `company-insights`), **4 subagents** (scout, researcher, vam, verifier), **3 hooks** (session start, write guard, sync), **17 hard rules** in `AGENTS.md`, **10 ADRs**.
+- **Nightly runner** on one machine: scan, score, VAMs, allocation proposal, manager brief, lint, sync. It never sends.
+- **Three markets** with their own send windows, holidays, channels, languages and guardrails; Singapore live first.
+- **Runs in Claude Code or Codex**; the optional console only renders and never widens permissions.
 
 ## 🧭 How it works
 
@@ -88,7 +117,7 @@ Small teams lose deals to busywork, not to competitors.
 3. The rep picks ("send 1, 2") and clicks **Approve**.
 4. Sales Mama sends through Gmail or WhatsApp and logs every touch.
 
-<sub>Replay of a real run on demo data with the fake transport. Still version: <a href="docs/assets/send-review.png">send-review.png</a>.</sub>
+<sub>Recorded in the console on demo data: two drafts ready for the SG window, one WhatsApp held because the contact asked for after 20 Nov. Terminal version: <a href="docs/assets/send-review.png">send-review.png</a>.</sub>
 
 `send.py` refuses outside the send window, on holidays, to suppressed contacts, without WhatsApp opt-in, over quota, for the nightly runner, or if anything changed after the preview. Sending is **off** until the manager turns it on ([ADR-0007](docs/adr/0007-approve-then-send.md)).
 
@@ -105,7 +134,7 @@ How it works, in one run (`/company-check 197200078R`):
 2. **Registry**: a local copy of ACRA, BCA, GeBIZ and HDB open data (2,127,089 entities, 624,271 live, refreshed monthly) answers the registry rules in under a second.
 3. **Verifiers**: three subagents search the web in parallel for identity, people and risk, and save cited evidence.
 4. **Rules**: 18 deterministic checks, each pass, warn, fail or unknown with its reason, scored 0–100.
-5. **Verdict**: a report in `company-check/reports/` and visual cards in the console. [Full result screenshot](docs/assets/screens/company-check-result.jpg)
+5. **Verdict**: a report in `company-check/reports/` and visual cards in the console. [Result in the console](docs/assets/screens/company-check-chat.jpg)
 
 | It checks | Rule |
 |---|---|
@@ -246,7 +275,8 @@ Codex reads `AGENTS.md` and `.agents/skills/` (`$mama-day`). It has no hooks or 
 | 02:00 | Runner | `/mama-nightly` scan · score · VAMs · allocation proposal |
 | 08:30 | Manager | `/mama-manager` approve leads, clear the review queue |
 | 08:45 | Rep | `/mama-day` replies · research · drafts |
-| 09:00–11:30 | Rep | `/mama-send` review and approve |
+| 09:00–11:30 | Rep | `/mama-send` review and approve (SG window; MY 09:30–11:30, IN 10:00–12:30 local) |
+| Any time | Rep | `/mama-replies` · `/mama-schedule` · `/mama-brief` · `/mama-handover` |
 | Friday | Manager | `/mama-weekly` metrics, calibration, PR |
 
 <details>
@@ -254,14 +284,17 @@ Codex reads `AGENTS.md` and `.agents/skills/` (`$mama-day`). It has no hooks or 
 
 | Rep | | Manager | |
 |---|---|---|---|
-| `/mama-day` | whole morning | `/mama-manager` | cockpit |
-| `/mama-book` | my accounts | `/mama-allocate` | split the pool |
-| `/mama-research acme` | research | `/mama-scan` | scan signals |
-| `/mama-recommend acme` | what to pitch | `/mama-vam <rep>` | refresh a book |
-| `/mama-draft acme first` | email or WhatsApp | `/mama-nightly` | run tonight's job |
-| `/mama-send` | review and send | `/mama-ingest` | import CRM |
-| `/mama-replies` | handle replies | `/mama-weekly` | weekly review |
-| `/mama-brief acme` | call prep | | |
+| `/mama-setup` | set me up, health check | `/mama-manager` | morning cockpit |
+| `/mama-day` | whole morning | `/mama-allocate` | split the pool, explained |
+| `/mama-book` | my accounts | `/mama-scan` | scan signals |
+| `/mama-target` | my allocated queue, claim tier C | `/mama-vam <rep>` | refresh a book |
+| `/mama-research acme` | cited research | `/mama-nightly` | run tonight's job |
+| `/mama-recommend acme` | what to pitch | `/mama-ingest` | import CRM |
+| `/mama-draft acme first` | email or WhatsApp | `/mama-weekly` | weekly review |
+| `/mama-send` | review and send | | |
+| `/mama-replies` | handle replies | **Anyone** | |
+| `/mama-schedule` | book, move, cancel meetings | `/company-check <UEN\|name>` | is this company real? |
+| `/mama-brief acme` | call or event prep | `/company-insights …` | stats, charts, tables |
 | `/mama-handover acme` | log a meeting | | |
 
 </details>
@@ -276,6 +309,10 @@ Codex reads `AGENTS.md` and `.agents/skills/` (`$mama-day`). It has no hooks or 
 | No invented names in drafts | `draft_check.py` entity check |
 | Suppression, send windows, WhatsApp opt-in | `draft_check.py`, `send.py` |
 | Reps touch only their own book | `guard.py` hook |
+| VAMs advise, never contact or reassign | `lint.py` checks VAM fields and sections |
+| Appointments only by the owner or manager | `appointments.py` ([ADR-0010](docs/adr/0010-appointments.md)) |
+| Calendar imports keep busy start/end only | `busy_import.py`, `lint.py` |
+| No LinkedIn automation or scraping | Rule 12 in [AGENTS.md](AGENTS.md) |
 | Web text is data, not instructions | Rule 15 in [AGENTS.md](AGENTS.md) |
 
 [Security on one page](docs/SECURITY.md) · compliance notes in `knowledge/guardrails.md` are not legal advice; confirm with your DPO.
@@ -309,6 +346,8 @@ Every pilot mistake becomes a failing eval case before it is fixed.
 | 8 · Codex parity + SG pilot | 🟡 in progress |
 | 9 · Console | ✅ |
 | 9b · Console v2: Today, chat, calendar, generative reports | ✅ |
+| 9c · Appointments, team calendar, Google Calendar busy blocks | ✅ |
+| Films: 2-minute pitch, 5-minute tour, install, five episodes | ✅ |
 
 </details>
 
