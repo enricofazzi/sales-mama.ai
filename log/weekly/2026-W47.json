@@ -1,0 +1,261 @@
+{
+  "week": "2026-W47",
+  "from": "2026-11-16",
+  "to": "2026-11-22",
+  "min_n": 20,
+  "metrics": {
+    "week": {
+      "from": "2026-11-16",
+      "to": "2026-11-22",
+      "touches": 0,
+      "total": {
+        "sent": 0,
+        "replies": 0,
+        "positive": 0,
+        "meetings": 0,
+        "reply_rate": "insufficient data",
+        "meeting_rate": "insufficient data"
+      },
+      "cuts": {
+        "rep": {},
+        "pattern": {},
+        "persona": {},
+        "pain": {},
+        "signal": {},
+        "product": {},
+        "tier": {},
+        "market": {}
+      }
+    },
+    "trailing_4w": {
+      "from": "2026-10-19",
+      "to": "2026-11-15",
+      "touches": 1,
+      "total": {
+        "sent": 0,
+        "replies": 1,
+        "positive": 0,
+        "meetings": 0,
+        "reply_rate": "insufficient data",
+        "meeting_rate": "insufficient data"
+      },
+      "cuts": {
+        "rep": {
+          "praveen": {
+            "sent": 0,
+            "replies": 1,
+            "positive": 0,
+            "meetings": 0,
+            "reply_rate": "insufficient data",
+            "meeting_rate": "insufficient data"
+          }
+        },
+        "pattern": {
+          "first-office-move": {
+            "sent": 0,
+            "replies": 1,
+            "positive": 0,
+            "meetings": 0,
+            "reply_rate": "insufficient data",
+            "meeting_rate": "insufficient data"
+          }
+        },
+        "persona": {
+          "ops_head": {
+            "sent": 0,
+            "replies": 1,
+            "positive": 0,
+            "meetings": 0,
+            "reply_rate": "insufficient data",
+            "meeting_rate": "insufficient data"
+          }
+        },
+        "pain": {
+          "connectivity_reset": {
+            "sent": 0,
+            "replies": 1,
+            "positive": 0,
+            "meetings": 0,
+            "reply_rate": "insufficient data",
+            "meeting_rate": "insufficient data"
+          },
+          "renewal_window": {
+            "sent": 0,
+            "replies": 1,
+            "positive": 0,
+            "meetings": 0,
+            "reply_rate": "insufficient data",
+            "meeting_rate": "insufficient data"
+          }
+        },
+        "signal": {
+          "contract_ending": {
+            "sent": 0,
+            "replies": 1,
+            "positive": 0,
+            "meetings": 0,
+            "reply_rate": "insufficient data",
+            "meeting_rate": "insufficient data"
+          },
+          "office_move": {
+            "sent": 0,
+            "replies": 1,
+            "positive": 0,
+            "meetings": 0,
+            "reply_rate": "insufficient data",
+            "meeting_rate": "insufficient data"
+          }
+        },
+        "product": {
+          "(none)": {
+            "sent": 0,
+            "replies": 1,
+            "positive": 0,
+            "meetings": 0,
+            "reply_rate": "insufficient data",
+            "meeting_rate": "insufficient data"
+          }
+        },
+        "tier": {
+          "A": {
+            "sent": 0,
+            "replies": 1,
+            "positive": 0,
+            "meetings": 0,
+            "reply_rate": "insufficient data",
+            "meeting_rate": "insufficient data"
+          }
+        },
+        "market": {
+          "SG": {
+            "sent": 0,
+            "replies": 1,
+            "positive": 0,
+            "meetings": 0,
+            "reply_rate": "insufficient data",
+            "meeting_rate": "insufficient data"
+          }
+        }
+      }
+    }
+  },
+  "funnel": {
+    "week_ago_rev": "6e8cf25588",
+    "stages": {
+      "new": {
+        "now": 70,
+        "week_ago": 70
+      },
+      "researched": {
+        "now": 10,
+        "week_ago": 10
+      },
+      "contacted": {
+        "now": 0,
+        "week_ago": 0
+      },
+      "replied": {
+        "now": 0,
+        "week_ago": 0
+      },
+      "meeting": {
+        "now": 0,
+        "week_ago": 0
+      },
+      "handed_over": {
+        "now": 0,
+        "week_ago": 0
+      },
+      "nurture": {
+        "now": 0,
+        "week_ago": 0
+      },
+      "closed_lost": {
+        "now": 0,
+        "week_ago": 0
+      },
+      "do_not_contact": {
+        "now": 0,
+        "week_ago": 0
+      }
+    }
+  },
+  "calibration": {
+    "from": "2026-09-28",
+    "to": "2026-11-22",
+    "tiers": {
+      "A": {
+        "contacted": 0,
+        "meetings": 0,
+        "meeting_rate": "insufficient data"
+      },
+      "B": {
+        "contacted": 0,
+        "meetings": 0,
+        "meeting_rate": "insufficient data"
+      },
+      "C": {
+        "contacted": 0,
+        "meetings": 0,
+        "meeting_rate": "insufficient data"
+      }
+    },
+    "lift_a_over_c": null,
+    "verdict": "insufficient",
+    "note": "tier is each account's current tier"
+  },
+  "allocation": {
+    "team_rate": 0.1,
+    "proposals": [
+      {
+        "file": "log/allocation/2026-11-02.md",
+        "date": "2026-11-02",
+        "status": "proposed",
+        "leads": 15,
+        "spread": 0.0,
+        "limit": 0.2,
+        "spread_ok": true,
+        "violations": []
+      },
+      {
+        "file": "log/allocation/2026-11-08.md",
+        "date": "2026-11-08",
+        "status": "proposed",
+        "leads": 15,
+        "spread": 0.0,
+        "limit": 0.2,
+        "spread_ok": true,
+        "violations": []
+      }
+    ],
+    "conversion": [],
+    "lapsed": [],
+    "violations": 0
+  },
+  "retention": {
+    "raw/signals": {
+      "days": 180,
+      "expired": []
+    },
+    "raw/research": {
+      "days": 180,
+      "expired": []
+    },
+    "raw/replies": {
+      "days": 180,
+      "expired": []
+    },
+    "raw/notes": {
+      "days": 180,
+      "expired": []
+    },
+    "raw/lists": {
+      "days": 90,
+      "expired": []
+    },
+    "raw/crm": {
+      "days": 365,
+      "expired": []
+    }
+  }
+}
