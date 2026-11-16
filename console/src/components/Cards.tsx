@@ -3,7 +3,10 @@
 import { Fragment, type ReactNode } from 'react';
 import type { Card as CardT, CardAction } from '../../shared/cards';
 
-export interface CardCtx { onPrompt: (p: string) => void; onSource: (p: string) => void; disabled: boolean }
+export interface CardCtx {
+  onPrompt: (p: string) => void; onSource: (p: string) => void; disabled: boolean;
+  openCanvas?: (part: { block: import('../../shared/a2ui').SurfaceBlock; issues: string[]; data?: unknown }) => void;
+}
 
 const AGENTS = ['mama', 'scout', 'researcher', 'vam', 'writer', 'allocator'];
 const DEFAULT_AGENT: Record<string, string> = {

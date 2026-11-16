@@ -1,12 +1,13 @@
 // Navigation: a slim icon rail on desktop, a bottom tab bar on phones (spec §3).
 import type { Route } from './router';
-import { IconBook, IconCalendar, IconChat, IconToday } from './Icons';
+import { IconBook, IconCalendar, IconChat, IconReports, IconToday } from './Icons';
 
 const ITEMS: { route: Route; label: string; Icon: (p: { size?: number }) => JSX.Element }[] = [
   { route: 'today', label: 'Today', Icon: IconToday },
   { route: 'chat', label: 'Chat', Icon: IconChat },
   { route: 'calendar', label: 'Calendar', Icon: IconCalendar },
   { route: 'book', label: 'Book', Icon: IconBook },
+  { route: 'reports', label: 'Reports', Icon: IconReports },
 ];
 
 export function NavRail({ route, go, busy }: { route: Route; go: (r: Route) => void; busy: boolean }) {

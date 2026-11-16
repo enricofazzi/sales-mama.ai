@@ -87,7 +87,11 @@ export function SurfaceView({ block, issues, ctx, preloaded, readOnly }: {
           <button type="button" className="ref" title="Open the data behind this view" onClick={() => ctx.onSource(block.dataRef!)}>data · {block.dataRef}</button>
         )}
         {block.refs?.map(r => <button key={r} type="button" className="ref" title={r} onClick={() => ctx.onSource(r)}>{r}</button>)}
-        {!readOnly && <button type="button" className="ghost small" onClick={share} disabled={busy || !built?.surface}>{busy ? 'Building page…' : 'Share as page'}</button>}
+        {!readOnly && ctx.openCanvas && (
+          <button type="button" className="ghost small" onClick={() => ctx.openCanvas!({ block, issues, data: data && data.ok ? data.value : undefined })}
+            title="Open this view wide, beside the chat">Open in canvas</button>
+        )}
+        {!readOnly && <button type="button" className={`ghost small${ctx.openCanvas ? ' tight' : ''}`} onClick={share} disabled={busy || !built?.surface}>{busy ? 'Building page…' : 'Share as page'}</button>}
       </footer>
       {all.length > 0 && (
         <details className="issues">

@@ -1,7 +1,7 @@
 // Global keyboard map (spec §5.4). Ignores keys typed into fields, except ⌘K and ⌘↓.
 import { useEffect, useRef } from 'react';
 
-export interface Hotkeys { palette: () => void; slash: () => void; jump: () => void; help: () => void; go: (k: 't' | 'c' | 'k' | 'b') => void }
+export interface Hotkeys { palette: () => void; slash: () => void; jump: () => void; help: () => void; go: (k: 't' | 'c' | 'k' | 'b' | 'r') => void }
 
 const typing = (t: EventTarget | null) => {
   const el = t as HTMLElement | null;
@@ -21,7 +21,7 @@ export function useHotkeys(h: Hotkeys) {
       if (e.key === '/') { e.preventDefault(); ref.current.slash(); return; }
       if (e.key === '?') { e.preventDefault(); ref.current.help(); return; }
       if (e.key === 'g') { gAt = Date.now(); return; }
-      if (Date.now() - gAt < 900 && (e.key === 't' || e.key === 'c' || e.key === 'k' || e.key === 'b')) { e.preventDefault(); gAt = 0; ref.current.go(e.key); }
+      if (Date.now() - gAt < 900 && (e.key === 't' || e.key === 'c' || e.key === 'k' || e.key === 'b' || e.key === 'r')) { e.preventDefault(); gAt = 0; ref.current.go(e.key); }
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);

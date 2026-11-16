@@ -2,8 +2,8 @@
 // refreshed. Route changes use the View Transitions API where the browser has it.
 import { useCallback, useEffect, useState } from 'react';
 
-export type Route = 'today' | 'chat' | 'calendar' | 'book';
-export const ROUTES: Route[] = ['today', 'chat', 'calendar', 'book'];
+export type Route = 'today' | 'chat' | 'calendar' | 'book' | 'reports';
+export const ROUTES: Route[] = ['today', 'chat', 'calendar', 'book', 'reports'];
 
 function current(): Route {
   const q = new URLSearchParams(location.search);

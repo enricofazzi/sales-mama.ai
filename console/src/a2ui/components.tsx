@@ -14,7 +14,11 @@ import { Agenda } from '../calendar/Views';
 import { Week, weekDays } from '../calendar/Week';
 import { weekStart, ymd, type CalItem, type Calendar } from '../calendar/time';
 
-export interface SurfaceCtx { onPrompt: (p: string) => void; onSource: (p: string) => void; disabled: boolean; readOnly?: boolean }
+export interface SurfaceCtx {
+  onPrompt: (p: string) => void; onSource: (p: string) => void; disabled: boolean; readOnly?: boolean;
+  /** Open a surface wide, beside the chat (Phase 5). Absent inside the canvas itself. */
+  openCanvas?: (part: { block: import('../../shared/a2ui').SurfaceBlock; issues: string[]; data?: unknown }) => void;
+}
 export const SurfaceContext = createContext<SurfaceCtx>({ onPrompt: () => {}, onSource: () => {}, disabled: true });
 const useCtx = () => useContext(SurfaceContext);
 

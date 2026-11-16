@@ -167,3 +167,43 @@ export function listAccounts(root: string): AccountInfo[] {
   }
   return out.sort((a, b) => (b.score ?? -1) - (a.score ?? -1) || a.name.localeCompare(b.name));
 }
+
+// ---------------------------------------------------------------------------------------------
+// Reports (spec §3, Phase 5): saved views and report data files, newest first. Read-only listing.
+// ---------------------------------------------------------------------------------------------
+export interface ReportInfo { path: string; kind: 'weekly' | 'allocation' | 'insights' | 'company' | 'view'; title: string; subtitle: string; updated: string; bytes: number }
+
+function jsonHead(file: string): Record<string, any> {
+  try { return JSON.parse(readFileSync(file, 'utf8')); } catch { return {}; }
+}
+
+export function listReports(root: string): ReportInfo[] {
+  const out: ReportInfo[] = [];
+  const add = (dir: string, test: RegExp, make: (name: string, full: string) => Omit<ReportInfo, 'path' | 'updated' | 'bytes'> | null) => {
+    const abs = join(root, dir);
+    if (!existsSync(abs)) return;
+    for (const name of readdirSync(abs)) {
+      if (!test.test(name)) continue;
+      const full = join(abs, name);
+      const st = statSync(full);
+      if (!st.isFile() || st.size > 4 * 1024 * 1024) continue;
+      const info = make(name, full);
+      if (info) out.push({ ...info, path: `${dir}/${name}`, updated: st.mtime.toISOString(), bytes: st.size });
+    }
+  };
+  add('log/weekly', /^\d{4}-W\d{2}\.json$/, name => ({ kind: 'weekly', title: `Weekly review · ${name.replace('.json', '')}`, subtitle: 'Funnel, calibration, conversion' }));
+  add('log/allocation', /^\d{4}-\d{2}-\d{2}(-\d+)?\.json$/, (name, full) => {
+    const d = jsonHead(full);
+    return { kind: 'allocation', title: `Allocation · ${name.replace('.json', '')}`, subtitle: `${(d.rows ?? []).length} leads · ${d.status ?? 'proposed'}` };
+  });
+  add('company-check/reports', /^insights-.+\.json$/, (_, full) => {
+    const d = jsonHead(full);
+    return { kind: 'insights', title: String(d.title ?? 'Company insights'), subtitle: (d.summary ?? [])[0] ? String(d.summary[0]).slice(0, 120) : 'Registry insights' };
+  });
+  add('company-check/reports', /^\d{4}-\d{2}-\d{2}-[0-9A-Z]+\.json$/, (_, full) => {
+    const d = jsonHead(full);
+    return d.verdict ? { kind: 'company', title: String(d.name ?? d.query ?? 'Company check'), subtitle: `${d.verdict} · ${d.score ?? '?'}/100 · UEN ${d.uen ?? '?'}` } : null;
+  });
+  add('company-check/reports', /\.(view|cards)\.md$/, name => ({ kind: 'view', title: name.replace(/\.(view|cards)\.md$/, ''), subtitle: 'Saved view' }));
+  return out.sort((a, b) => b.updated.localeCompare(a.updated));
+}

@@ -17,7 +17,8 @@ body { overflow: hidden; background-color: var(--ground); background-image: var(
 /* ---------- Grid ---------- */
 .app { height: 100dvh; display: grid; grid-template-rows: var(--header-h) var(--pulse-h) minmax(0, 1fr); }
 .body { display: grid; grid-template-columns: var(--nav-w) minmax(0, 1fr) var(--panel-w); min-height: 0; }
-.body.r-today, .body.r-calendar { grid-template-columns: var(--nav-w) minmax(0, 1fr); }
+.body.r-today, .body.r-calendar, .body.r-reports { grid-template-columns: var(--nav-w) minmax(0, 1fr); }
+.body.with-canvas { grid-template-columns: var(--nav-w) minmax(0, 1fr) var(--panel-w); }
 .main { min-width: 0; min-height: 0; position: relative; display: flex; flex-direction: column; }
 .main > * { flex: 1 1 auto; min-height: 0; }
 .route-chat { display: flex; flex-direction: column; }
@@ -179,13 +180,13 @@ body { overflow: hidden; background-color: var(--ground); background-image: var(
 @media (max-width: 1180px) { .clock .win { display: none; } }
 @media (max-width: 900px) {
   .app { grid-template-rows: var(--header-h) var(--pulse-h) minmax(0, 1fr) calc(var(--tabbar-h) + env(safe-area-inset-bottom, 0px)); }
-  .body, .body.r-today, .body.r-calendar { grid-template-columns: minmax(0, 1fr); }
+  .body, .body.r-today, .body.r-calendar, .body.r-reports, .body.with-canvas { grid-template-columns: minmax(0, 1fr); }
   .nav, .body > .rail { display: none; }
   .hdr { gap: 8px; padding: 0 10px; }
   .hdr .word, .hdr-btn span, .run-status { display: none; }
   .hdr-btn { padding: 6px 9px; }
   .clock { padding-right: 8px; }
-  .tabbar { display: grid; grid-template-columns: repeat(4, 1fr); background: var(--surface); border-top: 1px solid var(--line); padding-bottom: env(safe-area-inset-bottom, 0px); }
+  .tabbar { display: grid; grid-template-columns: repeat(5, 1fr); background: var(--surface); border-top: 1px solid var(--line); padding-bottom: env(safe-area-inset-bottom, 0px); }
   .tab { position: relative; border: 0; background: transparent; color: var(--muted); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
     font-size: 11px; font-weight: 650; cursor: pointer; }
   .tab.on { color: var(--mama); }

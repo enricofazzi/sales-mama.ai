@@ -12,7 +12,7 @@ import { NavRail, TabBar } from './app/Nav';
 import { ChatView } from './app/ChatView';
 import { TodayView } from './app/TodayView';
 import { BookView } from './app/BookView';
-import { IconAuto, IconBook, IconBolt, IconCalendar, IconChat, IconFire, IconPlus, IconToday } from './app/Icons';
+import { IconAuto, IconBook, IconBolt, IconCalendar, IconChat, IconFire, IconPlus, IconReports, IconToday } from './app/Icons';
 import { Rail } from './components/Rail';
 import { SourceDrawer } from './components/SourceDrawer';
 import { CommandPalette, ShortcutSheet, type PaletteItem } from './palette/CommandPalette';
@@ -23,6 +23,8 @@ import { NextUpCapsule } from './calendar/NextUp';
 import { useReminders } from './calendar/reminders';
 import type { CalItem } from './calendar/time';
 import { useNow } from './hooks/useNow';
+import { Canvas, useCanvasWidth, type CanvasContent } from './canvas/Canvas';
+import { ReportsView } from './reports/ReportsView';
 
 function useCatalog(connected: boolean) {
   const [skills, setSkills] = useState<SkillInfo[]>([]);
@@ -46,6 +48,8 @@ export function App() {
   const [palette, setPalette] = useState(false);
   const [help, setHelp] = useState(false);
   const [focus, setFocus] = useState<string | null>(null);
+  const [canvas, setCanvas] = useState<CanvasContent | null>(null);
+  const [canvasW, setCanvasW] = useCanvasWidth();
   const cal = useCalendar(rail);
   const reminders = useReminders(cal.mine);
   const now = useNow(30_000);
@@ -61,7 +65,10 @@ export function App() {
     ask(text);
     go('chat');
   }, [ask, canAsk, go]);
-  const ctx = useMemo(() => ({ onPrompt: askAndShow, onSource: setSource, disabled: !canAsk }), [askAndShow, canAsk]);
+  const openCanvas = useCallback((part: CanvasContent['parts'][number]) => {
+    setCanvas({ key: `${part.block.surfaceId}-${Date.now()}`, title: part.block.title ?? part.block.surfaceId.replace(/_/g, ' '), parts: [part], source: part.block.dataRef });
+  }, []);
+  const ctx = useMemo(() => ({ onPrompt: askAndShow, onSource: setSource, disabled: !canAsk, openCanvas }), [askAndShow, canAsk, openCanvas]);
 
   // A prompt typed during a run is sent as soon as the run ends.
   useEffect(() => {
@@ -74,6 +81,7 @@ export function App() {
   }, [turns]);
 
   const status = replay ? (replaying ? 'Replaying…' : 'Replay') : saved ? 'Saved result' : !connected ? 'Reconnecting…' : live ? 'Working…' : 'Ready';
+  const showCanvas = !!canvas && (route === 'chat' || route === 'book' || route === 'reports');
   const onNewChat = useCallback(() => { newChat(); setQueued(null); go('chat'); }, [newChat, go]);
   const prefill = useCallback((text: string) => { go('chat'); setSeed(text); }, [go]);
   const openChat = useCallback((c: SavedChat) => { if (!busy) { loadChat(c); go('chat'); } }, [busy, loadChat, go]);
@@ -84,7 +92,7 @@ export function App() {
     slash: () => prefill('/'),
     jump: () => { go('chat'); window.dispatchEvent(new Event('mama:jump')); },
     help: () => setHelp(true),
-    go: k => go(({ t: 'today', c: 'chat', k: 'calendar', b: 'book' } as Record<string, Route>)[k]),
+    go: k => go(({ t: 'today', c: 'chat', k: 'calendar', b: 'book', r: 'reports' } as Record<string, Route>)[k]),
   });
 
   const paletteItems = useMemo<PaletteItem[]>(() => {
@@ -97,6 +105,7 @@ export function App() {
       { id: 'go-chat', group: 'Go to', label: 'Chat', keys: 'g c', icon: <IconChat size={16} />, run: () => go('chat') },
       { id: 'go-cal', group: 'Go to', label: 'Calendar', keys: 'g k', icon: <IconCalendar size={16} />, run: () => go('calendar') },
       { id: 'go-book', group: 'Go to', label: 'Book', keys: 'g b', icon: <IconBook size={16} />, run: () => go('book') },
+      { id: 'go-reports', group: 'Go to', label: 'Reports', keys: 'g r', icon: <IconReports size={16} />, run: () => go('reports') },
     ];
     for (const s of skills) {
       if (!manager && s.role === 'manager') continue;
@@ -116,7 +125,7 @@ export function App() {
     <div className="app">
       <Header rail={rail} status={status} live={live} theme={theme} onTheme={cycle} onNewChat={onNewChat} newChatDisabled={busy} lanes={lanes}
         onSearch={() => setPalette(true)} nextUp={<NextUpCapsule cal={cal.mine} now={now} onOpen={openEvent} />} />
-      <div className={`body r-${route}`}>
+      <div className={`body r-${route}${showCanvas ? ' with-canvas' : ''}`} style={showCanvas ? { ['--panel-w' as any]: `${canvasW}px` } : undefined}>
         <NavRail route={route} go={go} busy={live} />
         <main className="main" id="main">
           {route === 'today' && <TodayView rail={rail} canAsk={canAsk} live={live} ask={askAndShow} stop={stop} openSource={setSource} skills={skills} accounts={accounts} cal={cal.mine} openEvent={openEvent} />}
@@ -129,8 +138,11 @@ export function App() {
               queued={queued} onQueue={setQueued} onCancelQueue={() => setQueued(null)} onOpenChat={openChat} />
           </div>
           {route === 'book' && <BookView rail={rail} ctx={ctx} />}
+          {route === 'reports' && <ReportsView onOpen={setCanvas} current={canvas?.source} />}
         </main>
-        {route !== 'today' && route !== 'calendar' && <Rail rail={rail} onSource={setSource} onPrompt={askAndShow} disabled={!canAsk} />}
+        {showCanvas && canvas
+          ? <Canvas content={canvas} width={canvasW} onWidth={setCanvasW} onClose={() => setCanvas(null)} ctx={ctx} />
+          : (route === 'chat' || route === 'book') && <Rail rail={rail} onSource={setSource} onPrompt={askAndShow} disabled={!canAsk} />}
       </div>
       <TabBar route={route} go={go} busy={live} />
       <CommandPalette open={palette} onClose={() => setPalette(false)} items={paletteItems} />

@@ -10,6 +10,7 @@ export const IconToday = (p: { size?: number }) => <I {...p}><circle cx="12" cy=
 export const IconChat = (p: { size?: number }) => <I {...p}><path d="M20 12a8 8 0 0 1-11.6 7.1L4 20l.9-4.1A8 8 0 1 1 20 12Z" /><path d="M8.5 11h7M8.5 14h4.5" /></I>;
 export const IconCalendar = (p: { size?: number }) => <I {...p}><rect x="3.5" y="5" width="17" height="15.5" rx="3" /><path d="M3.5 10h17M8 3v4M16 3v4" /><path d="M8 14h2M14 14h2M8 17.5h2" /></I>;
 export const IconBell = (p: { size?: number }) => <I {...p}><path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15L6 16Z" /><path d="M10 20.5a2 2 0 0 0 4 0" /></I>;
+export const IconReports = (p: { size?: number }) => <I {...p}><path d="M6 3.5h8.5L19 8v12.5H6z" /><path d="M14 3.5V8h5" /><path d="M9 17v-3M12 17v-6M15 17v-4" /></I>;
 export const IconBook = (p: { size?: number }) => <I {...p}><rect x="3.5" y="3.5" width="7" height="7" rx="2" /><rect x="13.5" y="3.5" width="7" height="7" rx="2" /><rect x="3.5" y="13.5" width="7" height="7" rx="2" /><rect x="13.5" y="13.5" width="7" height="7" rx="2" /></I>;
 export const IconSun = (p: { size?: number }) => <I {...p}><circle cx="12" cy="12" r="4.2" /><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4" /></I>;
 export const IconMoon = (p: { size?: number }) => <I {...p}><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5Z" /></I>;
