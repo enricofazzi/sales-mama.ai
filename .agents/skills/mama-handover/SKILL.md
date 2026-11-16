@@ -10,7 +10,7 @@ description: Log a meeting outcome and produce handover notes and a CRM update r
 
 ## Before you start
 - Who: the account's `owner`, or the manager.
-- Scripts: `find.py` (Phase 0); `crm_update.py` (Phase 7). Optional: `score.py` (Phase 3) to re-score.
+- Scripts: `find.py` (Phase 0); `crm_update.py` (Phase 7); `appointments.py` (calendar Phase 3). Optional: `score.py` (Phase 3) to re-score.
 - If a required script is missing, say which phase adds it and stop.
 - Re-read `wiki/accounts/<id>.md` and its frontmatter now (rule 17). If `owner` is not me (and I'm not the manager), stop (rules 6, 16).
 - Read `knowledge/crm_mapping.yaml` (`import:` columns).
@@ -31,6 +31,7 @@ description: Log a meeting outcome and produce handover notes and a CRM update r
    `python3 scripts/crm_update.py --id <id> --notes "<one-line summary, no personal data>" --contact <main attendee id> --products <a;b> --ref raw/notes/<file>.md`
    It re-reads the page and refuses another rep's account or unknown products. It appends `meeting / meeting_held` to `log/touches.csv`, and a row to `log/crm-updates/<YYYY-MM-DD>.csv` with exactly the `crm_mapping.yaml` `import:` columns (Account Name ← `name`, Stage, Next Step ← `next_action` by `next_action_due`, Owner Email, Notes). It quotes fields correctly. Show the `csv_line` it prints.
 5. If it says `Refused`, fix the cause (ownership, product id, notes path) or stop and tell the rep. Never write either CSV by hand.
+   Then close the appointment, if there was one (`python3 scripts/appointments.py list --json`, today's or the latest for this account): `python3 scripts/appointments.py held <apt-id> --ref raw/notes/<file>.md --json`, or `no-show <apt-id>` if they didn't turn up. `held` writes no touch (crm_update already wrote `meeting_held`). Book the next meeting the rep agreed with `appointments.py add` (see **mama-schedule**).
 6. Objections raised in the meeting: add them to `## Open objections` and link or create a `status: draft` objection page (never approve it).
 7. Optional: `python3 scripts/score.py --id <id>`.
 

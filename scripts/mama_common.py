@@ -677,6 +677,61 @@ def load_touches(root: Path | None = None) -> list[dict[str, str]]:
     return read_csv((root or repo_root()) / "log" / "touches.csv")
 
 
+# Appointments (ADR-0010): append-only and event-sourced; the latest row per id is the current state.
+APPOINTMENT_FIELDS = ("ts", "id", "rep", "account", "contact", "kind", "title", "starts", "ends", "tz",
+                      "location", "status", "source", "ref", "by")
+APPOINTMENT_KINDS = ("meeting", "call", "demo", "site_visit")
+APPOINTMENT_STATUSES = ("tentative", "confirmed", "rescheduled", "cancelled", "held", "no_show")
+LIVE_APPOINTMENT = ("tentative", "confirmed", "rescheduled")   # still on the calendar
+
+
+def appointment_history(root: Path | None = None) -> list[dict[str, str]]:
+    return read_csv((root or repo_root()) / "log" / "appointments.csv")
+
+
+def load_appointments(root: Path | None = None) -> dict[str, dict[str, str]]:
+    """id -> latest row (file order), i.e. each appointment's current state."""
+    out: dict[str, dict[str, str]] = {}
+    for row in appointment_history(root):
+        if norm(row.get("id")):
+            out[norm(row.get("id"))] = row
+    return out
+
+
+# ----------------------------------------------------------------------------
+# Markets: time zones and holidays (knowledge/markets.yaml)
+# ----------------------------------------------------------------------------
+# SG, MY and IN observe no daylight saving, so fixed offsets are exact and need no tz database.
+_FIXED_OFFSETS = {"Asia/Singapore": dt.timedelta(hours=8), "Asia/Kuala_Lumpur": dt.timedelta(hours=8),
+                  "Asia/Kolkata": dt.timedelta(hours=5, minutes=30)}
+TZ_ABBR = {"Asia/Singapore": "SGT", "Asia/Kuala_Lumpur": "MYT", "Asia/Kolkata": "IST"}
+
+
+def load_markets(root: Path | None = None) -> dict:
+    """knowledge/markets.yaml as a dict ({} when missing)."""
+    return load_yaml((root or repo_root()) / "knowledge" / "markets.yaml", {}) or {}
+
+
+def market_cfg(root: Path | None, market: str) -> dict:
+    return ((load_markets(root).get("markets") or {}).get(norm(market).upper()) or {})
+
+
+def market_tz(root: Path | None, market: str) -> tuple[str, dt.tzinfo]:
+    """(tz name, tzinfo) for a market; Singapore when unknown."""
+    name = norm(market_cfg(root, market).get("tz")) or "Asia/Singapore"
+    if name in _FIXED_OFFSETS:
+        return name, dt.timezone(_FIXED_OFFSETS[name], TZ_ABBR.get(name))
+    try:
+        from zoneinfo import ZoneInfo
+        return name, ZoneInfo(name)
+    except Exception:  # noqa: BLE001 - no tz database: fall back to UTC rather than guess
+        return name, dt.timezone.utc
+
+
+def market_holidays(cfg: dict) -> set[dt.date]:
+    return {d for d in (to_date(h) for h in as_list(cfg.get("holidays"))) if d}
+
+
 # ----------------------------------------------------------------------------
 # Knowledge
 # ----------------------------------------------------------------------------

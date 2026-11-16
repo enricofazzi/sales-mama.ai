@@ -1,4 +1,4 @@
-"""Rebuild the books: wiki/books/<rep>.md + .json for every rep and wiki/books/team.md + .json.
+"""Rebuild the books: wiki/books/<rep>.md + .json + .calendar.json for every rep and the team files.
 
 Books are generated views (gitignored) per PLAN.md §11. Each rep book shows:
 - active accounts vs max_active, tier mix
@@ -13,7 +13,9 @@ The team book has a per-rep table plus the pool (unowned accounts) by tier,
 the review-queue size and the funnel.
 
 The .md files are the agents' working view (mama-book, Codex). The .json files
-carry the same numbers as data for the console's A2UI surfaces (ADR-0009).
+carry the same numbers as data for the console's A2UI surfaces (ADR-0009). The
+.calendar.json files hold every dated item for today −14…+60 days: appointments,
+follow-ups due, renewals, claim lapses, events, holidays and send windows (ADR-0010).
 
 Missing fields are tolerated everywhere. Env MAMA_TODAY=YYYY-MM-DD fixes
 "today" for tests.
@@ -260,6 +262,132 @@ def _write_json(path: Path, data: dict) -> None:
     write_text(path, json.dumps(data, indent=2, ensure_ascii=False, default=str) + "\n")
 
 
+# ----------------------------------------------------------------------------
+# Calendar (ADR-0010, spec §6.1–6.2): everything with a date, as data for the console
+# ----------------------------------------------------------------------------
+CAL_BEFORE, CAL_AFTER = 14, 60      # window: today −14 … +60 days
+RENEWAL_LEAD = 90                   # a renewal window opens this many days before contract_end
+
+
+def _acc_ref(p) -> dict:
+    m = p.meta
+    return {"id": p.id, "name": norm(m.get("name")) or p.id, "tier": norm(m.get("tier")), "stage": norm(m.get("stage")),
+            "market": norm(m.get("market")).upper()}
+
+
+def _day_item(kind: str, iid: str, day: dt.date, title: str, **extra) -> dict:
+    return {"id": iid, "kind": kind, "status": extra.pop("status", ""), "title": title, "start": day.isoformat(),
+            "end": day.isoformat(), "all_day": True, **extra}
+
+
+def calendar_items(root: Path, reps: list[dict], accounts: list, touches: list[dict], on: dt.date) -> list[dict]:
+    """Every dated item for the given reps (their accounts and appointments), plus their markets' holidays."""
+    import lint
+    from mama_common import LIVE_APPOINTMENT, load_appointments, market_cfg, market_holidays, read_page, to_date
+    lo, hi = on - dt.timedelta(days=CAL_BEFORE), on + dt.timedelta(days=CAL_AFTER)
+    inside = lambda d: d is not None and lo <= d <= hi
+    rep_ids = {r["id"] for r in reps}
+    by_id = {p.id: p for p in accounts}
+    items: list[dict] = []
+
+    for row in load_appointments(root).values():
+        rep = norm(row.get("rep"))
+        day = to_date(row.get("starts", "")[:10])
+        if rep not in rep_ids or not inside(day):
+            continue
+        page = by_id.get(norm(row.get("account")))
+        contact, cname = norm(row.get("contact")), ""
+        if contact:
+            cp = root / "wiki" / "contacts" / f"{contact}.md"
+            cpage = read_page(cp, root) if cp.is_file() else None
+            if cpage and cpage.meta:
+                cname = norm(cpage.meta.get("name")) + (f" ({norm(cpage.meta.get('title'))})" if norm(cpage.meta.get("title")) else "")
+        items.append({"id": row.get("id"), "kind": norm(row.get("kind")) or "meeting", "status": norm(row.get("status")),
+                      "title": norm(row.get("title")), "start": row.get("starts"), "end": row.get("ends"), "all_day": False,
+                      "tz": norm(row.get("tz")), "rep": rep, "account": _acc_ref(page) if page else {"id": norm(row.get("account"))},
+                      "contact": contact, "contact_name": cname, "location": norm(row.get("location")),
+                      "live": norm(row.get("status")) in LIVE_APPOINTMENT, "ref": "log/appointments.csv"})
+
+    last = lint.last_touch_dates(touches)
+    for p in accounts:
+        m, rep = p.meta, norm(p.meta.get("owner"))
+        if rep not in rep_ids or not is_active(m):
+            continue
+        ref, acc = f"wiki/accounts/{p.id}.md", _acc_ref(p)
+        due = to_date(m.get("next_action_due"))
+        if inside(due):
+            items.append(_day_item("followup", f"fu-{p.id}", due, norm(m.get("next_action")) or norm(m.get("nba")) or "Next step",
+                                   status="overdue" if due < on else "due", rep=rep, account=acc, nba=norm(m.get("nba")),
+                                   reason=norm(m.get("nba_reason")), ref=ref))
+        end = to_date(m.get("contract_end"))
+        if end:
+            if inside(end):
+                items.append(_day_item("renewal", f"rn-{p.id}", end, f"Contract ends · {acc['name']}", rep=rep, account=acc, ref=ref))
+            opens = end - dt.timedelta(days=RENEWAL_LEAD)
+            if inside(opens):
+                items.append(_day_item("renewal_window", f"rw-{p.id}", opens, f"Renewal window opens · {acc['name']}", rep=rep, account=acc, ref=ref))
+        claimed = [d for d in (to_date(m.get("claimed_on")), to_date(m.get("allocated_on"))) if d]
+        if claimed:
+            touched = max(claimed + [d for d in (to_date(m.get("last_touch")), last.get(p.id)) if d])
+            lapse = touched + dt.timedelta(days=lint.IDLE_DAYS)
+            if inside(lapse):
+                items.append(_day_item("claim_lapse", f"cl-{p.id}", lapse, f"Claim lapses · {acc['name']}",
+                                       status="overdue" if lapse < on else "due", rep=rep, account=acc, ref=ref))
+
+    markets = {str(mk).upper() for r in reps for mk in (r.get("markets") or [])}
+    owned = {p.id for p in accounts if norm(p.meta.get("owner")) in rep_ids}
+    for ev in iter_pages("event", root):
+        m = ev.meta
+        days = sorted(d for d in (to_date(x) for x in (m.get("dates") or [])) if d)
+        matched = {norm(x) for x in (m.get("matched_accounts") or [])}
+        if not days or not (norm(m.get("market")).upper() in markets or matched & owned):
+            continue
+        if not (inside(days[0]) or inside(days[-1])):
+            continue
+        items.append({"id": f"ev-{ev.id}", "kind": "event", "status": "", "title": norm(m.get("name")) or ev.id,
+                      "start": days[0].isoformat(), "end": days[-1].isoformat(), "all_day": True, "market": norm(m.get("market")).upper(),
+                      "location": norm(m.get("venue")), "matched": sorted(matched & owned), "ref": ev.rel})
+    for mk in sorted(markets):
+        for h in sorted(market_holidays(market_cfg(root, mk))):
+            if inside(h):
+                items.append(_day_item("holiday", f"ho-{mk}-{h}", h, f"{mk} public holiday", market=mk))
+    items.sort(key=lambda x: (str(x["start"])[:10], not x.get("all_day"), str(x["start"]), x["kind"]))
+    return items
+
+
+def calendar_data(root: Path, reps: list[dict], accounts: list, touches: list[dict], on: dt.date, team: bool = False) -> dict:
+    from mama_common import market_cfg, market_tz
+    items = calendar_items(root, reps, accounts, touches, on)
+    markets = sorted({str(mk).upper() for r in reps for mk in (r.get("markets") or [])})
+    mcfg = {mk: {"tz": market_tz(root, mk)[0], "send_windows": market_cfg(root, mk).get("send_windows") or {}} for mk in markets}
+    now = dt.datetime.combine(on, dt.datetime.now().time())
+    upcoming = []
+    for x in items:
+        if x.get("all_day") or not x.get("live"):
+            continue
+        try:
+            start = dt.datetime.fromisoformat(str(x["start"]))
+        except ValueError:
+            continue
+        local_now = now.replace(tzinfo=start.tzinfo)
+        if start >= local_now:
+            upcoming.append((start, x))
+    out = {"type": "team_calendar" if team else "calendar", "date": on.isoformat(), "generated": now_stamp(),
+           "window": {"from": (on - dt.timedelta(days=CAL_BEFORE)).isoformat(), "to": (on + dt.timedelta(days=CAL_AFTER)).isoformat()},
+           "tz": mcfg[markets[0]]["tz"] if markets else "Asia/Singapore", "markets": mcfg,
+           "next_up": min(upcoming, key=lambda t: t[0])[1] if upcoming else None, "items": items}
+    if team:
+        load: dict[str, dict[str, int]] = {}
+        for x in items:
+            if x.get("rep") and (x.get("live") or x["kind"] == "followup"):
+                day = str(x["start"])[:10]
+                load.setdefault(x["rep"], {})[day] = load.setdefault(x["rep"], {}).get(day, 0) + 1
+        out["reps"] = [{"rep": r["id"], "name": norm(r.get("name")), "markets": [str(m) for m in (r.get("markets") or [])],
+                        "capacity": _int(r.get("max_active"))} for r in reps]
+        out["by_rep_day"] = load
+    return out
+
+
 def build(root: Path | None = None, only: str | None = None) -> list[Path]:
     """Write the books; return the paths written."""
     root = root or repo_root()
@@ -279,13 +407,17 @@ def build(root: Path | None = None, only: str | None = None) -> list[Path]:
         path = books / f"{rep['id']}.md"
         write_text(path, render_rep(rep, stats[rep["id"]], on))
         _write_json(path.with_suffix(".json"), rep_data(rep, stats[rep["id"]], on))
-        written += [path, path.with_suffix(".json")]
+        cal = books / f"{rep['id']}.calendar.json"
+        _write_json(cal, calendar_data(root, [rep], accounts, touches, on))
+        written += [path, path.with_suffix(".json"), cal]
     team = books / "team.md"
     write_text(team, render_team(reps, stats, accounts, root, on))
     _write_json(team.with_suffix(".json"), team_data(reps, stats, accounts, root, on))
-    written += [team, team.with_suffix(".json")]
+    team_cal = books / "team.calendar.json"
+    _write_json(team_cal, calendar_data(root, reps, accounts, touches, on, team=True))
+    written += [team, team.with_suffix(".json"), team_cal]
     if not only:  # remove books of reps that no longer exist
-        keep = {f"{r['id']}{ext}" for r in reps for ext in (".md", ".json")} | {"team.md", "team.json"}
+        keep = {f"{r['id']}{ext}" for r in reps for ext in (".md", ".json", ".calendar.json")} | {"team.md", "team.json", "team.calendar.json"}
         for p in [*books.glob("*.md"), *books.glob("*.json")]:
             if p.name not in keep:
                 try:
@@ -296,7 +428,7 @@ def build(root: Path | None = None, only: str | None = None) -> list[Path]:
 
 
 def main(argv: list[str] | None = None) -> int:
-    ap = argparse.ArgumentParser(description="Rebuild wiki/books/<rep>.md/.json and wiki/books/team.md/.json.")
+    ap = argparse.ArgumentParser(description="Rebuild wiki/books/<rep>.md/.json/.calendar.json and the team files.")
     ap.add_argument("--rep", help="rebuild only this rep's book (the team book is always rebuilt)")
     args = ap.parse_args(argv)
     setup_stdout()

@@ -22,7 +22,8 @@ description: 'The manager''s morning cockpit: last night''s status, hot accounts
    3. **At risk by rep**: counts and the top flags (`no_touch_14d`, `unanswered_reply`, `claim_lapsing`, ...).
    4. **Allocation proposal**: today's `log/allocation/<date>.json` (written next to the `.md` record) per market: `per_rep` (rep, A/B counts, EV in the base currency), each row's `reason`; `spread` vs `limit`; `checks`; `rebalance` items. A proposal from before 2026-11-15 has no `.json`: read its `.md` sections instead.
    5. **Review queue**: numbered undecided rows from `log/review.csv`: company text, source, best candidate, confidence.
-   6. **Team book**: from `wiki/books/team.json` (same numbers as `team.md`): per rep active/capacity, A/B/C, sent and replies (7 days), meetings vs target, at risk; pool by tier; rising pool accounts from the house VAM.
+   6. **Team week**: from `wiki/books/team.calendar.json`: each rep's appointments for the next 7 days (`items` with `live: true`), clashes (overlapping appointments for one rep) and overloaded days (`by_rep_day` above 4), plus follow-ups due and renewals in the next 30 days.
+   7. **Team book**: from `wiki/books/team.json` (same numbers as `team.md`): per rep active/capacity, A/B/C, sent and replies (7 days), meetings vs target, at risk; pool by tier; rising pool accounts from the house VAM.
 3. Take decisions conversationally, and confirm each before acting:
    - Allocation ("approve all", "approve except 3 and 7", "give the logistics ones to Arun") → hand off to **mama-allocate**.
    - Review ("1 is Acme Trading, 2 is new, 3 reject") → `python3 scripts/resolve.py --decide <row> <account-id|new|reject>` per item. For a link, add the cited `## Signals` bullet to that account and run `python3 scripts/score.py --id <id>`; for `new`, create the `stage: new` lead page from `templates/account.md`; for a reject that was already attached, remove the bullet and re-score.

@@ -10,12 +10,13 @@ description: 'Run a rep''s whole morning: replies, VAM pre-drafts, follow-ups du
 
 ## Before you start
 - Who: a rep (or the manager working their own book). Never the runner: drafts need the rep's own mailbox.
-- Scripts: `find.py` (Phase 0), `score.py` and `recommend.py` (Phase 3), `build_books.py` (Phase 5), `claim.py` (Phase 6, only for self-claims). It also needs the email connector (Phase 4) and the chained skills.
+- Scripts: `find.py` (Phase 0), `score.py` and `recommend.py` (Phase 3), `build_books.py` (Phase 5), `claim.py` (Phase 6, only for self-claims), `appointments.py` (calendar Phase 3). It also needs the email connector (Phase 4) and the chained skills.
 - If a required script is missing, say which phase adds it and stop. (Before Phase 6 you may skip step 4 and say so.)
 - Read `reps/<me>.md` for `daily_quota`, `markets`, `languages` and `send_window_override`. Quota left is in the session-start banner (`daily_quota` minus today's `drafted`/`sent` rows in `log/touches.csv` for me); recount after each draft.
 - Re-read each account page right before you act on it (rule 17). Work only on accounts you own (rule 16).
 
 ## Steps
+0. Today's schedule first: `python3 scripts/appointments.py list --from <today> --to <tomorrow> --json`. List today's appointments (time in the market's zone, account, contact, kind, status) and offer **mama-brief** for any in the next 24 hours that has no `## Call brief` from the last 7 days. Tentative ones: remind the rep to confirm or move them.
 1. Replies: run **mama-replies**. Keep any `meeting_request` for the top of the summary.
 2. VAM pre-drafts: `python3 scripts/find.py --owner me --json`, then open each account whose `## VAM notes` has a pre-draft due today or earlier.
    - Show each one (account, step, text, the signal it cites).

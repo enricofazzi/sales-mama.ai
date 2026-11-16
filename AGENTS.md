@@ -20,7 +20,7 @@ approval.
   (only exception: manager-approved retention deletions in `mama-weekly`).
 - `wiki/` — accounts, contacts, events, responses, plus generated `index.md` and `books/`,
   and append-only `log.md` and `suppression.csv`.
-- `log/` — append-only CSVs (touches, signals, review), allocation proposals, briefs, reports.
+- `log/` — append-only CSVs (touches, signals, review, appointments), allocation proposals, briefs, reports.
 - `reps/<id>.md` — role, markets, territory, capacity, targets, tone, signature.
 - `company-check/` — company legitimacy checks (ADR-0008): `data/` is a git-ignored local index of
   ACRA, BCA, GeBIZ and HDB open data; `reports/` and `evidence/` are shared. It never edits accounts.
@@ -42,7 +42,8 @@ approval.
 5. A draft may only name companies, people, numbers and products that appear in the
    account page (with source) or in `knowledge/`. Check before creating the draft.
 6. Ownership: edit an account page only if you are its `owner`, or the `manager`, or a VAM
-   (VAM limits in rule 11). Only the manager's approval assigns tier A/B leads
+   (VAM limits in rule 11). Appointments are written only through `scripts/appointments.py`,
+   by the owner or the manager; never by a VAM, the runner or the console (ADR-0010). Only the manager's approval assigns tier A/B leads
    (`scripts/claim.py --assign`). Reps may self-claim tier C only, if `allocation.yaml` allows.
 7. Tag accounts only with terms from `knowledge/ontology.yaml`; log anything else as `unmapped`.
 8. Personal data: business contact details only. No ID numbers, home addresses or personal
@@ -92,7 +93,7 @@ approval.
 ## Log format (`wiki/log.md`)
 `- [YYYY-MM-DD HH:MM] <op> | <user> | <target> | <summary>`
 op ∈ setup, ingest, scan, resolve, score, research, recommend, draft, send, reply, brief, handover,
-vam, allocate, assign, claim, release, lint, nightly, weekly, check, unmapped.
+vam, allocate, assign, claim, release, lint, nightly, weekly, check, appointment, unmapped.
 
 ## CSV schemas
 - `log/touches.csv`: `ts,rep,account,contact,channel,step,pattern,products,status,reply_class,ref`
@@ -105,6 +106,11 @@ vam, allocate, assign, claim, release, lint, nightly, weekly, check, unmapped.
 - `log/review.csv`: `ts,signal_row,company_text,candidates,decision,decided_by,decided_on`
 - `log/approvals.csv`: `ts,rep,preview,item,draft,account,contact,channel,step,to,body_sha256,decision,detail,ref`
   - decision: sent | refused | error; a `sent` touch's `ref` is `gmail:<id>` or `wa:<wamid>`
+- `log/appointments.csv`: `ts,id,rep,account,contact,kind,title,starts,ends,tz,location,status,source,ref,by`
+  - append-only and event-sourced: the latest row per `id` is the current state (ADR-0010)
+  - kind: meeting | call | demo | site_visit; source: reply | rep | handover | calendar
+  - status: tentative | confirmed | rescheduled | cancelled | held | no_show
+  - `starts`/`ends`: ISO with the account market's offset, e.g. `2026-11-18T14:00:00+08:00`
 
 ## Operations
 - INGEST: read source → create/update pages → cross-link → `build_index.py` → log.
@@ -115,7 +121,7 @@ vam, allocate, assign, claim, release, lint, nightly, weekly, check, unmapped.
 
 ## Skills
 Rep: mama-setup, mama-day, mama-book, mama-target, mama-research, mama-recommend,
-mama-draft, mama-send, mama-replies, mama-brief, mama-handover.
+mama-draft, mama-send, mama-replies, mama-brief, mama-handover, mama-schedule.
 Manager: mama-manager, mama-allocate, mama-scan, mama-vam, mama-nightly, mama-weekly,
 mama-ingest (CRM). Anyone: company-check, company-insights. Prefer a skill over ad-hoc steps whenever one fits.
 If a skill needs a script that does not exist yet, say which build phase adds it and stop.

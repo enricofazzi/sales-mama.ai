@@ -22,6 +22,7 @@ Checks (E = error, W = warning):
                  that are suppressed
   skills       E .claude/skills out of sync with .agents/skills
   dedupe       W same registry id or domain twice within a market
+  appointments W log/appointments.csv rows with an unknown account, kind or status, or bad times
 
 Missing or empty knowledge files and an empty wiki are fine (exit 0).
 Exit 1 only when there are errors. Env MAMA_TODAY=YYYY-MM-DD fixes "today".
@@ -513,6 +514,25 @@ def check_skills(root: Path, rep: Report) -> None:
 
 
 # ----------------------------------------------------------------------------
+def check_appointments(root: Path, account_ids: set[str], rep: "Report") -> None:
+    """log/appointments.csv (ADR-0010): each row names a real account and has a valid kind, status and times."""
+    path = "log/appointments.csv"
+    for i, row in enumerate(mc.appointment_history(root), start=2):
+        aid = mc.norm(row.get("id")) or f"row {i}"
+        if mc.norm(row.get("account")) not in account_ids:
+            rep.warn("appointments", path, f"{aid}: unknown account {row.get('account')!r}")
+        if mc.norm(row.get("kind")) not in mc.APPOINTMENT_KINDS:
+            rep.warn("appointments", path, f"{aid}: kind {row.get('kind')!r} not in {', '.join(mc.APPOINTMENT_KINDS)}")
+        if mc.norm(row.get("status")) not in mc.APPOINTMENT_STATUSES:
+            rep.warn("appointments", path, f"{aid}: status {row.get('status')!r} not in {', '.join(mc.APPOINTMENT_STATUSES)}")
+        try:
+            start, end = dt.datetime.fromisoformat(row["starts"]), dt.datetime.fromisoformat(row["ends"])
+            if start.tzinfo is None or end <= start:
+                raise ValueError
+        except (KeyError, ValueError, TypeError):
+            rep.warn("appointments", path, f"{aid}: starts/ends must be ISO with an offset and end after start")
+
+
 def run(root: Path) -> Report:
     rep = Report()
     on = mc.today()
@@ -544,6 +564,7 @@ def run(root: Path) -> Report:
     check_suppression(root, contacts, touches, rep)
     check_secrets(root, rep)
     check_skills(root, rep)
+    check_appointments(root, {p.id for p in accounts}, rep)
     return rep
 
 

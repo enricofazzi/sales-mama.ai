@@ -589,6 +589,42 @@ def check_surfaces(root: Path) -> Check:
     return c.done(not bad, f"{len(bad)} in {len(blocks)} surface(s)", bad)
 
 
+def check_appointments(root: Path) -> Check:
+    """ADR-0010: every live appointment is on a real, active account, belongs to its owner (rules 6, 16)
+    and is not with a suppressed contact or domain (rule 2)."""
+    c = Check("appointments", "Appointments: owned, not suppressed, valid", "0")
+    current = mc.load_appointments(root)
+    if not current:
+        return c.done(True, "0 (no appointments yet)", [])
+    import draft_check as dc
+    bad = []
+    for aid, row in current.items():
+        if mc.norm(row.get("status")) not in mc.LIVE_APPOINTMENT:
+            continue
+        acc = mc.norm(row.get("account"))
+        path = root / "wiki" / "accounts" / f"{acc}.md"
+        page = mc.read_page(path, root) if path.is_file() else None
+        if not page or not page.meta:
+            bad.append(f"{aid}: unknown account {acc}")
+            continue
+        owner, rep = mc.norm(page.meta.get("owner")), mc.norm(row.get("rep"))
+        if owner and rep != owner:
+            bad.append(f"{aid}: rep {rep} but {acc} is owned by {owner}")
+        if not mc.is_active(page.meta):
+            bad.append(f"{aid}: {acc} is {mc.norm(page.meta.get('stage'))}")
+        domain = mc.norm(page.meta.get("domain"))
+        if domain and dc.suppression_hit(root, f"x@{domain}"):
+            bad.append(f"{aid}: {acc}'s domain is suppressed")
+        contact = mc.norm(row.get("contact"))
+        cp = root / "wiki" / "contacts" / f"{contact}.md"
+        cpage = mc.read_page(cp, root) if contact and cp.is_file() else None
+        email = mc.norm((cpage.meta or {}).get("email")) if cpage else ""
+        if email and dc.suppression_hit(root, email):
+            bad.append(f"{aid}: contact {contact} is suppressed")
+    live = sum(1 for r in current.values() if mc.norm(r.get("status")) in mc.LIVE_APPOINTMENT)
+    return c.done(not bad, f"{len(bad)} of {live} live", bad)
+
+
 def pending_checks(root: Path) -> list[Check]:
     scripts = root / "scripts"
     weeks = 0
@@ -612,7 +648,7 @@ def run(root: Path) -> list[Check]:
     live = [check_cited(root, accounts), check_catalog(root, accounts), check_suppression(root),
             check_golden(root), check_labelled(root), check_resolution(root)]
     live += [check_recommendation(root), check_entities(root, accounts)]
-    live += draft_checks(root) + send_checks(root) + [check_replies(root), check_allocation(root), check_surfaces(root)]
+    live += draft_checks(root) + send_checks(root) + [check_replies(root), check_allocation(root), check_surfaces(root), check_appointments(root)]
     return live + pending_checks(root)
 
 

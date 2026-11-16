@@ -1690,6 +1690,114 @@ def t_crm_update(r: Runner) -> None:
         crm.unlink(missing_ok=True)
 
 
+def t_appointments(r: Runner) -> None:
+    """appointments.py (book, refuse, warn, lifecycle, scoping) and the calendar JSON from build_books."""
+    root = r.root
+    apts, touches, log = root / "log" / "appointments.csv", root / "log" / "touches.csv", root / "wiki" / "log.md"
+    tmp_contact = root / "wiki" / "contacts" / "opt-out-harbourlight-foods.md"
+    orig = {pth: (mc.read_text(pth) if pth.is_file() else None) for pth in (apts, touches, log)}
+
+    def apt(*args: str, email: str = MEI) -> tuple[int, dict, str]:
+        code, out, err = r.py("appointments.py", *args, "--json", email=email)
+        return code, _json(out), out + err
+
+    def booked_touches(ref: str) -> list[dict]:
+        return [t for t in mc.load_touches(root) if t.get("ref") == ref and t.get("status") == "meeting_booked"]
+
+    try:
+        code, d, out = apt("add", "--account", "harbourlight-foods", "--start", "2026-11-05 14:00", "--minutes", "45",
+                           "--contact", "rachel-goh-harbourlight-foods", "--title", "Pilot scoping", "--status", "confirmed")
+        aid = d.get("id", "")
+        ok = code == 0 and aid.startswith("apt-20261105-harbourlight-foods") and d.get("starts") == "2026-11-05T14:00:00+08:00" \
+            and d.get("ends") == "2026-11-05T14:45:00+08:00" and len(booked_touches(aid)) == 1 \
+            and f"appointment | mei | accounts/harbourlight-foods" in mc.read_text(log) and not d.get("warnings")
+        r.record("appointments: owner books in the market time zone; touch + log line", ok, str(d)[:200], out)
+
+        code, _, out = apt("add", "--account", "harbourlight-foods", "--start", "2026-11-06 10:00", email=ARUN)
+        r.record("appointments: another rep's account refused (rules 6, 16)", code == 1 and "Refused" in out, out[-200:])
+        code, d2, out = apt("add", "--account", "harbourlight-foods", "--start", "2026-11-06 10:00", email=GRACE)
+        r.record("appointments: the manager may book", code == 0 and d2.get("rep") == "mei", out[-200:])
+        code, _, out = apt("add", "--account", "harbourlight-foods", "--start", "2026-11-06 11:00", "--contact", "nobody-harbourlight-foods")
+        r.record("appointments: unknown contact refused (rule 5)", code == 1 and "Refused" in out, out[-200:])
+        mc.write_page(tmp_contact, {"type": "contact", "id": "opt-out-harbourlight-foods", "name": "Opt Out",
+                                    "account": "harbourlight-foods", "email": "optout@quietharbour.example", "status": "active"}, "")
+        code, _, out = apt("add", "--account", "harbourlight-foods", "--start", "2026-11-06 12:00", "--contact", "opt-out-harbourlight-foods")
+        r.record("appointments: suppressed contact refused (rule 2)", code == 1 and "suppress" in out.lower(), out[-200:])
+
+        _, d3, _ = apt("add", "--account", "harbourlight-foods", "--start", "2026-11-09 10:00")
+        _, d4, _ = apt("add", "--account", "harbourlight-foods", "--start", "2026-11-05 14:30", "--minutes", "30")
+        _, d5, _ = apt("add", "--account", "nimbus-clinics", "--start", "2026-11-10 21:00")
+        w = lambda x: " ".join(x.get("warnings") or []).lower()
+        r.record("appointments: holiday, overlap and after-hours warn but book",
+                 "holiday" in w(d3) and "overlap" in w(d4) and "outside" in w(d5) and all(x.get("id") for x in (d3, d4, d5)),
+                 str([d3.get("warnings"), d4.get("warnings"), d5.get("warnings")])[:300])
+
+        code, t, out = apt("add", "--account", "nimbus-clinics", "--start", "2026-11-12 10:00", "--status", "tentative", "--kind", "demo")
+        tid = t.get("id", "")
+        none_yet = len(booked_touches(tid)) == 0
+        code, c, _ = apt("confirm", tid)
+        r.record("appointments: tentative writes no touch; confirm writes one",
+                 none_yet and code == 0 and c.get("status") == "confirmed" and len(booked_touches(tid)) == 1, out[-200:])
+        code, rs, _ = apt("reschedule", tid, "--start", "2026-11-13 15:00")
+        hist = [x for x in mc.read_csv(apts) if x.get("id") == tid]
+        cur = mc.load_appointments(root).get(tid, {})
+        r.record("appointments: reschedule appends; latest row wins",
+                 code == 0 and len(hist) == 3 and cur.get("starts") == "2026-11-13T15:00:00+08:00" and cur.get("status") == "rescheduled",
+                 str(cur)[:200])
+        code, cx, _ = apt("cancel", d5.get("id", "x"), "--reason", "client asked")
+        n_before = len(mc.load_touches(root))
+        code2, h, _ = apt("held", aid)
+        r.record("appointments: cancel and held; held adds no touch (crm_update does)",
+                 code == 0 and cx.get("status") == "cancelled" and code2 == 0 and h.get("status") == "held"
+                 and len(mc.load_touches(root)) == n_before, str([cx.get("status"), h.get("status")]))
+        code, _, out = apt("cancel", "apt-nope")
+        r.record("appointments: unknown id refused", code == 1 and "Refused" in out, out[-120:])
+
+        _, mine, _ = apt("list")
+        _, arun_list, _ = apt("list", email=ARUN)
+        _, everyone, _ = apt("list", "--rep", "all", email=GRACE)
+        ok = mine.get("items") and all(x["rep"] == "mei" for x in mine["items"]) and arun_list.get("items") == [] \
+            and len(everyone.get("items") or []) == len(mine["items"])
+        _, sneaky, out = apt("list", "--rep", "all", email=ARUN)
+        r.record("appointments: list is scoped (rule 16); only the manager sees all",
+                 bool(ok) and sneaky.get("items") == [], f"{len(mine.get('items') or [])} mine, {len(everyone.get('items') or [])} all")
+
+        code, out, err = r.py("build_books.py")
+        books = root / "wiki" / "books"
+        cal = _json(mc.read_text(books / "mei.calendar.json")) if (books / "mei.calendar.json").is_file() else {}
+        kinds = {(x.get("kind"), (x.get("account") or {}).get("id") if isinstance(x.get("account"), dict) else x.get("title")) for x in cal.get("items") or []}
+        ok = ("meeting", "harbourlight-foods") in kinds and ("followup", "harbourlight-foods") in kinds \
+            and ("renewal", "nimbus-clinics") in kinds and any(k == "holiday" for k, _ in kinds) \
+            and (cal.get("next_up") or {}).get("id") and (cal.get("markets") or {}).get("SG", {}).get("send_windows")
+        r.record("calendar: rep JSON has meetings, follow-ups, renewals, holidays, next up, windows", bool(ok),
+                 str(sorted(k for k in kinds if k[0]))[:300])
+        team = _json(mc.read_text(books / "team.calendar.json")) if (books / "team.calendar.json").is_file() else {}
+        arun_cal = _json(mc.read_text(books / "arun.calendar.json")) if (books / "arun.calendar.json").is_file() else {}
+        r.record("calendar: team JSON has load by rep and day; reps see only their own",
+                 bool(team.get("by_rep_day", {}).get("mei")) and not any((x.get("account") or {}).get("id") == "harbourlight-foods"
+                                                                          for x in arun_cal.get("items") or [] if isinstance(x.get("account"), dict)),
+                 str(team.get("by_rep_day"))[:200])
+        r.py("build_books.py")
+        r.record("calendar: rebuilding keeps the calendar files", (books / "mei.calendar.json").is_file() and (books / "team.calendar.json").is_file())
+
+        code, out, err = r.py("eval.py", "--json")
+        st = {c["key"]: c["status"] for c in _json(out).get("checks", [])}
+        mc.append_csv(apts, {"ts": "2026-11-03 09:00", "id": "apt-20261120-harbourlight-foods-9", "rep": "arun", "account": "harbourlight-foods",
+                             "kind": "meeting", "title": "x", "starts": "2026-11-20T10:00:00+08:00", "ends": "2026-11-20T11:00:00+08:00",
+                             "tz": "Asia/Singapore", "status": "confirmed", "source": "rep", "by": "arun"}, mc.APPOINTMENT_FIELDS)
+        code2, out2, _ = r.py("eval.py", "--json")
+        st2 = {c["key"]: c["status"] for c in _json(out2).get("checks", [])}
+        r.record("eval: appointments pass, then a row for someone else's account fails",
+                 st.get("appointments") == "PASS" and st2.get("appointments") == "FAIL" and code2 == 1, str((st.get("appointments"), st2.get("appointments"))))
+    finally:
+        for pth, text in orig.items():
+            if text is None:
+                pth.unlink(missing_ok=True)
+            else:
+                mc.write_text(pth, text)
+        tmp_contact.unlink(missing_ok=True)
+
+
 def t_help(r: Runner) -> None:
     bad = []
     for s in ("mama_common.py", "session_start.py", "sync.py", "build_index.py",
@@ -1697,7 +1805,7 @@ def t_help(r: Runner) -> None:
               "ingest.py", "eval.py", "fetch_dataset.py", "resolve.py", "score.py", "recommend.py",
               "draft_check.py", "classify_reply.py", "suppress.py", "claim.py", "allocate.py",
               "weekly.py", "crm_update.py", "channels.py", "connect.py", "send.py", "registry_data.py",
-              "company_check.py", "company_analytics.py"):
+              "company_check.py", "company_analytics.py", "appointments.py"):
         code, out, _ = r.py(s, "--help")
         if code != 0 or "usage" not in out.lower():
             bad.append(s)
@@ -1724,7 +1832,7 @@ def main(argv: list[str] | None = None) -> int:
         for test in (t_help, t_no_presentation, t_frontmatter, t_guard, t_lint, t_lint_secrets, t_find, t_index, t_books, t_session,
                      t_sync, t_skills, t_ingest, t_fetch, t_resolve, t_score, t_recommend, t_eval,
                      t_draft_check, t_send, t_company_check, t_company_analytics, t_classify, t_suppress, t_claim, t_claim_race, t_allocate,
-                     t_weekly, t_crm_update):
+                     t_weekly, t_crm_update, t_appointments):
             try:
                 test(runner)
             except Exception as exc:  # noqa: BLE001
