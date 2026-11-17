@@ -154,4 +154,3 @@
   "injection_asr": 0.0
  }
 }
-python3 -m shb.run --adapter oracle --out $S/runs/oracle.json  0.39s user 1.12s system 64% cpu 2.352 total

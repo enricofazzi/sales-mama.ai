@@ -361,17 +361,18 @@ How the Sales Harness Leaderboard was built, and how to use it | Film 2
 ```
 So which harness is actually better?
 
-The story of the Sales Harness Leaderboard: where its 143 tasks came from, what an agent sees in its sandbox, how a run is graded on the end state, when one harness is really better than another, how the static board was built (and the leak its first run caught), and how to benchmark your own harness and open a pull request.
+The story of the Sales Harness Leaderboard: where its 143 tasks came from, what an agent sees in its sandbox, how a run is graded on the end state, when one harness is really better than another, how the static board was built (and the leak its first run caught), what the first real runs showed (Claude Code with the sales-mama.ai kit 92.1, vanilla Claude Code 90.0, same model, tied at rank 1, zero violations), and how to benchmark your own harness and open a pull request.
 
 Chapters
 0:00 How agents get judged today
 0:27 Title
 0:37 Q1 · Where did the tasks come from?
-1:17 Q2 · What does the agent actually see?
-2:02 Q3 · How is a run scored?
-2:27 Q4 · When is one harness really better than another?
-3:05 Q5 · How was the board itself built?
-4:02 Q6 · How do I benchmark my own harness?
+1:15 Q2 · What does the agent actually see?
+1:55 Q3 · How is a run scored?
+2:17 Q4 · When is one harness really better than another?
+2:52 Q5 · How was the board itself built?
+3:45 Q6 · What did the first real runs show?
+4:20 Q7 · How do I benchmark my own harness?
 5:30 Recap
 
 Terminal output in the film is from real runs of the v0.1 dev split (oracle, null and the sanity checks).

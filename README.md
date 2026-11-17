@@ -58,7 +58,7 @@ Music and on-screen words, no voice-over; fictional demo data. Each episode open
 <table>
 <tr>
 <td width="50%"><a href="docs/assets/video/sales-harness-bench-1-why-720p.mp4"><img src="docs/assets/video/bench1-thumb.jpg" alt="Sales Harness Bench film 1: Can you trust an agent with your pipeline?"></a><br><sub><b>Bench 1 · Can you trust an agent with your pipeline?</b> · 6:01 · what a harness is, the research it builds on, ten tracks, nine rule breaks that zero a task, integrity, why SG · MY · IN.</sub></td>
-<td width="50%"><a href="docs/assets/video/sales-harness-bench-2-how-720p.mp4"><img src="docs/assets/video/bench2-thumb.jpg" alt="Sales Harness Bench film 2: How the leaderboard was built, and how to use it"></a><br><sub><b>Bench 2 · How the leaderboard was built, and how to use it</b> · 6:01 · where the 143 tasks came from, the sandbox, grading, ties, the leak the first run caught, running your harness and opening a PR.</sub></td>
+<td width="50%"><a href="docs/assets/video/sales-harness-bench-2-how-720p.mp4"><img src="docs/assets/video/bench2-thumb.jpg" alt="Sales Harness Bench film 2: How the leaderboard was built, and how to use it"></a><br><sub><b>Bench 2 · How the leaderboard was built, and how to use it</b> · 6:01 · where the 143 tasks came from, the sandbox, grading, ties, the leak the first run caught, the first real runs (kit 92.1 vs vanilla 90.0, tied at rank 1), running your harness and opening a PR.</sub></td>
 </tr>
 </table>
 

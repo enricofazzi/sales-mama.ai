@@ -10,31 +10,36 @@
   "How is a run scored?",
   "When is one harness really better than another?",
   "How was the board itself built?",
+  "What did the first real runs show?",
   "How do I benchmark my own harness?"
  ],
  "qspan": [
   [
    37.5,
-   77.5
+   75.0
   ],
   [
-   77.5,
-   122.5
+   75.0,
+   115.0
   ],
   [
-   122.5,
-   147.5
+   115.0,
+   137.5
   ],
   [
-   147.5,
-   185.0
+   137.5,
+   172.5
   ],
   [
-   185.0,
-   242.5
+   172.5,
+   225.0
   ],
   [
-   242.5,
+   225.0,
+   260.0
+  ],
+  [
+   260.0,
    330.0
   ]
  ],
@@ -118,7 +123,7 @@
    "bars": 2,
    "text": "Where did the tasks come from?",
    "num": "Q1",
-   "eyebrow": "Question 1 of 6",
+   "eyebrow": "Question 1 of 7",
    "id": "s3",
    "start": 37.5,
    "end": 42.5,
@@ -128,7 +133,7 @@
    "type": "flow",
    "bg": "night",
    "mus": "groove",
-   "bars": 8,
+   "bars": 7,
    "eyebrow": "Sources → tracks",
    "h": "Built from data that already existed, then made fictional.",
    "total": "143",
@@ -167,7 +172,7 @@
    ],
    "id": "s4",
    "start": 42.5,
-   "end": 62.5,
+   "end": 60.0,
    "q": 0
   },
   {
@@ -203,8 +208,8 @@
     }
    ],
    "id": "s5",
-   "start": 62.5,
-   "end": 77.5,
+   "start": 60.0,
+   "end": 75.0,
    "q": 0
   },
   {
@@ -215,17 +220,17 @@
    "bars": 2,
    "text": "What does the agent actually see?",
    "num": "Q2",
-   "eyebrow": "Question 2 of 6",
+   "eyebrow": "Question 2 of 7",
    "id": "s6",
-   "start": 77.5,
-   "end": 82.5,
+   "start": 75.0,
+   "end": 80.0,
    "q": 1
   },
   {
    "type": "tree",
    "bg": "night",
    "mus": "groove",
-   "bars": 9,
+   "bars": 8,
    "eyebrow": "One sandbox per task",
    "h": "A small sales world, and one way to act in it.",
    "rows": [
@@ -279,15 +284,15 @@
     }
    ],
    "id": "s7",
-   "start": 82.5,
-   "end": 105.0,
+   "start": 80.0,
+   "end": 100.0,
    "q": 1
   },
   {
    "type": "doc",
    "bg": "night",
    "mus": "break",
-   "bars": 7,
+   "bars": 6,
    "path": "tasks/dev/respond/respond-02-ms-unsubscribe",
    "w": 1000,
    "good": [
@@ -328,8 +333,8 @@
     }
    ],
    "id": "s8",
-   "start": 105.0,
-   "end": 122.5,
+   "start": 100.0,
+   "end": 115.0,
    "q": 1
   },
   {
@@ -340,17 +345,17 @@
    "bars": 2,
    "text": "How is a run scored?",
    "num": "Q3",
-   "eyebrow": "Question 3 of 6",
+   "eyebrow": "Question 3 of 7",
    "id": "s9",
-   "start": 122.5,
-   "end": 127.5,
+   "start": 115.0,
+   "end": 120.0,
    "q": 2
   },
   {
    "type": "pipeline",
    "bg": "night",
    "mus": "groove",
-   "bars": 8,
+   "bars": 7,
    "eyebrow": "Grading",
    "h": "Graded on the end state, not the prose.",
    "steps": [
@@ -377,8 +382,8 @@
    ],
    "foot": "Track score = mean over tasks and trials · capability = weighted mean of the live tracks · SHS = 100 × capability × trust",
    "id": "s10",
-   "start": 127.5,
-   "end": 147.5,
+   "start": 120.0,
+   "end": 137.5,
    "q": 2
   },
   {
@@ -389,17 +394,17 @@
    "bars": 2,
    "text": "When is one harness really better than another?",
    "num": "Q4",
-   "eyebrow": "Question 4 of 6",
+   "eyebrow": "Question 4 of 7",
    "id": "s11",
-   "start": 147.5,
-   "end": 152.5,
+   "start": 137.5,
+   "end": 142.5,
    "q": 3
   },
   {
    "type": "cards",
    "bg": "night",
    "mus": "groove",
-   "bars": 8,
+   "bars": 7,
    "eyebrow": "Statistics and reliability",
    "h": "A higher number isn't always a better harness.",
    "cols": 3,
@@ -439,8 +444,8 @@
     }
    ],
    "id": "s12",
-   "start": 152.5,
-   "end": 172.5,
+   "start": 142.5,
+   "end": 160.0,
    "q": 3
   },
   {
@@ -453,8 +458,8 @@
     "still": "lb-leaderboard"
    },
    "eyebrow": "On the board",
-   "h": "How to read a row.",
-   "sub": "SHS is the rank. Capability: did it do the job? Trust: did it follow the rules?",
+   "h": "Two rows, one rank.",
+   "sub": "92.1 and 90.0, but their intervals overlap, so both are rank 1. Partial and reference rows are shown, not ranked.",
    "cam": [
     {
      "at": 3,
@@ -464,16 +469,28 @@
      "y": 200
     },
     {
-     "at": 11,
+     "at": 10,
      "dur": 3,
-     "z": 1.22,
-     "x": 600,
+     "z": 1.35,
+     "x": 640,
      "y": 640
     }
    ],
+   "spot": [
+    {
+     "at": 13,
+     "out": 20,
+     "r": [
+      115,
+      575,
+      1320,
+      715
+     ]
+    }
+   ],
    "id": "s13",
-   "start": 172.5,
-   "end": 185.0,
+   "start": 160.0,
+   "end": 172.5,
    "q": 3
   },
   {
@@ -484,17 +501,17 @@
    "bars": 2,
    "text": "How was the board itself built?",
    "num": "Q5",
-   "eyebrow": "Question 5 of 6",
+   "eyebrow": "Question 5 of 7",
    "id": "s14",
-   "start": 185.0,
-   "end": 190.0,
+   "start": 172.5,
+   "end": 177.5,
    "q": 4
   },
   {
    "type": "pipeline",
    "bg": "night",
    "mus": "groove",
-   "bars": 8,
+   "bars": 7,
    "eyebrow": "Under the hood",
    "h": "A static site, scored offline.",
    "steps": [
@@ -521,8 +538,8 @@
    ],
    "foot": "Published as a free static Hugging Face Space. The Gradio version needs paid hardware, so the live board is static.",
    "id": "s15",
-   "start": 190.0,
-   "end": 210.0,
+   "start": 177.5,
+   "end": 195.0,
    "q": 4
   },
   {
@@ -548,15 +565,15 @@
     }
    ],
    "id": "s16",
-   "start": 210.0,
-   "end": 222.5,
+   "start": 195.0,
+   "end": 207.5,
    "q": 4
   },
   {
    "type": "kpis",
    "bg": "night",
    "mus": "groove",
-   "bars": 8,
+   "bars": 7,
    "eyebrow": "The first row",
    "h": "The first run tested the benchmark too.",
    "sub": "sales-mama.ai's own rule-based tools, no LLM, on the two tracks they cover. Shown, not ranked.",
@@ -603,8 +620,8 @@
     }
    ],
    "id": "s17",
-   "start": 222.5,
-   "end": 242.5,
+   "start": 207.5,
+   "end": 225.0,
    "q": 4
   },
   {
@@ -613,19 +630,116 @@
    "mus": "groove",
    "hit": true,
    "bars": 2,
-   "text": "How do I benchmark my own harness?",
+   "text": "What did the first real runs show?",
    "num": "Q6",
-   "eyebrow": "Question 6 of 6",
+   "eyebrow": "Question 6 of 7",
    "id": "s18",
-   "start": 242.5,
+   "start": 225.0,
+   "end": 230.0,
+   "q": 5
+  },
+  {
+   "type": "kpis",
+   "bg": "night",
+   "mus": "lift",
+   "bars": 7,
+   "eyebrow": "Same model, with and without the kit",
+   "h": "Claude Code on claude-haiku-5-5, three trials each.",
+   "sub": "Dev split, self-reported, graded with the v0.1.1 grader. Both runs are on the live board.",
+   "ktop": 380,
+   "items": [
+    {
+     "n": 92.1,
+     "dec": 1,
+     "label": "SHS · Claude Code + sales-mama.ai kit",
+     "color": "#C8F031"
+    },
+    {
+     "n": 90.0,
+     "dec": 1,
+     "label": "SHS · Claude Code, vanilla"
+    },
+    {
+     "n": 6.7,
+     "dec": 1,
+     "pre": "+",
+     "label": "Recommend points from the kit",
+     "color": "#A78BFA"
+    },
+    {
+     "n": 0,
+     "label": "critical violations in 858 runs",
+     "color": "#C8F031"
+    }
+   ],
+   "notes": [
+    {
+     "k": "A tie, shown honestly",
+     "t": "88.7–95.2 and 83.9–94.8 overlap",
+     "d": "So both share rank 1. More tasks or trials would separate them.",
+     "tone": "lime"
+    },
+    {
+     "k": "Where the kit helped",
+     "t": "Recommend 93.3 vs 86.7",
+     "d": "Respond 100 vs 98.8. Prospect and Care-QA about level."
+    },
+    {
+     "k": "Caveat",
+     "t": "The kit has seen these shapes",
+     "d": "Prospect and Recommend dev items come from the kit's own evals."
+    }
+   ],
+   "id": "s19",
+   "start": 230.0,
    "end": 247.5,
    "q": 5
+  },
+  {
+   "type": "device",
+   "bg": "night",
+   "mus": "groove",
+   "bars": 5,
+   "layout": "right",
+   "media": {
+    "still": "lb-cost"
+   },
+   "eyebrow": "Cost vs score",
+   "h": "Accuracy is not free.",
+   "sub": "The kit costs about $0.0053 a task, vanilla $0.0038. Both sit on the Pareto front.",
+   "cam": [
+    {
+     "at": 4,
+     "dur": 4,
+     "z": 1.25,
+     "x": 760,
+     "y": 520
+    }
+   ],
+   "id": "s20",
+   "start": 247.5,
+   "end": 260.0,
+   "q": 5
+  },
+  {
+   "type": "question",
+   "bg": "night",
+   "mus": "groove",
+   "hit": true,
+   "bars": 2,
+   "text": "How do I benchmark my own harness?",
+   "num": "Q7",
+   "eyebrow": "Question 7 of 7",
+   "id": "s21",
+   "start": 260.0,
+   "end": 265.0,
+   "q": 6
   },
   {
    "type": "term",
    "bg": "night",
    "mus": "groove",
-   "bars": 8,
+   "bars": 7,
    "title": "zsh — sales-harness-bench",
    "max": 17,
    "lines": [
@@ -705,16 +819,16 @@
      "at": 24
     }
    ],
-   "id": "s19",
-   "start": 247.5,
-   "end": 267.5,
-   "q": 5
+   "id": "s22",
+   "start": 265.0,
+   "end": 282.5,
+   "q": 6
   },
   {
    "type": "term",
    "bg": "night",
    "mus": "groove",
-   "bars": 8,
+   "bars": 7,
    "left": true,
    "eyebrow": "Your harness",
    "h": "Any command that takes a sandbox.",
@@ -778,10 +892,10 @@
      "at": 18
     }
    ],
-   "id": "s20",
-   "start": 267.5,
-   "end": 287.5,
-   "q": 5
+   "id": "s23",
+   "start": 282.5,
+   "end": 300.0,
+   "q": 6
   },
   {
    "type": "steps",
@@ -806,10 +920,10 @@
      "d": "Dev results are self-reported. Ask in the PR to have your adapter run on the private test split."
     }
    ],
-   "id": "s21",
-   "start": 287.5,
-   "end": 305.0,
-   "q": 5
+   "id": "s24",
+   "start": 300.0,
+   "end": 317.5,
+   "q": 6
   },
   {
    "type": "device",
@@ -833,57 +947,10 @@
      "y": 740
     }
    ],
-   "id": "s22",
-   "start": 305.0,
-   "end": 317.5,
-   "q": 5
-  },
-  {
-   "type": "cards",
-   "bg": "paper",
-   "mus": "groove",
-   "bars": 5,
-   "eyebrow": "What's next · v0.2",
-   "h": "Six more tracks, and judges for the words.",
-   "cols": 3,
-   "gtop": 350,
-   "compact": true,
-   "items": [
-    {
-     "k": "Engage · 20%",
-     "t": "Drafts, judged",
-     "d": "Hard gates times a three-judge LLM jury from different model families."
-    },
-    {
-     "k": "Research · Qualify",
-     "t": "Facts and rankings",
-     "d": "Fact F1 with citation precision; NDCG@10 for lead pools."
-    },
-    {
-     "k": "Schedule · Manage",
-     "t": "Calendars and allocation",
-     "d": "Time zones and holidays; EV against the optimum, with fairness."
-    },
-    {
-     "k": "Sales Week",
-     "t": "A simulated week",
-     "d": "Replies arrive mid-task; buyers push back; meetings booked."
-    },
-    {
-     "k": "Metering proxy",
-     "t": "Verified cost",
-     "d": "Model, version and effort pinned outside the harness."
-    },
-    {
-     "k": "Human baseline",
-     "t": "A salesperson's score",
-     "d": "Planned, as in SalesLLM."
-    }
-   ],
-   "id": "s23",
+   "id": "s25",
    "start": 317.5,
    "end": 330.0,
-   "q": 5
+   "q": 6
   },
   {
    "type": "recap",
@@ -891,7 +958,7 @@
    "mus": "groove",
    "bars": 6,
    "hud": false,
-   "eyebrow": "Six questions",
+   "eyebrow": "Seven questions",
    "h": "What we covered",
    "items": [
     [
@@ -921,14 +988,19 @@
     ],
     [
      "Q6",
+     "What did the first runs show?",
+     "Kit 92.1, vanilla 90.0 on the same model: a tie at rank 1, zero violations."
+    ],
+    [
+     "Q7",
      "How do I use it?",
      "Sanity-check, run your adapter with --trials 3, open a pull request."
     ]
    ],
-   "id": "s24",
+   "id": "s26",
    "start": 330.0,
    "end": 345.0,
-   "q": 5
+   "q": 6
   },
   {
    "type": "outro",
@@ -936,16 +1008,16 @@
    "mus": "outro",
    "bars": 6,
    "hud": false,
-   "h": "Rank 1 is open.<br><span class=\"lime\">Bring your harness.</span>",
+   "h": "Rank 1 is shared.<br><span class=\"lime\">Bring your harness.</span>",
    "urls": [
     "huggingface.co/spaces/<b>praveengovi/Sales-Harness-Leaderboard</b>",
     "huggingface.co/datasets/<b>praveengovi/sales-harness-bench</b>"
    ],
-   "tag": "Run vanilla Claude Code, then Claude Code with the sales-mama.ai kit, on the same model. The gap is what the kit adds.",
-   "id": "s25",
+   "tag": "On claude-haiku-5-5: Claude Code with the sales-mama.ai kit 92.1, vanilla 90.0, inside each other's intervals.",
+   "id": "s27",
    "start": 345.0,
    "end": 360.0,
-   "q": 5
+   "q": 6
   }
  ]
 }
