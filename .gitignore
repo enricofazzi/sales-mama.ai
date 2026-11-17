@@ -11,3 +11,8 @@ __pycache__/
 node_modules/
 console/dist/
 company-check/data/
+
+# Film masters and scores: large, rebuilt from docs/assets/film/**/src; 720p copies live in docs/assets/video/
+docs/assets/film/**/*.mp4
+docs/assets/film/**/*.wav
+docs/assets/film/**/.DS_Store

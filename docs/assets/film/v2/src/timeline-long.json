@@ -1,0 +1,914 @@
+{
+ "bpm": 104,
+ "beat": 0.5769230769230769,
+ "bar": 2.3076923076923075,
+ "duration": 301.1538,
+ "scenes": [
+  {
+   "type": "words",
+   "bg": "black",
+   "mus": "intro",
+   "items": [
+    {
+     "cls": "eyebrow",
+     "text": "Monday \u00b7 8:40 am \u00b7 Singapore",
+     "at": 0.5,
+     "out": 7.4,
+     "y": 330
+    },
+    {
+     "cls": "h1",
+     "text": "17 accounts.",
+     "at": 2,
+     "out": 3.8
+    },
+    {
+     "cls": "h1",
+     "text": "3 markets.",
+     "at": 4,
+     "out": 5.8
+    },
+    {
+     "cls": "h1",
+     "text": "1 inbox.",
+     "at": 6,
+     "out": 7.8
+    },
+    {
+     "cls": "h2",
+     "text": "Where do you<br><span class=\"red\">even start?</span>",
+     "at": 17,
+     "out": 23.6,
+     "y": 400
+    }
+   ],
+   "pains": [
+    [
+     "Leads go cold in the CRM",
+     180,
+     210
+    ],
+    [
+     "Research eats the morning",
+     1060,
+     270
+    ],
+    [
+     "Follow-ups slip",
+     260,
+     760
+    ],
+    [
+     "Meetings clash",
+     1210,
+     820
+    ],
+    [
+     "Generic messages",
+     720,
+     130
+    ],
+    [
+     "Is this company even real?",
+     690,
+     930
+    ]
+   ],
+   "pains_at": 8.5,
+   "pains_out": 16.5,
+   "id": "s0",
+   "key": "open_long",
+   "bars": 6,
+   "start": 0.0,
+   "end": 13.8462
+  },
+  {
+   "type": "reveal",
+   "bg": "light",
+   "mus": "groove",
+   "hit": true,
+   "media": {
+    "clip": "today",
+    "at": 7
+   },
+   "id": "s1",
+   "key": "reveal",
+   "bars": 5,
+   "start": 13.8462,
+   "end": 25.3846
+  },
+  {
+   "type": "chapter",
+   "bg": "black",
+   "mus": "groove",
+   "hit": true,
+   "num": "01",
+   "title": "Morning",
+   "id": "s2",
+   "key": "ch1",
+   "bars": 1,
+   "start": 25.3846,
+   "end": 27.6923
+  },
+  {
+   "type": "device",
+   "bg": "light",
+   "mus": "groove",
+   "layout": "right",
+   "media": {
+    "still": "today"
+   },
+   "pill": "Today",
+   "h": "Your day,<br><span class=\"grad\">already planned.</span>",
+   "sub": "Your next meeting, live send windows for SG \u00b7 MY \u00b7 IN, and only what needs you.",
+   "cam": [
+    {
+     "at": 5,
+     "dur": 4,
+     "z": 1.75,
+     "x": 402,
+     "y": 369
+    },
+    {
+     "at": 11,
+     "dur": 3,
+     "z": 1.5,
+     "x": 930,
+     "y": 380
+    }
+   ],
+   "spot": [
+    {
+     "at": 5.5,
+     "out": 10.6,
+     "r": [
+      229,
+      243,
+      575,
+      495
+     ]
+    },
+    {
+     "at": 11.4,
+     "out": 15.5,
+     "r": [
+      590,
+      243,
+      1283,
+      495
+     ]
+    }
+   ],
+   "id": "s3",
+   "key": "today",
+   "bars": 5,
+   "start": 27.6923,
+   "end": 39.2308
+  },
+  {
+   "type": "stats",
+   "bg": "dark",
+   "mus": "groove",
+   "pill": "\u25cf 02:00 \u00b7 overnight",
+   "h": "While you slept.",
+   "sub": "Scouts scanned news, tenders and registries. Virtual account managers rescored every book.",
+   "items": [
+    {
+     "n": 64,
+     "label": "signals scanned"
+    },
+    {
+     "n": 21,
+     "label": "linked to accounts"
+    },
+    {
+     "n": 17,
+     "label": "accounts rescored"
+    },
+    {
+     "n": 2,
+     "label": "follow-ups pre-drafted"
+    }
+   ],
+   "id": "s4",
+   "key": "overnight",
+   "bars": 4,
+   "start": 39.2308,
+   "end": 48.4615
+  },
+  {
+   "type": "chapter",
+   "bg": "black",
+   "mus": "groove",
+   "hit": true,
+   "num": "02",
+   "title": "Ask",
+   "id": "s5",
+   "key": "ch2",
+   "bars": 1,
+   "start": 48.4615,
+   "end": 50.7692
+  },
+  {
+   "type": "device",
+   "bg": "dark",
+   "mus": "lift",
+   "layout": "full",
+   "media": {
+    "clip": "chatday",
+    "from_": 0.2
+   },
+   "h": "Just ask.",
+   "sub": "Agents research, score and draft for you, in parallel.",
+   "cap_at": 1,
+   "cam": [
+    {
+     "at": 7,
+     "dur": 3,
+     "z": 1.32,
+     "x": 600,
+     "y": 340
+    },
+    {
+     "at": 15,
+     "dur": 3,
+     "z": 1.0,
+     "x": 720,
+     "y": 450
+    }
+   ],
+   "spot": [
+    {
+     "at": 7.5,
+     "out": 14.5,
+     "r": [
+      251,
+      237,
+      951,
+      447
+     ]
+    }
+   ],
+   "id": "s6",
+   "key": "chat",
+   "bars": 8,
+   "start": 50.7692,
+   "end": 69.2308
+  },
+  {
+   "type": "device",
+   "bg": "light",
+   "mus": "groove",
+   "layout": "left",
+   "media": {
+    "clip": "slash",
+    "at": 1
+   },
+   "pill": "/ and @",
+   "h": "Type less.<br><span class=\"grad\">Do more.</span>",
+   "sub": "/ for skills, @ for accounts. Fuzzy search finds the rest.",
+   "cam": [
+    {
+     "at": 2,
+     "dur": 3,
+     "z": 1.45,
+     "x": 575,
+     "y": 700
+    }
+   ],
+   "id": "s7",
+   "key": "slash",
+   "bars": 4,
+   "start": 69.2308,
+   "end": 78.4615
+  },
+  {
+   "type": "device",
+   "bg": "dark",
+   "mus": "groove",
+   "layout": "right",
+   "media": {
+    "clip": "palette",
+    "at": 0.5
+   },
+   "pill": "\u2318K",
+   "h": "Anything,<br><span class=\"lime\">instantly.</span>",
+   "sub": "Accounts, skills, reports and views, one keystroke away.",
+   "cam": [
+    {
+     "at": 2,
+     "dur": 2.5,
+     "z": 1.6,
+     "x": 720,
+     "y": 180
+    }
+   ],
+   "id": "s8",
+   "key": "palette",
+   "bars": 3,
+   "start": 78.4615,
+   "end": 85.3846
+  },
+  {
+   "type": "device",
+   "bg": "light",
+   "mus": "groove",
+   "layout": "right",
+   "media": {
+    "clip": "brief",
+    "at": 0.5
+   },
+   "pill": "/mama-brief",
+   "h": "Walk in<br><span class=\"grad\">prepared.</span>",
+   "sub": "A one-page brief before every call: why now, what to propose, what to ask.",
+   "cam": [
+    {
+     "at": 7,
+     "dur": 3,
+     "z": 1.35,
+     "x": 600,
+     "y": 430
+    }
+   ],
+   "id": "s9",
+   "key": "brief",
+   "bars": 4,
+   "start": 85.3846,
+   "end": 94.6154
+  },
+  {
+   "type": "chapter",
+   "bg": "black",
+   "mus": "groove",
+   "hit": true,
+   "num": "03",
+   "title": "Engage",
+   "id": "s10",
+   "key": "ch3",
+   "bars": 1,
+   "start": 94.6154,
+   "end": 96.9231
+  },
+  {
+   "type": "device",
+   "bg": "light",
+   "mus": "groove",
+   "layout": "right",
+   "media": {
+    "still": "chatday-end"
+   },
+   "pill": "Grounded",
+   "h": "Every word,<br><span class=\"grad\">cited.</span>",
+   "sub": "Drafts use only facts with a source, and wait for your approval.",
+   "cam": [
+    {
+     "at": 2.5,
+     "dur": 4,
+     "z": 1.5,
+     "x": 600,
+     "y": 470
+    }
+   ],
+   "spot": [
+    {
+     "at": 3.5,
+     "out": 15.5,
+     "r": [
+      240,
+      265,
+      962,
+      687
+     ]
+    }
+   ],
+   "id": "s11",
+   "key": "draft",
+   "bars": 4,
+   "start": 96.9231,
+   "end": 106.1538
+  },
+  {
+   "type": "device",
+   "bg": "dark",
+   "mus": "groove",
+   "layout": "right",
+   "media": {
+    "clip": "send",
+    "at": 0.3
+   },
+   "pill": "/mama-send",
+   "h": "Nothing sends<br><span class=\"lime\">until you approve.</span>",
+   "sub": "Every draft is checked: suppression, sources, send window.",
+   "cam": [
+    {
+     "at": 6,
+     "dur": 3,
+     "z": 1.45,
+     "x": 420,
+     "y": 470
+    }
+   ],
+   "id": "s12",
+   "key": "send",
+   "bars": 4,
+   "start": 106.1538,
+   "end": 115.3846
+  },
+  {
+   "type": "markets",
+   "bg": "light",
+   "mus": "groove",
+   "h": "Three markets.<br><span class=\"grad\">One buddy.</span>",
+   "sub": "Local time, send windows, holidays and channels for Singapore, Malaysia and India.",
+   "id": "s13",
+   "key": "markets",
+   "bars": 4,
+   "start": 115.3846,
+   "end": 124.6154
+  },
+  {
+   "type": "chapter",
+   "bg": "black",
+   "mus": "groove",
+   "hit": true,
+   "num": "04",
+   "title": "Schedule",
+   "id": "s14",
+   "key": "ch4",
+   "bars": 1,
+   "start": 124.6154,
+   "end": 126.9231
+  },
+  {
+   "type": "device",
+   "bg": "light",
+   "mus": "lift",
+   "layout": "full",
+   "media": {
+    "clip": "calendar",
+    "at": 1,
+    "from_": 0.2
+   },
+   "h": "Your week, one calendar.",
+   "sub": "Meetings, follow-ups, renewals and holidays, plus your Google busy times.",
+   "cap_at": 0.5,
+   "id": "s15",
+   "key": "calendar",
+   "bars": 7,
+   "start": 126.9231,
+   "end": 143.0769
+  },
+  {
+   "type": "device",
+   "bg": "light",
+   "mus": "groove",
+   "layout": "right",
+   "media": {
+    "still": "cal-busy"
+   },
+   "pill": "Google Calendar",
+   "h": "Busy times.<br><span class=\"grad\">Nothing else.</span>",
+   "sub": "Start and end only: no titles, no attendees. It never changes your calendar.",
+   "cam": [
+    {
+     "at": 3,
+     "dur": 4,
+     "z": 1.7,
+     "x": 1265,
+     "y": 240
+    }
+   ],
+   "spot": [
+    {
+     "at": 4,
+     "out": 15.5,
+     "r": [
+      1100,
+      70,
+      1432,
+      400
+     ]
+    }
+   ],
+   "id": "s16",
+   "key": "busy",
+   "bars": 4,
+   "start": 143.0769,
+   "end": 152.3077
+  },
+  {
+   "type": "trio",
+   "bg": "dark",
+   "mus": "groove",
+   "h": "Day. Week. Month.<br><span class=\"lime\">Even in chat.</span>",
+   "imgs": [
+    "cal-month",
+    "weekchat-end",
+    "cal-day"
+   ],
+   "id": "s17",
+   "key": "calviews",
+   "bars": 4,
+   "start": 152.3077,
+   "end": 161.5385
+  },
+  {
+   "type": "chapter",
+   "bg": "black",
+   "mus": "groove",
+   "hit": true,
+   "num": "05",
+   "title": "Lead",
+   "id": "s18",
+   "key": "ch5",
+   "bars": 1,
+   "start": 161.5385,
+   "end": 163.8462
+  },
+  {
+   "type": "device",
+   "bg": "light",
+   "mus": "groove",
+   "layout": "right",
+   "media": {
+    "clip": "manager",
+    "at": 0.5
+   },
+   "pill": "For managers",
+   "h": "See the team.<br><span class=\"grad\">Approve every lead.</span>",
+   "sub": "Last night's run, team metrics and entity matches in one morning cockpit.",
+   "cam": [
+    {
+     "at": 9,
+     "dur": 3,
+     "z": 1.4,
+     "x": 600,
+     "y": 560
+    }
+   ],
+   "id": "s19",
+   "key": "manager",
+   "bars": 6,
+   "start": 163.8462,
+   "end": 177.6923
+  },
+  {
+   "type": "device",
+   "bg": "light",
+   "mus": "groove",
+   "layout": "right",
+   "media": {
+    "still": "cal-team"
+   },
+   "pill": "Team view",
+   "h": "Every rep's week.<br><span class=\"grad\">Clashes flagged.</span>",
+   "sub": "Load per day at a glance, with double bookings in red.",
+   "cam": [
+    {
+     "at": 3,
+     "dur": 4,
+     "z": 1.8,
+     "x": 520,
+     "y": 330
+    }
+   ],
+   "spot": [
+    {
+     "at": 4,
+     "out": 15.5,
+     "r": [
+      444,
+      360,
+      598,
+      430
+     ]
+    }
+   ],
+   "id": "s20",
+   "key": "team",
+   "bars": 4,
+   "start": 177.6923,
+   "end": 186.9231
+  },
+  {
+   "type": "device",
+   "bg": "light",
+   "mus": "groove",
+   "layout": "right",
+   "media": {
+    "still": "canvas-alloc"
+   },
+   "pill": "/mama-allocate",
+   "h": "Fair allocation,<br><span class=\"grad\">explained.</span>",
+   "sub": "Score, capacity, territory and fit. The manager approves every assignment.",
+   "cam": [
+    {
+     "at": 3,
+     "dur": 4,
+     "z": 1.45,
+     "x": 1130,
+     "y": 420
+    }
+   ],
+   "id": "s21",
+   "key": "alloc",
+   "bars": 4,
+   "start": 186.9231,
+   "end": 196.1538
+  },
+  {
+   "type": "trio",
+   "bg": "light",
+   "mus": "lift",
+   "h": "Reports that<br><span class=\"grad\">build themselves.</span>",
+   "sub": "Generative UI: charts, tables and verdicts bound to your data.",
+   "imgs": [
+    "canvas-weekly",
+    "canvas-insights",
+    "canvas-alloc"
+   ],
+   "id": "s22",
+   "key": "reports",
+   "bars": 6,
+   "start": 196.1538,
+   "end": 210.0
+  },
+  {
+   "type": "check",
+   "bg": "light",
+   "mus": "groove",
+   "media": {
+    "still": "company"
+   },
+   "pill": "/company-check",
+   "h": "Is this company <span class=\"grad\">real?</span>",
+   "checks": [
+    "Live with ACRA",
+    "Annual return on time",
+    "A real office, not a virtual one",
+    "More than 3 staff"
+   ],
+   "cam": [
+    {
+     "at": 3,
+     "dur": 4,
+     "z": 1.5,
+     "x": 480,
+     "y": 470
+    }
+   ],
+   "id": "s23",
+   "key": "company",
+   "bars": 4,
+   "start": 210.0,
+   "end": 219.2308
+  },
+  {
+   "type": "insights",
+   "bg": "light",
+   "mus": "groove",
+   "media": {
+    "still": "canvas-insights"
+   },
+   "pill": "/company-insights",
+   "h": "Ask. Get a report.",
+   "q": "\u201cClinics in Singapore\u201d",
+   "kpis": [
+    {
+     "n": 9618,
+     "label": "live clinics",
+     "color": "#6D28D9"
+    },
+    {
+     "n": 92.7,
+     "dec": 1,
+     "unit": "%",
+     "label": "file their annual return on time",
+     "color": "#15803D"
+    },
+    {
+     "n": 15.9,
+     "dec": 1,
+     "unit": "%",
+     "label": "use a shared or virtual address",
+     "color": "#B45309"
+    }
+   ],
+   "cam": [
+    {
+     "at": 3,
+     "dur": 4,
+     "z": 1.6,
+     "x": 1135,
+     "y": 430
+    }
+   ],
+   "id": "s24",
+   "key": "insights",
+   "bars": 4,
+   "start": 219.2308,
+   "end": 228.4615
+  },
+  {
+   "type": "chapter",
+   "bg": "black",
+   "mus": "groove",
+   "hit": true,
+   "num": "06",
+   "title": "Trust",
+   "id": "s25",
+   "key": "ch6",
+   "bars": 1,
+   "start": 228.4615,
+   "end": 230.7692
+  },
+  {
+   "type": "guard",
+   "bg": "black",
+   "mus": "break",
+   "h": "Guardrails, <span class=\"lime\">built in.</span>",
+   "rules": [
+    [
+     "Approve, then send",
+     "nothing goes out on its own"
+    ],
+    [
+     "Every fact cited",
+     "no source, no claim"
+    ],
+    [
+     "Manager assigns leads",
+     "fair and explainable"
+    ],
+    [
+     "Suppression first",
+     "unsubscribes honoured at once"
+    ],
+    [
+     "Send windows",
+     "and holidays, per market"
+    ],
+    [
+     "PDPA-aware",
+     "business data only"
+    ]
+   ],
+   "id": "s26",
+   "key": "guard",
+   "bars": 6,
+   "start": 230.7692,
+   "end": 244.6154
+  },
+  {
+   "type": "words",
+   "bg": "dark",
+   "mus": "groove",
+   "items": [
+    {
+     "cls": "h2",
+     "text": "Your data lives in<br><span class=\"lime\">your repo.</span>",
+     "at": 0.5,
+     "out": 5.6,
+     "y": 380
+    },
+    {
+     "cls": "h2",
+     "text": "Every change,<br><span class=\"grad\">a git commit.</span>",
+     "at": 6,
+     "out": 10.6,
+     "y": 380
+    },
+    {
+     "cls": "h3",
+     "text": "Python tools do the work.<br><span class=\"lime\">Generative UI shows it.</span>",
+     "at": 11,
+     "out": 15.7,
+     "y": 410
+    }
+   ],
+   "id": "s27",
+   "key": "repo",
+   "bars": 4,
+   "start": 244.6154,
+   "end": 253.8462
+  },
+  {
+   "type": "split",
+   "bg": "dark",
+   "mus": "groove",
+   "a": "palette",
+   "b": "today-dark",
+   "h": "Light or dark.<br><span class=\"lime\">Your call.</span>",
+   "id": "s28",
+   "key": "fast",
+   "bars": 4,
+   "start": 253.8462,
+   "end": 263.0769
+  },
+  {
+   "type": "phones",
+   "bg": "light",
+   "mus": "groove",
+   "h": "In your pocket,<span class=\"grad\"> too.</span>",
+   "imgs": [
+    "phone-cal",
+    "phone-today",
+    "phone-brief"
+   ],
+   "id": "s29",
+   "key": "phones",
+   "bars": 4,
+   "start": 263.0769,
+   "end": 272.3077
+  },
+  {
+   "type": "bento",
+   "bg": "light",
+   "mus": "lift",
+   "h": "Everything a rep needs.",
+   "tiles": [
+    {
+     "src": "today",
+     "crop": [
+      229,
+      243,
+      346,
+      252
+     ],
+     "label": "Your day",
+     "span": 2
+    },
+    {
+     "src": "chatday/f00392.jpg",
+     "crop": [
+      251,
+      237,
+      700,
+      210
+     ],
+     "label": "Agents in parallel",
+     "span": 2
+    },
+    {
+     "src": "chatday-end",
+     "crop": [
+      240,
+      265,
+      722,
+      420
+     ],
+     "label": "Cited drafts",
+     "span": 1
+    },
+    {
+     "src": "cal-week",
+     "crop": [
+      66,
+      85,
+      640,
+      330
+     ],
+     "label": "One calendar",
+     "span": 1
+    },
+    {
+     "src": "canvas-insights",
+     "crop": [
+      1040,
+      60,
+      400,
+      420
+     ],
+     "label": "Generative reports",
+     "span": 1
+    },
+    {
+     "src": "cal-team",
+     "crop": [
+      760,
+      80,
+      680,
+      240
+     ],
+     "label": "Team view",
+     "span": 1
+    }
+   ],
+   "id": "s30",
+   "key": "bento",
+   "bars": 6,
+   "start": 272.3077,
+   "end": 286.1538
+  },
+  {
+   "type": "outro",
+   "bg": "light",
+   "mus": "outro",
+   "id": "s31",
+   "key": "outro",
+   "bars": 6,
+   "start": 286.1538,
+   "end": 300.0
+  }
+ ]
+}

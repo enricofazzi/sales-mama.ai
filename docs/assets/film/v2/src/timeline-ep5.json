@@ -1,0 +1,604 @@
+{
+ "bpm": 104,
+ "beat": 0.5769230769230769,
+ "bar": 2.3076923076923075,
+ "duration": 301.1538,
+ "scenes": [
+  {
+   "type": "words",
+   "bg": "black",
+   "mus": "intro",
+   "bars": 8,
+   "items": [
+    {
+     "cls": "eyebrow",
+     "text": "Friday \u00b7 5 pm",
+     "at": 0.5,
+     "out": 7.4,
+     "y": 330
+    },
+    {
+     "cls": "h1",
+     "text": "Who's overloaded?",
+     "at": 2,
+     "out": 3.8
+    },
+    {
+     "cls": "h1",
+     "text": "Who got the good leads?",
+     "at": 4,
+     "out": 5.8
+    },
+    {
+     "cls": "h1",
+     "text": "What's working?",
+     "at": 6,
+     "out": 7.8
+    },
+    {
+     "cls": "h2",
+     "text": "Managing a team<br><span class=\"red\">you can't see.</span>",
+     "at": 24,
+     "out": 31.6,
+     "y": 400
+    }
+   ],
+   "pains": [
+    [
+     "Leads handed out by gut feel",
+     180,
+     210
+    ],
+    [
+     "Reports built by hand",
+     1060,
+     270
+    ],
+    [
+     "No view of the team's week",
+     260,
+     760
+    ],
+    [
+     "Hot leads sitting idle",
+     1210,
+     820
+    ],
+    [
+     "Coaching by guesswork",
+     720,
+     130
+    ],
+    [
+     "Three markets, three time zones",
+     690,
+     930
+    ]
+   ],
+   "pains_at": 8.5,
+   "pains_out": 22.5,
+   "id": "s0",
+   "key": "words",
+   "start": 0.0,
+   "end": 18.4615
+  },
+  {
+   "type": "words",
+   "bg": "dark",
+   "mus": "break",
+   "bars": 4,
+   "items": [
+    {
+     "cls": "h2",
+     "text": "Small teams win<br><span class=\"lime\">on focus.</span>",
+     "at": 0.5,
+     "out": 8.5,
+     "y": 360
+    },
+    {
+     "cls": "h3",
+     "text": "The right lead, to the right rep,<br>at the right time.",
+     "at": 8.8,
+     "out": 15.7,
+     "y": 420
+    }
+   ],
+   "id": "s1",
+   "key": "words",
+   "start": 18.4615,
+   "end": 27.6923
+  },
+  {
+   "type": "title",
+   "bg": "light",
+   "mus": "groove",
+   "hit": true,
+   "bars": 4,
+   "eyebrow": "Episode 5 of 5",
+   "title": "Managing blind",
+   "sub": "How Sales Mama fixes it, step by step.",
+   "id": "s2",
+   "key": "title",
+   "start": 27.6923,
+   "end": 36.9231
+  },
+  {
+   "type": "words",
+   "bg": "light",
+   "mus": "groove",
+   "bars": 3,
+   "items": [
+    {
+     "cls": "h1",
+     "text": "Meet Grace.",
+     "at": 0.3,
+     "out": 11.6,
+     "y": 380
+    },
+    {
+     "cls": "sub",
+     "text": "Sales manager \u00b7 3 reps \u00b7 Singapore, Malaysia and India",
+     "at": 1.5,
+     "out": 11.6,
+     "y": 560
+    }
+   ],
+   "id": "s3",
+   "key": "words",
+   "start": 36.9231,
+   "end": 43.8462
+  },
+  {
+   "type": "chapter",
+   "bg": "black",
+   "mus": "groove",
+   "hit": true,
+   "bars": 1,
+   "num": "STEP 1",
+   "title": "One view every morning",
+   "id": "s4",
+   "key": "chapter",
+   "start": 43.8462,
+   "end": 46.1538
+  },
+  {
+   "type": "ask",
+   "bg": "light",
+   "mus": "groove",
+   "bars": 3,
+   "who": "Grace types",
+   "prompt": "Morning cockpit",
+   "sub": "Last night's results, the team's numbers and anything that needs her decision.",
+   "id": "s5",
+   "key": "ask",
+   "start": 46.1538,
+   "end": 53.0769
+  },
+  {
+   "type": "device",
+   "bg": "light",
+   "mus": "groove",
+   "layout": "right",
+   "media": {
+    "clip": "manager",
+    "at": 0.5
+   },
+   "h": "The whole team<br><span class=\"grad\">before 9 am.</span>",
+   "sub": "Last night's run, this week's funnel, and decisions waiting for her.",
+   "bars": 9,
+   "pill": "Step 1 \u00b7 One view every morning",
+   "cam": [],
+   "spot": [],
+   "cap_at": 1,
+   "id": "s6",
+   "key": "device",
+   "start": 53.0769,
+   "end": 73.8462
+  },
+  {
+   "type": "device",
+   "bg": "light",
+   "mus": "groove",
+   "layout": "right",
+   "media": {
+    "still": "manager-end"
+   },
+   "h": "Decide in<br><span class=\"lime\">one line.</span>",
+   "sub": "\u201c1 is a match\u201d confirms a news story belongs to Harbourlight Foods.",
+   "bars": 8,
+   "pill": "Step 1 \u00b7 One view every morning",
+   "cam": [
+    {
+     "at": 3,
+     "dur": 4,
+     "z": 1.5,
+     "x": 600,
+     "y": 560
+    }
+   ],
+   "spot": [
+    {
+     "at": 4,
+     "out": 99,
+     "r": [
+      240,
+      440,
+      962,
+      690
+     ]
+    }
+   ],
+   "cap_at": 1,
+   "id": "s7",
+   "key": "device",
+   "start": 73.8462,
+   "end": 92.3077
+  },
+  {
+   "type": "chapter",
+   "bg": "black",
+   "mus": "groove",
+   "hit": true,
+   "bars": 1,
+   "num": "STEP 2",
+   "title": "Hand out leads fairly",
+   "id": "s8",
+   "key": "chapter",
+   "start": 92.3077,
+   "end": 94.6154
+  },
+  {
+   "type": "ask",
+   "bg": "light",
+   "mus": "groove",
+   "bars": 3,
+   "who": "Grace types",
+   "prompt": "/mama-allocate",
+   "sub": "A proposal based on score, free capacity, market and each rep's track record.",
+   "id": "s9",
+   "key": "ask",
+   "start": 94.6154,
+   "end": 101.5385
+  },
+  {
+   "type": "device",
+   "bg": "light",
+   "mus": "lift",
+   "layout": "full",
+   "media": {
+    "clip": "ep5-allocate",
+    "at": 0.5
+   },
+   "h": "Every lead,<br><span class=\"grad\">with a reason.</span>",
+   "sub": "Who gets what, and why. Nothing is assigned until Grace approves.",
+   "bars": 10,
+   "pill": "Step 2 \u00b7 Hand out leads fairly",
+   "cam": [],
+   "spot": [],
+   "cap_at": 1,
+   "id": "s10",
+   "key": "device",
+   "start": 101.5385,
+   "end": 124.6154
+  },
+  {
+   "type": "device",
+   "bg": "light",
+   "mus": "groove",
+   "layout": "right",
+   "media": {
+    "still": "canvas-alloc"
+   },
+   "h": "Fair by design.<br><span class=\"lime\">Checked every time.</span>",
+   "sub": "Capacity, territory and suppression rules hold on every row.",
+   "bars": 7,
+   "pill": "Step 2 \u00b7 Hand out leads fairly",
+   "cam": [
+    {
+     "at": 3,
+     "dur": 4,
+     "z": 1.45,
+     "x": 1130,
+     "y": 420
+    }
+   ],
+   "spot": [],
+   "cap_at": 1,
+   "id": "s11",
+   "key": "device",
+   "start": 124.6154,
+   "end": 140.7692
+  },
+  {
+   "type": "chapter",
+   "bg": "black",
+   "mus": "groove",
+   "hit": true,
+   "bars": 1,
+   "num": "STEP 3",
+   "title": "See the team's week",
+   "id": "s12",
+   "key": "chapter",
+   "start": 140.7692,
+   "end": 143.0769
+  },
+  {
+   "type": "device",
+   "bg": "light",
+   "mus": "groove",
+   "layout": "right",
+   "media": {
+    "still": "cal-team"
+   },
+   "h": "Every rep's week.<br><span class=\"grad\">At a glance.</span>",
+   "sub": "Load per day, and double bookings in red before a customer notices.",
+   "bars": 9,
+   "pill": "Step 3 \u00b7 See the team's week",
+   "cam": [
+    {
+     "at": 3,
+     "dur": 4,
+     "z": 1.8,
+     "x": 520,
+     "y": 330
+    }
+   ],
+   "spot": [
+    {
+     "at": 4,
+     "out": 99,
+     "r": [
+      444,
+      360,
+      598,
+      430
+     ]
+    }
+   ],
+   "cap_at": 1,
+   "id": "s13",
+   "key": "device",
+   "start": 143.0769,
+   "end": 163.8462
+  },
+  {
+   "type": "device",
+   "bg": "light",
+   "mus": "groove",
+   "layout": "right",
+   "media": {
+    "still": "mgr-today"
+   },
+   "h": "Three markets,<br><span class=\"lime\">one screen.</span>",
+   "sub": "Live send windows for Singapore, Malaysia and India.",
+   "bars": 6,
+   "pill": "Step 3 \u00b7 See the team's week",
+   "cam": [
+    {
+     "at": 3,
+     "dur": 4,
+     "z": 1.4,
+     "x": 700,
+     "y": 330
+    }
+   ],
+   "spot": [],
+   "cap_at": 1,
+   "id": "s14",
+   "key": "device",
+   "start": 163.8462,
+   "end": 177.6923
+  },
+  {
+   "type": "chapter",
+   "bg": "black",
+   "mus": "groove",
+   "hit": true,
+   "bars": 1,
+   "num": "STEP 4",
+   "title": "Coach from what works",
+   "id": "s15",
+   "key": "chapter",
+   "start": 177.6923,
+   "end": 180.0
+  },
+  {
+   "type": "ask",
+   "bg": "light",
+   "mus": "groove",
+   "bars": 3,
+   "who": "Grace types",
+   "prompt": "/mama-weekly",
+   "sub": "The weekly review: funnel, reply rates and which rep converts which industry.",
+   "id": "s16",
+   "key": "ask",
+   "start": 180.0,
+   "end": 186.9231
+  },
+  {
+   "type": "device",
+   "bg": "light",
+   "mus": "groove",
+   "layout": "right",
+   "media": {
+    "still": "canvas-weekly"
+   },
+   "h": "What's working,<br><span class=\"grad\">by rep and industry.</span>",
+   "sub": "Coach with numbers, not guesswork.",
+   "bars": 9,
+   "pill": "Step 4 \u00b7 Coach from what works",
+   "cam": [
+    {
+     "at": 3,
+     "dur": 4,
+     "z": 1.5,
+     "x": 1130,
+     "y": 520
+    }
+   ],
+   "spot": [],
+   "cap_at": 1,
+   "id": "s17",
+   "key": "device",
+   "start": 186.9231,
+   "end": 207.6923
+  },
+  {
+   "type": "device",
+   "bg": "light",
+   "mus": "groove",
+   "layout": "right",
+   "media": {
+    "still": "canvas-insights"
+   },
+   "h": "Ask any question<br><span class=\"lime\">of the market.</span>",
+   "sub": "Charts and tables from your own data and official registries.",
+   "bars": 6,
+   "pill": "Step 4 \u00b7 Coach from what works",
+   "cam": [
+    {
+     "at": 3,
+     "dur": 4,
+     "z": 1.4,
+     "x": 1135,
+     "y": 430
+    }
+   ],
+   "spot": [],
+   "cap_at": 1,
+   "id": "s18",
+   "key": "device",
+   "start": 207.6923,
+   "end": 221.5385
+  },
+  {
+   "type": "chapter",
+   "bg": "black",
+   "mus": "groove",
+   "hit": true,
+   "bars": 1,
+   "num": "STEP 5",
+   "title": "Share it in one click",
+   "id": "s19",
+   "key": "chapter",
+   "start": 221.5385,
+   "end": 223.8462
+  },
+  {
+   "type": "device",
+   "bg": "light",
+   "mus": "lift",
+   "layout": "right",
+   "media": {
+    "clip": "reports",
+    "at": 0.5
+   },
+   "h": "Every report,<br><span class=\"grad\">saved.</span>",
+   "sub": "Weekly reviews, allocations, company checks and insights, in one place.",
+   "bars": 7,
+   "pill": "Step 5 \u00b7 Share it in one click",
+   "cam": [],
+   "spot": [],
+   "cap_at": 1,
+   "id": "s20",
+   "key": "device",
+   "start": 223.8462,
+   "end": 240.0
+  },
+  {
+   "type": "device",
+   "bg": "light",
+   "mus": "groove",
+   "layout": "right",
+   "media": {
+    "still": "reports"
+   },
+   "h": "Share as a page.<br><span class=\"lime\">No spreadsheet.</span>",
+   "sub": "Send the weekly review to the founder in one click.",
+   "bars": 6,
+   "pill": "Step 5 \u00b7 Share it in one click",
+   "cam": [
+    {
+     "at": 3,
+     "dur": 4,
+     "z": 1.35,
+     "x": 500,
+     "y": 420
+    }
+   ],
+   "spot": [],
+   "cap_at": 1,
+   "id": "s21",
+   "key": "device",
+   "start": 240.0,
+   "end": 253.8462
+  },
+  {
+   "type": "compare",
+   "bg": "light",
+   "mus": "lift",
+   "bars": 8,
+   "h": "A team you can see.",
+   "before": [
+    "Leads handed out by gut feel",
+    "Overloaded reps, idle leads",
+    "Reports built by hand on Friday"
+   ],
+   "after": [
+    "Every assignment explained and approved",
+    "Every rep's week at a glance",
+    "The weekly review, ready to share"
+   ],
+   "id": "s22",
+   "key": "compare",
+   "start": 253.8462,
+   "end": 272.3077
+  },
+  {
+   "type": "recap",
+   "bg": "light",
+   "mus": "groove",
+   "bars": 6,
+   "eyebrow": "Episode 5 \u00b7 Managing blind",
+   "h": "Five steps to a team you can see.",
+   "items": [
+    [
+     "One view every morning",
+     "One morning view of the whole team"
+    ],
+    [
+     "Hand out leads fairly",
+     "Fair allocation with a reason for every lead"
+    ],
+    [
+     "See the team's week",
+     "Every rep's week, clashes in red"
+    ],
+    [
+     "Coach from what works",
+     "A weekly review to coach from"
+    ],
+    [
+     "Share it in one click",
+     "Every report saved and shareable"
+    ]
+   ],
+   "id": "s23",
+   "key": "recap",
+   "start": 272.3077,
+   "end": 286.1538
+  },
+  {
+   "type": "epout",
+   "bg": "light",
+   "mus": "outro",
+   "bars": 6,
+   "h": "Lead the team<br><span class=\"grad\">you can see.</span>",
+   "next": null,
+   "id": "s24",
+   "key": "epout",
+   "start": 286.1538,
+   "end": 300.0
+  }
+ ]
+}

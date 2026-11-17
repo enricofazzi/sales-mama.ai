@@ -1,0 +1,602 @@
+{
+ "bpm": 104,
+ "beat": 0.5769230769230769,
+ "bar": 2.3076923076923075,
+ "duration": 301.1538,
+ "scenes": [
+  {
+   "type": "words",
+   "bg": "black",
+   "mus": "intro",
+   "bars": 8,
+   "items": [
+    {
+     "cls": "eyebrow",
+     "text": "\u201cThursday works for me.\u201d",
+     "at": 0.5,
+     "out": 7.4,
+     "y": 330
+    },
+    {
+     "cls": "h1",
+     "text": "Nobody booked it.",
+     "at": 2,
+     "out": 3.8
+    },
+    {
+     "cls": "h1",
+     "text": "Two meetings at 10:30.",
+     "at": 4,
+     "out": 5.8
+    },
+    {
+     "cls": "h1",
+     "text": "A renewal date passed.",
+     "at": 6,
+     "out": 7.8
+    },
+    {
+     "cls": "h2",
+     "text": "Deals die<br><span class=\"red\">between meetings.</span>",
+     "at": 24,
+     "out": 31.6,
+     "y": 400
+    }
+   ],
+   "pains": [
+    [
+     "Forgotten follow-ups",
+     180,
+     210
+    ],
+    [
+     "Double bookings",
+     1060,
+     270
+    ],
+    [
+     "Renewals missed",
+     260,
+     760
+    ],
+    [
+     "No notes after the meeting",
+     1210,
+     820
+    ],
+    [
+     "CRM never updated",
+     720,
+     130
+    ],
+    [
+     "Holidays forgotten",
+     690,
+     930
+    ]
+   ],
+   "pains_at": 8.5,
+   "pains_out": 22.5,
+   "id": "s0",
+   "key": "words",
+   "start": 0.0,
+   "end": 18.4615
+  },
+  {
+   "type": "words",
+   "bg": "dark",
+   "mus": "break",
+   "bars": 4,
+   "items": [
+    {
+     "cls": "h2",
+     "text": "A deal moves only as fast<br><span class=\"lime\">as its next step.</span>",
+     "at": 0.5,
+     "out": 8.5,
+     "y": 360
+    },
+    {
+     "cls": "h3",
+     "text": "Miss one, and the buyer<br>moves on.",
+     "at": 8.8,
+     "out": 15.7,
+     "y": 420
+    }
+   ],
+   "id": "s1",
+   "key": "words",
+   "start": 18.4615,
+   "end": 27.6923
+  },
+  {
+   "type": "title",
+   "bg": "light",
+   "mus": "groove",
+   "hit": true,
+   "bars": 4,
+   "eyebrow": "Episode 4 of 5",
+   "title": "Meetings and follow-ups that slip",
+   "sub": "How Sales Mama fixes it, step by step.",
+   "id": "s2",
+   "key": "title",
+   "start": 27.6923,
+   "end": 36.9231
+  },
+  {
+   "type": "words",
+   "bg": "light",
+   "mus": "groove",
+   "bars": 3,
+   "items": [
+    {
+     "cls": "h1",
+     "text": "Mei's week.",
+     "at": 0.3,
+     "out": 11.6,
+     "y": 380
+    },
+    {
+     "cls": "sub",
+     "text": "9 appointments \u00b7 2 follow-ups \u00b7 6 renewal dates",
+     "at": 1.5,
+     "out": 11.6,
+     "y": 560
+    }
+   ],
+   "id": "s3",
+   "key": "words",
+   "start": 36.9231,
+   "end": 43.8462
+  },
+  {
+   "type": "chapter",
+   "bg": "black",
+   "mus": "groove",
+   "hit": true,
+   "bars": 1,
+   "num": "STEP 1",
+   "title": "Turn a reply into a meeting",
+   "id": "s4",
+   "key": "chapter",
+   "start": 43.8462,
+   "end": 46.1538
+  },
+  {
+   "type": "ask",
+   "bg": "light",
+   "mus": "groove",
+   "bars": 3,
+   "who": "Mei types",
+   "prompt": "Book Nimbus Thursday 10:00 with Daniel",
+   "sub": "Sales Mama checks clashes, holidays and working hours first, then asks you.",
+   "id": "s5",
+   "key": "ask",
+   "start": 46.1538,
+   "end": 53.0769
+  },
+  {
+   "type": "device",
+   "bg": "light",
+   "mus": "groove",
+   "layout": "right",
+   "media": {
+    "clip": "ep4-book",
+    "at": 0.5
+   },
+   "h": "Checked before<br><span class=\"grad\">it's booked.</span>",
+   "sub": "Free slot, no clash, no holiday, inside working hours. You say yes.",
+   "bars": 8,
+   "pill": "Step 1 \u00b7 Turn a reply into a meeting",
+   "cam": [],
+   "spot": [],
+   "cap_at": 1,
+   "id": "s6",
+   "key": "device",
+   "start": 53.0769,
+   "end": 71.5385
+  },
+  {
+   "type": "device",
+   "bg": "light",
+   "mus": "groove",
+   "layout": "right",
+   "media": {
+    "still": "ep4-book-end"
+   },
+   "h": "Straight onto<br><span class=\"lime\">your week.</span>",
+   "sub": "The meeting lands on your calendar and in the account's history.",
+   "bars": 6,
+   "pill": "Step 1 \u00b7 Turn a reply into a meeting",
+   "cam": [
+    {
+     "at": 3,
+     "dur": 4,
+     "z": 1.4,
+     "x": 600,
+     "y": 480
+    }
+   ],
+   "spot": [],
+   "cap_at": 1,
+   "id": "s7",
+   "key": "device",
+   "start": 71.5385,
+   "end": 85.3846
+  },
+  {
+   "type": "chapter",
+   "bg": "black",
+   "mus": "groove",
+   "hit": true,
+   "bars": 1,
+   "num": "STEP 2",
+   "title": "See your whole week",
+   "id": "s8",
+   "key": "chapter",
+   "start": 85.3846,
+   "end": 87.6923
+  },
+  {
+   "type": "device",
+   "bg": "light",
+   "mus": "lift",
+   "layout": "full",
+   "media": {
+    "clip": "calfix",
+    "at": 0.5
+   },
+   "h": "One calendar<br><span class=\"grad\">for the whole pipeline.</span>",
+   "sub": "Meetings, follow-ups, renewal windows and holidays together.",
+   "bars": 10,
+   "pill": "Step 2 \u00b7 See your whole week",
+   "cam": [],
+   "spot": [],
+   "cap_at": 1,
+   "id": "s9",
+   "key": "device",
+   "start": 87.6923,
+   "end": 110.7692
+  },
+  {
+   "type": "device",
+   "bg": "light",
+   "mus": "groove",
+   "layout": "right",
+   "media": {
+    "still": "cal-week"
+   },
+   "h": "Clashes<br><span class=\"lime\">flagged.</span>",
+   "sub": "Tuesday's demo overlaps the Quayside site visit. You see it now, not at 10:30.",
+   "bars": 8,
+   "pill": "Step 2 \u00b7 See your whole week",
+   "cam": [
+    {
+     "at": 3,
+     "dur": 4,
+     "z": 1.9,
+     "x": 425,
+     "y": 450
+    }
+   ],
+   "spot": [
+    {
+     "at": 4,
+     "out": 99,
+     "r": [
+      330,
+      415,
+      520,
+      490
+     ]
+    }
+   ],
+   "cap_at": 1,
+   "id": "s10",
+   "key": "device",
+   "start": 110.7692,
+   "end": 129.2308
+  },
+  {
+   "type": "chapter",
+   "bg": "black",
+   "mus": "groove",
+   "hit": true,
+   "bars": 1,
+   "num": "STEP 3",
+   "title": "Fix clashes in one line",
+   "id": "s11",
+   "key": "chapter",
+   "start": 129.2308,
+   "end": 131.5385
+  },
+  {
+   "type": "ask",
+   "bg": "light",
+   "mus": "groove",
+   "bars": 3,
+   "who": "Mei types",
+   "prompt": "Move the Quayside visit to Tuesday 14:00",
+   "sub": "Or drag it on the calendar. Sales Mama checks the new slot before it moves.",
+   "id": "s12",
+   "key": "ask",
+   "start": 131.5385,
+   "end": 138.4615
+  },
+  {
+   "type": "device",
+   "bg": "light",
+   "mus": "groove",
+   "layout": "right",
+   "media": {
+    "clip": "ep4-move",
+    "at": 0.5
+   },
+   "h": "Moved,<br><span class=\"grad\">clash gone.</span>",
+   "sub": "The new time is checked for clashes and holidays first.",
+   "bars": 8,
+   "pill": "Step 3 \u00b7 Fix clashes in one line",
+   "cam": [],
+   "spot": [],
+   "cap_at": 1,
+   "id": "s13",
+   "key": "device",
+   "start": 138.4615,
+   "end": 156.9231
+  },
+  {
+   "type": "device",
+   "bg": "light",
+   "mus": "groove",
+   "layout": "full",
+   "media": {
+    "clip": "calendar",
+    "at": 0.2,
+    "from_": 2.4
+   },
+   "h": "Or just drag it.",
+   "sub": "Drop it on a new slot, confirm, done.",
+   "bars": 8,
+   "cam": [],
+   "spot": [],
+   "cap_at": 0.5,
+   "pill": "Step 3 \u00b7 Fix clashes in one line",
+   "id": "s14",
+   "key": "device",
+   "start": 156.9231,
+   "end": 175.3846
+  },
+  {
+   "type": "chapter",
+   "bg": "black",
+   "mus": "groove",
+   "hit": true,
+   "bars": 1,
+   "num": "STEP 4",
+   "title": "Never miss a renewal",
+   "id": "s15",
+   "key": "chapter",
+   "start": 175.3846,
+   "end": 177.6923
+  },
+  {
+   "type": "device",
+   "bg": "light",
+   "mus": "groove",
+   "layout": "right",
+   "media": {
+    "still": "cal-renewal"
+   },
+   "h": "Renewal windows,<br><span class=\"grad\">before they close.</span>",
+   "sub": "Harbourlight's renewal window opens Tuesday. Brief me, or book the call.",
+   "bars": 7,
+   "pill": "Step 4 \u00b7 Never miss a renewal",
+   "cam": [
+    {
+     "at": 3,
+     "dur": 4,
+     "z": 1.7,
+     "x": 1265,
+     "y": 260
+    }
+   ],
+   "spot": [
+    {
+     "at": 4,
+     "out": 99,
+     "r": [
+      1100,
+      70,
+      1432,
+      430
+     ]
+    }
+   ],
+   "cap_at": 1,
+   "id": "s16",
+   "key": "device",
+   "start": 177.6923,
+   "end": 193.8462
+  },
+  {
+   "type": "device",
+   "bg": "light",
+   "mus": "groove",
+   "layout": "right",
+   "media": {
+    "still": "cal-busy"
+   },
+   "h": "Your Google Calendar,<br><span class=\"lime\">busy times only.</span>",
+   "sub": "No titles, no attendees. Sales Mama never books over your own commitments.",
+   "bars": 7,
+   "pill": "Step 4 \u00b7 Never miss a renewal",
+   "cam": [
+    {
+     "at": 3,
+     "dur": 4,
+     "z": 1.7,
+     "x": 1265,
+     "y": 240
+    }
+   ],
+   "spot": [
+    {
+     "at": 4,
+     "out": 99,
+     "r": [
+      1100,
+      70,
+      1432,
+      400
+     ]
+    }
+   ],
+   "cap_at": 1,
+   "id": "s17",
+   "key": "device",
+   "start": 193.8462,
+   "end": 210.0
+  },
+  {
+   "type": "chapter",
+   "bg": "black",
+   "mus": "groove",
+   "hit": true,
+   "bars": 1,
+   "num": "STEP 5",
+   "title": "Log it in one line",
+   "id": "s18",
+   "key": "chapter",
+   "start": 210.0,
+   "end": 212.3077
+  },
+  {
+   "type": "ask",
+   "bg": "light",
+   "mus": "groove",
+   "bars": 3,
+   "who": "Mei types",
+   "prompt": "/mama-handover harbourlight-foods: pilot agreed, start with Tampines in January",
+   "sub": "After the meeting, one sentence updates the account, the calendar and your CRM row.",
+   "id": "s19",
+   "key": "ask",
+   "start": 212.3077,
+   "end": 219.2308
+  },
+  {
+   "type": "device",
+   "bg": "light",
+   "mus": "lift",
+   "layout": "right",
+   "media": {
+    "clip": "ep4-handover",
+    "at": 0.5
+   },
+   "h": "Outcome logged.<br><span class=\"grad\">Next step booked.</span>",
+   "sub": "Meeting marked held. Proposal review already on the calendar for 24 Nov.",
+   "bars": 9,
+   "pill": "Step 5 \u00b7 Log it in one line",
+   "cam": [],
+   "spot": [],
+   "cap_at": 1,
+   "id": "s20",
+   "key": "device",
+   "start": 219.2308,
+   "end": 240.0
+  },
+  {
+   "type": "device",
+   "bg": "light",
+   "mus": "groove",
+   "layout": "right",
+   "media": {
+    "still": "ep4-handover-end"
+   },
+   "h": "Your CRM row,<br><span class=\"lime\">ready.</span>",
+   "sub": "No retyping notes at 6 pm.",
+   "bars": 6,
+   "pill": "Step 5 \u00b7 Log it in one line",
+   "cam": [
+    {
+     "at": 3,
+     "dur": 4,
+     "z": 1.4,
+     "x": 600,
+     "y": 470
+    }
+   ],
+   "spot": [],
+   "cap_at": 1,
+   "id": "s21",
+   "key": "device",
+   "start": 240.0,
+   "end": 253.8462
+  },
+  {
+   "type": "compare",
+   "bg": "light",
+   "mus": "lift",
+   "bars": 8,
+   "h": "Every deal keeps moving.",
+   "before": [
+    "Replies that never became meetings",
+    "Clashes found too late",
+    "Renewals noticed after the date"
+   ],
+   "after": [
+    "A reply becomes a booked meeting",
+    "Clashes flagged before you commit",
+    "Renewals and follow-ups on your calendar"
+   ],
+   "id": "s22",
+   "key": "compare",
+   "start": 253.8462,
+   "end": 272.3077
+  },
+  {
+   "type": "recap",
+   "bg": "light",
+   "mus": "groove",
+   "bars": 6,
+   "eyebrow": "Episode 4 \u00b7 Meetings and follow-ups that slip",
+   "h": "Five steps to a pipeline that moves.",
+   "items": [
+    [
+     "Turn a reply into a meeting",
+     "Book from a sentence, checked first"
+    ],
+    [
+     "See your whole week",
+     "One calendar for meetings, follow-ups and renewals"
+    ],
+    [
+     "Fix clashes in one line",
+     "Move meetings by asking, or by dragging"
+    ],
+    [
+     "Never miss a renewal",
+     "Renewals and busy times, never missed"
+    ],
+    [
+     "Log it in one line",
+     "Log the outcome; the next step is booked"
+    ]
+   ],
+   "id": "s23",
+   "key": "recap",
+   "start": 272.3077,
+   "end": 286.1538
+  },
+  {
+   "type": "epout",
+   "bg": "light",
+   "mus": "outro",
+   "bars": 6,
+   "h": "Keep every deal<br><span class=\"grad\">moving.</span>",
+   "next": "Episode 5 \u00b7 Managing blind",
+   "id": "s24",
+   "key": "epout",
+   "start": 286.1538,
+   "end": 300.0
+  }
+ ]
+}

@@ -1,0 +1,642 @@
+{
+ "bpm": 104,
+ "beat": 0.5769230769230769,
+ "bar": 2.3076923076923075,
+ "duration": 301.1538,
+ "scenes": [
+  {
+   "type": "words",
+   "bg": "black",
+   "mus": "intro",
+   "bars": 8,
+   "items": [
+    {
+     "cls": "eyebrow",
+     "text": "Prospecting \u00b7 Monday",
+     "at": 0.5,
+     "out": 7.4,
+     "y": 330
+    },
+    {
+     "cls": "h1",
+     "text": "A list of names.",
+     "at": 2,
+     "out": 3.8
+    },
+    {
+     "cls": "h1",
+     "text": "No reason to call.",
+     "at": 4,
+     "out": 5.8
+    },
+    {
+     "cls": "h1",
+     "text": "Some don't exist.",
+     "at": 6,
+     "out": 7.8
+    },
+    {
+     "cls": "h2",
+     "text": "Who's actually<br><span class=\"red\">ready to buy?</span>",
+     "at": 24,
+     "out": 31.6,
+     "y": 400
+    }
+   ],
+   "pains": [
+    [
+     "Cold lists",
+     180,
+     210
+    ],
+    [
+     "Companies that closed",
+     1060,
+     270
+    ],
+    [
+     "No reason to buy now",
+     260,
+     760
+    ],
+    [
+     "Calling the wrong person",
+     1210,
+     820
+    ],
+    [
+     "Guessing who's hot",
+     720,
+     130
+    ],
+    [
+     "Same list as everyone",
+     690,
+     930
+    ]
+   ],
+   "pains_at": 8.5,
+   "pains_out": 22.5,
+   "id": "s0",
+   "key": "words",
+   "start": 0.0,
+   "end": 18.4615
+  },
+  {
+   "type": "words",
+   "bg": "dark",
+   "mus": "break",
+   "bars": 4,
+   "items": [
+    {
+     "cls": "h2",
+     "text": "Every wrong call<br><span class=\"lime\">costs a right one.</span>",
+     "at": 0.5,
+     "out": 8.5,
+     "y": 360
+    },
+    {
+     "cls": "h3",
+     "text": "Time spent on dead leads is time<br>your best buyers never get.",
+     "at": 8.8,
+     "out": 15.7,
+     "y": 420
+    }
+   ],
+   "id": "s1",
+   "key": "words",
+   "start": 18.4615,
+   "end": 27.6923
+  },
+  {
+   "type": "title",
+   "bg": "light",
+   "mus": "groove",
+   "hit": true,
+   "bars": 4,
+   "eyebrow": "Episode 2 of 5",
+   "title": "Chasing the wrong leads",
+   "sub": "How Sales Mama fixes it, step by step.",
+   "id": "s2",
+   "key": "title",
+   "start": 27.6923,
+   "end": 36.9231
+  },
+  {
+   "type": "words",
+   "bg": "light",
+   "mus": "groove",
+   "bars": 3,
+   "items": [
+    {
+     "cls": "h1",
+     "text": "Mei and Grace.",
+     "at": 0.3,
+     "out": 11.6,
+     "y": 380
+    },
+    {
+     "cls": "sub",
+     "text": "A rep and her manager \u00b7 finding the next customers",
+     "at": 1.5,
+     "out": 11.6,
+     "y": 560
+    }
+   ],
+   "id": "s3",
+   "key": "words",
+   "start": 36.9231,
+   "end": 43.8462
+  },
+  {
+   "type": "chapter",
+   "bg": "black",
+   "mus": "groove",
+   "hit": true,
+   "bars": 1,
+   "num": "STEP 1",
+   "title": "Wake up to reasons to call",
+   "id": "s4",
+   "key": "chapter",
+   "start": 43.8462,
+   "end": 46.1538
+  },
+  {
+   "type": "ask",
+   "bg": "light",
+   "mus": "groove",
+   "bars": 3,
+   "who": "Mei asks",
+   "prompt": "What changed overnight?",
+   "sub": "Every night Sales Mama reads news, tenders and company registries in SG, MY and IN.",
+   "id": "s5",
+   "key": "ask",
+   "start": 46.1538,
+   "end": 53.0769
+  },
+  {
+   "type": "device",
+   "bg": "light",
+   "mus": "groove",
+   "layout": "right",
+   "media": {
+    "clip": "ep2-overnight",
+    "at": 0.5
+   },
+   "h": "While you slept,<br><span class=\"grad\">the market moved.</span>",
+   "sub": "64 updates scanned overnight. 21 matched to accounts. 5 new leads found.",
+   "bars": 8,
+   "pill": "Step 1 \u00b7 Wake up to reasons to call",
+   "cam": [],
+   "spot": [],
+   "cap_at": 1,
+   "id": "s6",
+   "key": "device",
+   "start": 53.0769,
+   "end": 71.5385
+  },
+  {
+   "type": "device",
+   "bg": "light",
+   "mus": "groove",
+   "layout": "right",
+   "media": {
+    "still": "ep2-overnight-end"
+   },
+   "h": "Your accounts<br><span class=\"lime\">that moved.</span>",
+   "sub": "Harbourlight and Nimbus rose to the top. Everything else is quiet.",
+   "bars": 7,
+   "pill": "Step 1 \u00b7 Wake up to reasons to call",
+   "cam": [
+    {
+     "at": 3,
+     "dur": 4,
+     "z": 1.5,
+     "x": 600,
+     "y": 500
+    }
+   ],
+   "spot": [
+    {
+     "at": 4,
+     "out": 99,
+     "r": [
+      240,
+      400,
+      962,
+      600
+     ]
+    }
+   ],
+   "cap_at": 1,
+   "id": "s7",
+   "key": "device",
+   "start": 71.5385,
+   "end": 87.6923
+  },
+  {
+   "type": "chapter",
+   "bg": "black",
+   "mus": "groove",
+   "hit": true,
+   "bars": 1,
+   "num": "STEP 2",
+   "title": "See why a lead is hot",
+   "id": "s8",
+   "key": "chapter",
+   "start": 87.6923,
+   "end": 90.0
+  },
+  {
+   "type": "ask",
+   "bg": "light",
+   "mus": "groove",
+   "bars": 3,
+   "who": "Mei asks",
+   "prompt": "Why is Harbourlight hot?",
+   "sub": "Every score comes with its reasons, and every reason links its source.",
+   "id": "s9",
+   "key": "ask",
+   "start": 90.0,
+   "end": 96.9231
+  },
+  {
+   "type": "device",
+   "bg": "light",
+   "mus": "groove",
+   "layout": "right",
+   "media": {
+    "clip": "ep2-hot",
+    "at": 0.5
+   },
+   "h": "Real reasons<br><span class=\"grad\">to call now.</span>",
+   "sub": "A new school-canteen contract and a second kitchen in Tampines.",
+   "bars": 7,
+   "pill": "Step 2 \u00b7 See why a lead is hot",
+   "cam": [],
+   "spot": [],
+   "cap_at": 1,
+   "id": "s10",
+   "key": "device",
+   "start": 96.9231,
+   "end": 113.0769
+  },
+  {
+   "type": "device",
+   "bg": "light",
+   "mus": "groove",
+   "layout": "right",
+   "media": {
+    "still": "ep2-hot-end"
+   },
+   "h": "Each one<br><span class=\"lime\">with a source.</span>",
+   "sub": "Click to read the tender notice or the company's own announcement.",
+   "bars": 7,
+   "pill": "Step 2 \u00b7 See why a lead is hot",
+   "cam": [
+    {
+     "at": 3,
+     "dur": 4,
+     "z": 1.7,
+     "x": 600,
+     "y": 510
+    }
+   ],
+   "spot": [
+    {
+     "at": 4,
+     "out": 99,
+     "r": [
+      250,
+      455,
+      960,
+      560
+     ]
+    }
+   ],
+   "cap_at": 1,
+   "id": "s11",
+   "key": "device",
+   "start": 113.0769,
+   "end": 129.2308
+  },
+  {
+   "type": "chapter",
+   "bg": "black",
+   "mus": "groove",
+   "hit": true,
+   "bars": 1,
+   "num": "STEP 3",
+   "title": "Check it's a real business",
+   "id": "s12",
+   "key": "chapter",
+   "start": 129.2308,
+   "end": 131.5385
+  },
+  {
+   "type": "ask",
+   "bg": "light",
+   "mus": "groove",
+   "bars": 3,
+   "who": "Mei types",
+   "prompt": "/company-check 197200078R",
+   "sub": "Type a company's UEN or name. Sales Mama checks the official registry and the web.",
+   "id": "s13",
+   "key": "ask",
+   "start": 131.5385,
+   "end": 138.4615
+  },
+  {
+   "type": "device",
+   "bg": "dark",
+   "mus": "lift",
+   "layout": "full",
+   "media": {
+    "clip": "ep2-check",
+    "at": 0.5
+   },
+   "h": "Three checks<br><span class=\"grad\">at once.</span>",
+   "sub": "Identity, people and risk, each checked in parallel on the open web.",
+   "bars": 9,
+   "pill": "Step 3 \u00b7 Check it's a real business",
+   "cam": [
+    {
+     "at": 6,
+     "dur": 3,
+     "z": 1.3,
+     "x": 600,
+     "y": 330
+    },
+    {
+     "at": 14,
+     "dur": 3,
+     "z": 1,
+     "x": 720,
+     "y": 450
+    }
+   ],
+   "spot": [],
+   "cap_at": 1,
+   "id": "s14",
+   "key": "device",
+   "start": 138.4615,
+   "end": 159.2308
+  },
+  {
+   "type": "device",
+   "bg": "light",
+   "mus": "groove",
+   "layout": "right",
+   "media": {
+    "still": "company"
+   },
+   "h": "A clear verdict,<br><span class=\"grad\">every check shown.</span>",
+   "sub": "Live with ACRA, filing on time, a real office, more than 3 staff.",
+   "bars": 7,
+   "pill": "Step 3 \u00b7 Check it's a real business",
+   "cam": [
+    {
+     "at": 3,
+     "dur": 4,
+     "z": 1.5,
+     "x": 480,
+     "y": 470
+    }
+   ],
+   "spot": [],
+   "cap_at": 1,
+   "id": "s15",
+   "key": "device",
+   "start": 159.2308,
+   "end": 175.3846
+  },
+  {
+   "type": "chapter",
+   "bg": "black",
+   "mus": "groove",
+   "hit": true,
+   "bars": 1,
+   "num": "STEP 4",
+   "title": "Find more like your best customers",
+   "id": "s16",
+   "key": "chapter",
+   "start": 175.3846,
+   "end": 177.6923
+  },
+  {
+   "type": "ask",
+   "bg": "light",
+   "mus": "groove",
+   "bars": 3,
+   "who": "Mei asks",
+   "prompt": "How many clinics are there in Singapore, and how healthy are they?",
+   "sub": "Ask about a whole market and get the numbers from the official registry.",
+   "id": "s17",
+   "key": "ask",
+   "start": 177.6923,
+   "end": 184.6154
+  },
+  {
+   "type": "device",
+   "bg": "light",
+   "mus": "groove",
+   "layout": "right",
+   "media": {
+    "clip": "ep2-segment",
+    "at": 0.5
+   },
+   "h": "Size the market<br><span class=\"grad\">in seconds.</span>",
+   "sub": "9,618 live clinics in Singapore, with filing health and growth by year.",
+   "bars": 7,
+   "pill": "Step 4 \u00b7 Find more like your best customers",
+   "cam": [],
+   "spot": [],
+   "cap_at": 1,
+   "id": "s18",
+   "key": "device",
+   "start": 184.6154,
+   "end": 200.7692
+  },
+  {
+   "type": "device",
+   "bg": "light",
+   "mus": "groove",
+   "layout": "right",
+   "media": {
+    "still": "canvas-insights"
+   },
+   "h": "Know where<br><span class=\"lime\">to look first.</span>",
+   "sub": "About one in six uses a shared or virtual address: check those before calling.",
+   "bars": 7,
+   "pill": "Step 4 \u00b7 Find more like your best customers",
+   "cam": [
+    {
+     "at": 3,
+     "dur": 4,
+     "z": 1.6,
+     "x": 1135,
+     "y": 430
+    }
+   ],
+   "spot": [],
+   "cap_at": 1,
+   "id": "s19",
+   "key": "device",
+   "start": 200.7692,
+   "end": 216.9231
+  },
+  {
+   "type": "chapter",
+   "bg": "black",
+   "mus": "groove",
+   "hit": true,
+   "bars": 1,
+   "num": "STEP 5",
+   "title": "Claim the right ones",
+   "id": "s20",
+   "key": "chapter",
+   "start": 216.9231,
+   "end": 219.2308
+  },
+  {
+   "type": "ask",
+   "bg": "light",
+   "mus": "groove",
+   "bars": 3,
+   "who": "Mei types",
+   "prompt": "Get me more accounts",
+   "sub": "Your manager assigns the best leads. You can claim more from the pool when you have room.",
+   "id": "s21",
+   "key": "ask",
+   "start": 219.2308,
+   "end": 226.1538
+  },
+  {
+   "type": "device",
+   "bg": "light",
+   "mus": "groove",
+   "layout": "right",
+   "media": {
+    "clip": "ep2-target",
+    "at": 0.5
+   },
+   "h": "Fill your book<br><span class=\"grad\">fairly.</span>",
+   "sub": "23 free slots. Tier C accounts are open to claim; A and B come from your manager.",
+   "bars": 7,
+   "pill": "Step 5 \u00b7 Claim the right ones",
+   "cam": [],
+   "spot": [],
+   "cap_at": 1,
+   "id": "s22",
+   "key": "device",
+   "start": 226.1538,
+   "end": 242.3077
+  },
+  {
+   "type": "device",
+   "bg": "light",
+   "mus": "groove",
+   "layout": "right",
+   "media": {
+    "still": "ep2-target-end"
+   },
+   "h": "One line<br><span class=\"lime\">to claim.</span>",
+   "sub": "\u201cClaim 1 and 2\u201d and they're yours for 30 days.",
+   "bars": 5,
+   "pill": "Step 5 \u00b7 Claim the right ones",
+   "cam": [
+    {
+     "at": 3,
+     "dur": 4,
+     "z": 1.5,
+     "x": 600,
+     "y": 440
+    }
+   ],
+   "spot": [
+    {
+     "at": 4,
+     "out": 99,
+     "r": [
+      240,
+      335,
+      962,
+      545
+     ]
+    }
+   ],
+   "cap_at": 1,
+   "id": "s23",
+   "key": "device",
+   "start": 242.3077,
+   "end": 253.8462
+  },
+  {
+   "type": "compare",
+   "bg": "light",
+   "mus": "lift",
+   "bars": 8,
+   "h": "From cold lists to ready buyers.",
+   "before": [
+    "Calling names from a cold list",
+    "Pitching companies that closed",
+    "Guessing who's hot"
+   ],
+   "after": [
+    "A reason to call, with a source",
+    "Every company checked first",
+    "Hot accounts at the top every morning"
+   ],
+   "id": "s24",
+   "key": "compare",
+   "start": 253.8462,
+   "end": 272.3077
+  },
+  {
+   "type": "recap",
+   "bg": "light",
+   "mus": "groove",
+   "bars": 6,
+   "eyebrow": "Episode 2 \u00b7 Chasing the wrong leads",
+   "h": "Five steps to better leads.",
+   "items": [
+    [
+     "Wake up to reasons to call",
+     "Overnight signals, matched to your accounts"
+    ],
+    [
+     "See why a lead is hot",
+     "Why a lead is hot, with sources"
+    ],
+    [
+     "Check it's a real business",
+     "Check any company before you call"
+    ],
+    [
+     "Find more like your best customers",
+     "Size a segment before you prospect it"
+    ],
+    [
+     "Claim the right ones",
+     "Claim more when you have room"
+    ]
+   ],
+   "id": "s25",
+   "key": "recap",
+   "start": 272.3077,
+   "end": 286.1538
+  },
+  {
+   "type": "epout",
+   "bg": "light",
+   "mus": "outro",
+   "bars": 6,
+   "h": "Spend your time on buyers<br><span class=\"grad\">who are ready.</span>",
+   "next": "Episode 3 \u00b7 Outreach that gets ignored",
+   "id": "s26",
+   "key": "epout",
+   "start": 286.1538,
+   "end": 300.0
+  }
+ ]
+}

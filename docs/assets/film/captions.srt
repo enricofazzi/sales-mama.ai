@@ -1,0 +1,95 @@
+1
+00:00:00,700 --> 00:00:03,151
+It's Monday morning, in Singapore.
+
+2
+00:00:03,301 --> 00:00:08,443
+Maya runs a sales team of six. Hundreds of leads. No time.
+
+3
+00:00:08,593 --> 00:00:12,848
+Leads go cold in the CRM. Research eats the whole morning.
+
+4
+00:00:12,998 --> 00:00:16,419
+And nobody is sure, which companies are even real.
+
+5
+00:00:19,162 --> 00:00:20,486
+Meet Sales Mama.
+
+6
+00:00:20,636 --> 00:00:26,026
+An AI sales harness, that runs inside Claude Code. The repo is the system.
+
+7
+00:00:28,392 --> 00:00:32,743
+At two a.m., scouts scan news, tenders and registries.
+
+8
+00:00:32,893 --> 00:00:37,349
+Every lead is scored. And a virtual account manager watches every book.
+
+9
+00:00:39,931 --> 00:00:42,914
+At eight thirty, the manager opens the cockpit.
+
+10
+00:00:43,063 --> 00:00:49,196
+Last night's run. The hot accounts. And a fair allocation, approved in one click.
+
+11
+00:00:51,469 --> 00:00:53,258
+Reps type, mama day.
+
+12
+00:00:53,409 --> 00:00:59,964
+Replies are triaged. New accounts are researched in parallel. And drafts are written in their own voice.
+
+13
+00:01:03,008 --> 00:01:07,621
+Every fact links back to its source. No source, no claim.
+
+14
+00:01:09,931 --> 00:01:13,196
+In the send window, mama send shows the whole batch.
+
+15
+00:01:13,345 --> 00:01:19,510
+The rep picks, approves once, and Sales Mama sends email and WhatsApp, logging every touch.
+
+16
+00:01:19,660 --> 00:01:21,984
+Nothing goes out, without approval.
+
+17
+00:01:23,777 --> 00:01:28,609
+Before anyone sells, company check asks: is this company real?
+
+18
+00:01:28,759 --> 00:01:35,909
+Live with ACRA. Filing on time. A real office, not a virtual one. And more than three staff.
+
+19
+00:01:36,060 --> 00:01:39,220
+Three verifier agents, gather the evidence.
+
+20
+00:01:42,238 --> 00:01:44,794
+Ask a question. Get a report.
+
+21
+00:01:44,945 --> 00:01:51,770
+Nine thousand six hundred clinics. Ninety-three percent filing on time. And the best new leads.
+
+22
+00:01:53,777 --> 00:02:00,750
+Guardrails are built in. Approvals, citations, suppression lists, and rules for every market.
+
+23
+00:02:03,008 --> 00:02:04,119
+Sales Mama.
+
+24
+00:02:04,269 --> 00:02:07,353
+Your sales team's morning, done before coffee.

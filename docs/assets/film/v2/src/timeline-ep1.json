@@ -1,0 +1,670 @@
+{
+ "bpm": 104,
+ "beat": 0.5769230769230769,
+ "bar": 2.3076923076923075,
+ "duration": 301.1538,
+ "scenes": [
+  {
+   "type": "words",
+   "bg": "black",
+   "mus": "intro",
+   "bars": 8,
+   "items": [
+    {
+     "cls": "eyebrow",
+     "text": "Monday \u00b7 8:40 am \u00b7 Singapore",
+     "at": 0.5,
+     "out": 7.4,
+     "y": 330
+    },
+    {
+     "cls": "h1",
+     "text": "17 accounts.",
+     "at": 2,
+     "out": 3.8
+    },
+    {
+     "cls": "h1",
+     "text": "2 follow-ups overdue.",
+     "at": 4,
+     "out": 5.8
+    },
+    {
+     "cls": "h1",
+     "text": "A meeting at 3 pm.",
+     "at": 6,
+     "out": 7.8
+    },
+    {
+     "cls": "h2",
+     "text": "Where do I<br><span class=\"red\">start?</span>",
+     "at": 24,
+     "out": 31.6,
+     "y": 400
+    }
+   ],
+   "pains": [
+    [
+     "Which lead is hot?",
+     180,
+     210
+    ],
+    [
+     "Who's waiting on me?",
+     1060,
+     270
+    ],
+    [
+     "What do I say at 3 pm?",
+     260,
+     760
+    ],
+    [
+     "The send window opens at 9",
+     1210,
+     820
+    ],
+    [
+     "Notes in five places",
+     720,
+     130
+    ],
+    [
+     "Overdue follow-ups",
+     690,
+     930
+    ]
+   ],
+   "pains_at": 8.5,
+   "pains_out": 22.5,
+   "id": "s0",
+   "key": "words",
+   "start": 0.0,
+   "end": 18.4615
+  },
+  {
+   "type": "words",
+   "bg": "dark",
+   "mus": "break",
+   "bars": 4,
+   "items": [
+    {
+     "cls": "h2",
+     "text": "The first hour<br><span class=\"lime\">sets the day.</span>",
+     "at": 0.5,
+     "out": 8.5,
+     "y": 360
+    },
+    {
+     "cls": "h3",
+     "text": "Spend it searching,<br>and the best leads wait.",
+     "at": 8.8,
+     "out": 15.7,
+     "y": 420
+    }
+   ],
+   "id": "s1",
+   "key": "words",
+   "start": 18.4615,
+   "end": 27.6923
+  },
+  {
+   "type": "title",
+   "bg": "light",
+   "mus": "groove",
+   "hit": true,
+   "bars": 4,
+   "eyebrow": "Episode 1 of 5",
+   "title": "Where do I start?",
+   "sub": "How Sales Mama fixes it, step by step.",
+   "id": "s2",
+   "key": "title",
+   "start": 27.6923,
+   "end": 36.9231
+  },
+  {
+   "type": "words",
+   "bg": "light",
+   "mus": "groove",
+   "bars": 3,
+   "items": [
+    {
+     "cls": "h1",
+     "text": "Meet Mei.",
+     "at": 0.3,
+     "out": 11.6,
+     "y": 380
+    },
+    {
+     "cls": "sub",
+     "text": "Account executive \u00b7 Singapore \u00b7 17 accounts",
+     "at": 1.5,
+     "out": 11.6,
+     "y": 560
+    }
+   ],
+   "id": "s3",
+   "key": "words",
+   "start": 36.9231,
+   "end": 43.8462
+  },
+  {
+   "type": "chapter",
+   "bg": "black",
+   "mus": "groove",
+   "hit": true,
+   "bars": 1,
+   "num": "STEP 1",
+   "title": "See your day",
+   "id": "s4",
+   "key": "chapter",
+   "start": 43.8462,
+   "end": 46.1538
+  },
+  {
+   "type": "device",
+   "bg": "light",
+   "mus": "groove",
+   "layout": "right",
+   "media": {
+    "clip": "today",
+    "at": 0.5
+   },
+   "h": "Everything that<br><span class=\"grad\">needs you.</span>",
+   "sub": "Your next meeting with a countdown, the send window, and the accounts to act on today.",
+   "bars": 9,
+   "pill": "Step 1 \u00b7 See your day",
+   "cam": [
+    {
+     "at": 5,
+     "dur": 3,
+     "z": 1.7,
+     "x": 402,
+     "y": 369
+    }
+   ],
+   "spot": [
+    {
+     "at": 5.5,
+     "out": 99,
+     "r": [
+      229,
+      243,
+      575,
+      495
+     ]
+    }
+   ],
+   "cap_at": 1,
+   "id": "s5",
+   "key": "device",
+   "start": 46.1538,
+   "end": 66.9231
+  },
+  {
+   "type": "device",
+   "bg": "light",
+   "mus": "groove",
+   "layout": "right",
+   "media": {
+    "still": "today-needs"
+   },
+   "h": "Only what<br><span class=\"grad\">matters today.</span>",
+   "sub": "Follow-ups due, an account at risk, a brief to read. Each with one button.",
+   "bars": 7,
+   "pill": "Step 1 \u00b7 See your day",
+   "cam": [
+    {
+     "at": 3,
+     "dur": 4,
+     "z": 1.35,
+     "x": 720,
+     "y": 520
+    }
+   ],
+   "spot": [],
+   "cap_at": 1,
+   "id": "s6",
+   "key": "device",
+   "start": 66.9231,
+   "end": 83.0769
+  },
+  {
+   "type": "chapter",
+   "bg": "black",
+   "mus": "groove",
+   "hit": true,
+   "bars": 1,
+   "num": "STEP 2",
+   "title": "Let Mama do the legwork",
+   "id": "s7",
+   "key": "chapter",
+   "start": 83.0769,
+   "end": 85.3846
+  },
+  {
+   "type": "ask",
+   "bg": "light",
+   "mus": "groove",
+   "bars": 3,
+   "who": "Mei types",
+   "prompt": "Run my day",
+   "sub": "One sentence. Sales Mama checks replies, refreshes every account and drafts what's due.",
+   "id": "s8",
+   "key": "ask",
+   "start": 85.3846,
+   "end": 92.3077
+  },
+  {
+   "type": "device",
+   "bg": "dark",
+   "mus": "lift",
+   "layout": "full",
+   "media": {
+    "clip": "ep1-day",
+    "at": 0.5
+   },
+   "h": "It works while you get coffee.",
+   "sub": "Replies checked, accounts refreshed, follow-ups drafted, all at once.",
+   "bars": 10,
+   "pill": "Step 2 \u00b7 Let Mama do the legwork",
+   "cam": [
+    {
+     "at": 7,
+     "dur": 3,
+     "z": 1.3,
+     "x": 600,
+     "y": 340
+    },
+    {
+     "at": 15,
+     "dur": 3,
+     "z": 1,
+     "x": 720,
+     "y": 450
+    }
+   ],
+   "spot": [
+    {
+     "at": 7.5,
+     "out": 14.5,
+     "r": [
+      251,
+      237,
+      951,
+      447
+     ]
+    }
+   ],
+   "cap_at": 1,
+   "id": "s9",
+   "key": "device",
+   "start": 92.3077,
+   "end": 115.3846
+  },
+  {
+   "type": "device",
+   "bg": "light",
+   "mus": "groove",
+   "layout": "right",
+   "media": {
+    "still": "ep1-day-end"
+   },
+   "h": "A plan in<br><span class=\"grad\">plain words.</span>",
+   "sub": "Start with the 3 pm meeting. Approve the Nimbus follow-up before the window opens.",
+   "bars": 7,
+   "pill": "Step 2 \u00b7 Let Mama do the legwork",
+   "cam": [
+    {
+     "at": 3,
+     "dur": 4,
+     "z": 1.45,
+     "x": 600,
+     "y": 480
+    }
+   ],
+   "spot": [
+    {
+     "at": 4,
+     "out": 99,
+     "r": [
+      240,
+      288,
+      962,
+      690
+     ]
+    }
+   ],
+   "cap_at": 1,
+   "id": "s10",
+   "key": "device",
+   "start": 115.3846,
+   "end": 131.5385
+  },
+  {
+   "type": "chapter",
+   "bg": "black",
+   "mus": "groove",
+   "hit": true,
+   "bars": 1,
+   "num": "STEP 3",
+   "title": "Know who needs you",
+   "id": "s11",
+   "key": "chapter",
+   "start": 131.5385,
+   "end": 133.8462
+  },
+  {
+   "type": "ask",
+   "bg": "light",
+   "mus": "groove",
+   "bars": 3,
+   "who": "Mei asks",
+   "prompt": "Why is Nimbus at risk?",
+   "sub": "Ask about any account in plain English.",
+   "id": "s12",
+   "key": "ask",
+   "start": 133.8462,
+   "end": 140.7692
+  },
+  {
+   "type": "device",
+   "bg": "light",
+   "mus": "groove",
+   "layout": "right",
+   "media": {
+    "clip": "ep1-risk",
+    "at": 0.5
+   },
+   "h": "The reason,<br><span class=\"grad\">not just a score.</span>",
+   "sub": "Their IT contract ends on 31 December and there's no plan yet.",
+   "bars": 7,
+   "pill": "Step 3 \u00b7 Know who needs you",
+   "cam": [],
+   "spot": [],
+   "cap_at": 1,
+   "id": "s13",
+   "key": "device",
+   "start": 140.7692,
+   "end": 156.9231
+  },
+  {
+   "type": "device",
+   "bg": "light",
+   "mus": "groove",
+   "layout": "right",
+   "media": {
+    "still": "ep1-risk-end"
+   },
+   "h": "And the<br><span class=\"lime\">next best action.</span>",
+   "sub": "Send follow-up 1 today and mention the December contract end.",
+   "bars": 7,
+   "pill": "Step 3 \u00b7 Know who needs you",
+   "cam": [
+    {
+     "at": 3,
+     "dur": 4,
+     "z": 1.6,
+     "x": 600,
+     "y": 500
+    }
+   ],
+   "spot": [
+    {
+     "at": 4,
+     "out": 99,
+     "r": [
+      250,
+      470,
+      960,
+      580
+     ]
+    }
+   ],
+   "cap_at": 1,
+   "id": "s14",
+   "key": "device",
+   "start": 156.9231,
+   "end": 173.0769
+  },
+  {
+   "type": "chapter",
+   "bg": "black",
+   "mus": "groove",
+   "hit": true,
+   "bars": 1,
+   "num": "STEP 4",
+   "title": "Walk in prepared",
+   "id": "s15",
+   "key": "chapter",
+   "start": 173.0769,
+   "end": 175.3846
+  },
+  {
+   "type": "ask",
+   "bg": "light",
+   "mus": "groove",
+   "bars": 3,
+   "who": "Mei asks",
+   "prompt": "Brief me on Harbourlight Foods",
+   "sub": "A one-page brief before every meeting.",
+   "id": "s16",
+   "key": "ask",
+   "start": 175.3846,
+   "end": 182.3077
+  },
+  {
+   "type": "device",
+   "bg": "light",
+   "mus": "groove",
+   "layout": "right",
+   "media": {
+    "clip": "ep1-brief",
+    "at": 0.5
+   },
+   "h": "Why now. What to offer.<br><span class=\"grad\">What to ask.</span>",
+   "sub": "Built from the account page: the new contract, the second kitchen, the objection she raised.",
+   "bars": 8,
+   "pill": "Step 4 \u00b7 Walk in prepared",
+   "cam": [],
+   "spot": [],
+   "cap_at": 1,
+   "id": "s17",
+   "key": "device",
+   "start": 182.3077,
+   "end": 200.7692
+  },
+  {
+   "type": "device",
+   "bg": "light",
+   "mus": "groove",
+   "layout": "right",
+   "media": {
+    "still": "ep1-brief-end"
+   },
+   "h": "Even the<br><span class=\"grad\">watch-outs.</span>",
+   "sub": "She said they already have a provider. Ask what they'd change.",
+   "bars": 6,
+   "pill": "Step 4 \u00b7 Walk in prepared",
+   "cam": [
+    {
+     "at": 3,
+     "dur": 4,
+     "z": 1.6,
+     "x": 600,
+     "y": 520
+    }
+   ],
+   "spot": [
+    {
+     "at": 4,
+     "out": 99,
+     "r": [
+      250,
+      495,
+      960,
+      580
+     ]
+    }
+   ],
+   "cap_at": 1,
+   "id": "s18",
+   "key": "device",
+   "start": 200.7692,
+   "end": 214.6154
+  },
+  {
+   "type": "chapter",
+   "bg": "black",
+   "mus": "groove",
+   "hit": true,
+   "bars": 1,
+   "num": "STEP 5",
+   "title": "Send at the right time",
+   "id": "s19",
+   "key": "chapter",
+   "start": 214.6154,
+   "end": 216.9231
+  },
+  {
+   "type": "ask",
+   "bg": "light",
+   "mus": "groove",
+   "bars": 3,
+   "who": "Mei types",
+   "prompt": "Send my drafts",
+   "sub": "Every draft is checked before anything goes out. You approve each one.",
+   "id": "s20",
+   "key": "ask",
+   "start": 216.9231,
+   "end": 223.8462
+  },
+  {
+   "type": "device",
+   "bg": "dark",
+   "mus": "lift",
+   "layout": "right",
+   "media": {
+    "clip": "ep1-send",
+    "at": 0.5
+   },
+   "h": "Nothing goes out<br><span class=\"lime\">until you approve.</span>",
+   "sub": "Checked for unsubscribes, sources and the send window. The draft without a contact is held.",
+   "bars": 7,
+   "pill": "Step 5 \u00b7 Send at the right time",
+   "cam": [],
+   "spot": [],
+   "cap_at": 1,
+   "id": "s21",
+   "key": "device",
+   "start": 223.8462,
+   "end": 240.0
+  },
+  {
+   "type": "device",
+   "bg": "light",
+   "mus": "groove",
+   "layout": "right",
+   "media": {
+    "still": "ep1-send-end"
+   },
+   "h": "Sent from<br><span class=\"grad\">your own mailbox.</span>",
+   "sub": "Reply \u201csend 1\u201d and it goes at 9:05, inside the Singapore window.",
+   "bars": 6,
+   "pill": "Step 5 \u00b7 Send at the right time",
+   "cam": [
+    {
+     "at": 3,
+     "dur": 4,
+     "z": 1.5,
+     "x": 600,
+     "y": 420
+    }
+   ],
+   "spot": [
+    {
+     "at": 4,
+     "out": 99,
+     "r": [
+      240,
+      320,
+      962,
+      500
+     ]
+    }
+   ],
+   "cap_at": 1,
+   "id": "s22",
+   "key": "device",
+   "start": 240.0,
+   "end": 253.8462
+  },
+  {
+   "type": "compare",
+   "bg": "light",
+   "mus": "lift",
+   "bars": 8,
+   "h": "The difference by 9 am.",
+   "before": [
+    "An hour sorting the inbox",
+    "Walking into 3 pm cold",
+    "A follow-up that slips a week"
+   ],
+   "after": [
+    "A plan before the send window opens",
+    "A brief ready for 3 pm",
+    "The follow-up approved and sent at 9"
+   ],
+   "id": "s23",
+   "key": "compare",
+   "start": 253.8462,
+   "end": 272.3077
+  },
+  {
+   "type": "recap",
+   "bg": "light",
+   "mus": "groove",
+   "bars": 6,
+   "eyebrow": "Episode 1 \u00b7 Where do I start?",
+   "h": "Five steps to a better morning.",
+   "items": [
+    [
+     "See your day",
+     "Today shows the next meeting and what needs you"
+    ],
+    [
+     "Let Mama do the legwork",
+     "Run my day: replies, accounts and drafts in one go"
+    ],
+    [
+     "Know who needs you",
+     "Ask why: the reason, the source and the next best action"
+    ],
+    [
+     "Walk in prepared",
+     "A brief before every meeting"
+    ],
+    [
+     "Send at the right time",
+     "Approve and send inside the market's window"
+    ]
+   ],
+   "id": "s24",
+   "key": "recap",
+   "start": 272.3077,
+   "end": 286.1538
+  },
+  {
+   "type": "epout",
+   "bg": "light",
+   "mus": "outro",
+   "bars": 6,
+   "h": "Start every day<br><span class=\"grad\">knowing where to start.</span>",
+   "next": "Episode 2 \u00b7 Chasing the wrong leads",
+   "id": "s25",
+   "key": "epout",
+   "start": 286.1538,
+   "end": 300.0
+  }
+ ]
+}

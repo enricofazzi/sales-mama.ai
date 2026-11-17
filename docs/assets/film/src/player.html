@@ -1,0 +1,374 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800;900&family=Geist+Mono:wght@400;500;600&display=block" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; }
+  html, body { width: 1920px; height: 1080px; overflow: hidden; background: #000; }
+  body { font-family: Geist, -apple-system, system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  .scene { position: absolute; inset: 0; overflow: hidden; display: none; perspective: 2200px; }
+  .scene.on { display: block; }
+  .light { background: radial-gradient(ellipse at 50% 30%, #FFFFFF 0%, #F5F5F7 55%, #EBEBF0 100%); color: #1D1D1F; }
+  .dark { background: radial-gradient(ellipse at 50% 20%, #15131F 0%, #07070C 60%, #000 100%); color: #F5F5F7; }
+  .black { background: #000; color: #F5F5F7; }
+  .abs { position: absolute; }
+  .center { left: 0; right: 0; text-align: center; }
+  .eyebrow { font: 600 26px Geist; letter-spacing: .5px; color: #86868B; }
+  .h1 { font: 800 132px/1 Geist; letter-spacing: -5px; }
+  .h2 { font: 800 96px/1.02 Geist; letter-spacing: -3.5px; }
+  .h3 { font: 700 60px/1.08 Geist; letter-spacing: -1.8px; }
+  .sub { font: 500 34px/1.35 Geist; color: #6E6E73; letter-spacing: -.3px; }
+  .dark .sub, .black .sub { color: #A1A1A6; }
+  .lime { color: #C8F031; } .violet { color: #6D28D9; }
+  .grad { background: linear-gradient(90deg, #6D28D9, #0F766E 55%, #1D4ED8); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .mono { font-family: 'Geist Mono', ui-monospace, monospace; }
+  .pill { display: inline-flex; align-items: center; gap: 10px; padding: 12px 22px; border-radius: 999px; font: 600 26px Geist; }
+  /* laptop */
+  .laptop { position: absolute; width: 1240px; transform-style: preserve-3d; }
+  .lid { background: #1D1D1F; border-radius: 30px 30px 8px 8px; padding: 18px 18px 22px; box-shadow: 0 0 0 2px #3A3A3C inset; }
+  .lid .scr { border-radius: 12px; overflow: hidden; aspect-ratio: 16/10; background: #fff; position: relative; }
+  .lid .scr img { position: absolute; left: 0; top: 0; width: 100%; transform-origin: 0 0; }
+  .deck { height: 30px; margin: 0 -80px; background: linear-gradient(180deg, #E8E8ED 0%, #C7C7CC 70%, #A1A1A6 100%); border-radius: 0 0 26px 26px; position: relative; }
+  .deck::after { content: ''; position: absolute; left: 50%; top: 0; width: 220px; height: 12px; transform: translateX(-50%); background: #B4B4BA; border-radius: 0 0 14px 14px; }
+  .floor { position: absolute; height: 80px; border-radius: 50%; background: radial-gradient(closest-side, rgba(0,0,0,.28), rgba(0,0,0,0)); filter: blur(8px); }
+  /* window */
+  .win { position: absolute; background: #fff; border-radius: 18px; overflow: hidden; box-shadow: 0 60px 140px -40px rgba(0,0,0,.45), 0 0 0 1px rgba(0,0,0,.06); }
+  .win .bar { height: 40px; background: #ECECF0; display: flex; align-items: center; gap: 9px; padding: 0 16px; }
+  .win .bar i { width: 13px; height: 13px; border-radius: 50%; } .win .bar i:nth-child(1) { background: #FF5F57; } .win .bar i:nth-child(2) { background: #FEBC2E; } .win .bar i:nth-child(3) { background: #28C840; }
+  .win .bar span { margin-left: 14px; font: 500 15px Geist; color: #86868B; }
+  .win .body { position: relative; overflow: hidden; }
+  .win .body img { position: absolute; left: 0; top: 0; width: 100%; }
+  .dwin { background: #121018; box-shadow: 0 60px 140px -30px rgba(0,0,0,.8), 0 0 0 1px #2A2638; }
+  .dwin .bar { background: #1C1926; } .dwin .bar span { color: #8A84A3; }
+  /* problem */
+  .pain { position: absolute; font: 600 44px Geist; color: #F5F5F7; white-space: nowrap; letter-spacing: -1px; }
+  .pain b { color: #FF6B6B; font-weight: 700; }
+  /* logo */
+  .logo { width: 190px; height: 190px; border-radius: 46px; background: #16131F; color: #C8F031; display: grid; place-items: center; font: 900 84px Geist; letter-spacing: -3px; box-shadow: 0 40px 80px -30px rgba(22,19,31,.6), inset 0 2px 0 rgba(255,255,255,.08); }
+  /* terminal */
+  .term { font: 400 22px/1.55 'Geist Mono', monospace; color: #E9E6F2; padding: 26px 30px; white-space: pre-wrap; }
+  .term .ok { color: #86EFAC; font-weight: 600; } .term .q { color: #C4B5FD; } .term .m { color: #8A84A3; } .term .c { color: #C8F031; }
+  .term .you { color: #fff; font-weight: 600; } .term .mama { font-family: Geist; color: #fff; font-size: 23px; }
+  .ask { margin: 14px 0; border: 2px solid #C8F031; border-radius: 16px; padding: 14px 18px; display: flex; align-items: center; gap: 16px; font: 500 22px Geist; }
+  .ask .btn { margin-left: auto; background: #C8F031; color: #16131F; font: 700 20px Geist; padding: 9px 20px; border-radius: 999px; }
+  /* chips */
+  .chk { display: flex; align-items: center; gap: 16px; font: 600 36px Geist; letter-spacing: -.6px; }
+  .chk i { width: 44px; height: 44px; border-radius: 50%; background: #C8F031; display: grid; place-items: center; color: #16131F; font: 900 26px Geist; font-style: normal; }
+  .light .chk i { background: #16131F; color: #C8F031; }
+  .rule { background: #111015; border: 1px solid #2A2638; border-radius: 28px; padding: 30px 34px; font: 700 38px/1.15 Geist; letter-spacing: -1px; display: flex; flex-direction: column; gap: 16px; }
+  .rule i { width: 48px; height: 48px; border-radius: 14px; background: #C8F031; color: #16131F; display: grid; place-items: center; font: 900 28px Geist; font-style: normal; }
+  .rule small { font: 500 22px Geist; color: #8A84A3; letter-spacing: 0; }
+  .kpi { font: 800 112px/1 Geist; letter-spacing: -4px; }
+  .kpil { font: 600 26px Geist; color: #6E6E73; margin-top: 6px; }
+  .agent { padding: 14px 22px; border-radius: 999px; font: 700 26px Geist; }
+  #flash { position: absolute; inset: 0; pointer-events: none; z-index: 50; }
+</style></head>
+<body>
+<div id="flash"></div>
+
+<!-- 1 · problem -->
+<section class="scene black" id="problem"><div class="abs" id="pb-cam" style="inset:0">
+  <div class="abs center eyebrow" id="pb-when" style="top:300px">Monday · 8:47 am · Singapore</div>
+  <div class="abs center h1" id="pb-a" style="top:380px">6 reps.</div>
+  <div class="abs center h1" id="pb-b" style="top:380px">900 leads.</div>
+  <div class="abs center h1" id="pb-c" style="top:380px">Zero time.</div>
+  <div class="pain" id="pp1" style="left:180px;top:200px"><b>●</b> Leads go cold in the CRM</div>
+  <div class="pain" id="pp2" style="left:1080px;top:270px"><b>●</b> Research eats the morning</div>
+  <div class="pain" id="pp3" style="left:260px;top:760px"><b>●</b> Follow-ups slip</div>
+  <div class="pain" id="pp4" style="left:1150px;top:800px"><b>●</b> Leads handed out by gut feel</div>
+  <div class="pain" id="pp5" style="left:720px;top:120px"><b>●</b> Generic messages</div>
+  <div class="abs center h2" id="pb-real" style="top:440px">Is this company<br><span style="color:#FF6B6B">even real?</span></div>
+</div></section>
+
+<!-- 2 · reveal -->
+<section class="scene light" id="reveal"><div class="abs" id="rv-cam" style="inset:0">
+  <div class="abs" id="rv-brand" style="left:0;right:0;top:250px;display:flex;flex-direction:column;align-items:center;gap:30px">
+    <div class="logo" id="rv-logo">SM</div>
+    <div class="h1" id="rv-name">Sales Mama</div>
+    <div class="sub" id="rv-tag">The sales harness for Claude Code.</div>
+  </div>
+  <div class="floor" id="rv-floor" style="left:460px;width:1000px;top:1000px"></div>
+  <div class="laptop" id="rv-laptop" style="left:340px;top:1100px"><div class="lid"><div class="scr"><img src="assets/console-home.png"></div></div><div class="deck"></div></div>
+</div></section>
+
+<!-- 3 · overnight -->
+<section class="scene dark" id="overnight"><div class="abs" id="on-cam" style="inset:0">
+  <div class="abs" style="left:110px;top:130px;width:560px">
+    <div class="pill" id="on-chip" style="background:#1F1B2E;color:#C8F031">● 02:00 · overnight</div>
+    <div class="h2" id="on-h" style="margin-top:34px">While you sleep.</div>
+    <div class="sub" id="on-s" style="margin-top:26px">Scouts scan news, tenders and registries. Every lead is scored. Every book is watched.</div>
+  </div>
+  <div class="abs" id="on-panel" style="left:690px;top:150px;width:1160px;height:787px">
+    <img src="assets/architecture-dark.svg" style="width:1160px;border-radius:24px;box-shadow:0 50px 140px -40px rgba(0,0,0,.9)">
+  </div>
+</div></section>
+
+<!-- 4 · manager -->
+<section class="scene light" id="manager"><div class="abs" id="mg-cam" style="inset:0">
+  <div class="abs center" style="top:70px"><div class="eyebrow" id="mg-e">08:30 · Manager</div><div class="h3" id="mg-h" style="margin-top:14px">Approve in one click.</div></div>
+  <div class="floor" style="left:420px;width:1080px;top:1000px"></div>
+  <div class="laptop" id="mg-laptop" style="left:340px;top:250px"><div class="lid"><div class="scr"><img id="mg-img" src="assets/manager-run.jpg"></div></div><div class="deck"></div></div>
+</div></section>
+
+<!-- 5 · rep -->
+<section class="scene light" id="rep"><div class="abs" id="rp-cam" style="inset:0">
+  <div class="abs" style="left:100px;top:130px;width:560px">
+    <div class="pill mono" id="rp-chip" style="background:#16131F;color:#C8F031">/mama-day</div>
+    <div class="h2" id="rp-h" style="margin-top:34px;font-size:84px">Your morning, prepared.</div>
+    <div class="sub" id="rp-s" style="margin-top:26px">Replies triaged. Accounts researched in parallel. Drafts in your own voice.</div>
+  </div>
+  <div class="win" id="rp-w1" style="left:740px;top:90px;width:1100px"><div class="bar"><i></i><i></i><i></i><span>Sales Mama · /mama-day</span></div><div class="body" style="height:700px"><img src="assets/day-plan.jpg"></div></div>
+  <div class="win" id="rp-w2" style="left:800px;top:380px;width:1060px"><div class="bar"><i></i><i></i><i></i><span>Sales Mama · /mama-book</span></div><div class="body" style="height:640px"><img src="assets/book.jpg"></div></div>
+</div></section>
+
+<!-- 6 · grounded -->
+<section class="scene light" id="grounded"><div class="abs" id="gr-cam" style="inset:0">
+  
+  <img id="gr-sharp" src="assets/source.jpg" class="abs" style="left:0;top:0;width:1920px;transform-origin:75% 40%">
+  <div class="abs" id="gr-card" style="left:110px;top:640px;background:rgba(255,255,255,.82);backdrop-filter:blur(20px);border-radius:32px;padding:40px 48px;box-shadow:0 40px 100px -40px rgba(0,0,0,.35)">
+    <div class="h2">Every fact.<br><span class="violet">Cited.</span></div>
+    <div class="sub" style="margin-top:18px">No source, no claim.</div>
+  </div>
+</div></section>
+
+<!-- 7 · send -->
+<section class="scene dark" id="send"><div class="abs" id="sd-cam" style="inset:0">
+  <div class="abs center" style="top:56px"><div class="pill mono" id="sd-chip" style="background:#1F1B2E;color:#C8F031">/mama-send</div></div>
+  <div class="win dwin" id="sd-win" style="left:280px;top:150px;width:1360px"><div class="bar"><i></i><i></i><i></i><span>claude · sales-mama.ai</span></div>
+    <div class="body" style="height:820px;display:flex;flex-direction:column;justify-content:flex-end"><div class="term" id="sd-term"></div></div></div>
+  <div class="abs" id="sd-chan" style="left:0;right:0;top:1000px;display:flex;justify-content:center;gap:16px">
+    <span class="pill" style="background:#1F1B2E;color:#fff">✉️&nbsp; Gmail</span><span class="pill" style="background:#1F1B2E;color:#fff">💬&nbsp; WhatsApp</span><span class="pill" style="background:#C8F031;color:#16131F">Approve once</span>
+  </div>
+  <div class="abs" id="sd-over" style="inset:0;display:grid;place-items:center;background:rgba(7,7,12,.0)">
+    <div class="h2 center" id="sd-big" style="position:static">Nothing goes out<br><span class="lime">until you approve.</span></div>
+  </div>
+</div></section>
+
+<!-- 8 · company check -->
+<section class="scene light" id="check"><div class="abs" id="ck-cam" style="inset:0">
+  <div class="abs" style="left:100px;top:100px;width:700px">
+    <div class="pill mono" id="ck-chip" style="background:#16131F;color:#C8F031">/company-check</div>
+    <div class="h2" id="ck-h" style="margin-top:30px">Is this company <span class="grad">real?</span></div>
+    <div id="ck-count" style="margin-top:40px"><div class="kpi" id="ck-n">0</div><div class="kpil">live companies, of 2,127,089 in ACRA</div></div>
+    <div id="ck-list" style="margin-top:44px;display:flex;flex-direction:column;gap:22px">
+      <div class="chk" id="ck1"><i>✓</i>Live with ACRA</div>
+      <div class="chk" id="ck2"><i>✓</i>Annual return filed on time</div>
+      <div class="chk" id="ck3"><i>✓</i>A real office, not a virtual one</div>
+      <div class="chk" id="ck4"><i>✓</i>More than 3 staff</div>
+    </div>
+    <div id="ck-agents" style="margin-top:40px;display:flex;gap:12px">
+      <span class="agent" style="background:#E5EDFF;color:#1D4ED8">identity</span><span class="agent" style="background:#DDF5F1;color:#0F766E">people</span><span class="agent" style="background:#FFE6F1;color:#BE185D">risk</span>
+    </div>
+  </div>
+  <div class="win" id="ck-win" style="left:830px;top:70px;width:1020px"><div class="bar"><i></i><i></i><i></i><span>/company-check 197200078R</span></div><div class="body" style="height:940px"><img id="ck-img" src="assets/company-check-result.jpg" style="width:122%"></div></div>
+</div></section>
+
+<!-- 9 · insights -->
+<section class="scene light" id="insights"><div class="abs" id="in-cam" style="inset:0">
+  <div class="win" id="in-win" style="left:780px;top:70px;width:1070px"><div class="bar"><i></i><i></i><i></i><span>/company-insights clinics</span></div><div class="body" style="height:940px"><img id="in-img" src="assets/insights-full.png" style="width:112%"></div></div>
+  <div class="abs" style="left:120px;top:110px;width:660px">
+    <div class="pill mono" id="in-chip" style="background:#16131F;color:#C8F031">/company-insights</div>
+    <div class="h2" id="in-h" style="margin-top:30px">Ask. Get a report.</div>
+    <div class="sub" id="in-q" style="margin-top:22px">“Clinics in Singapore”</div>
+    <div style="margin-top:44px;display:flex;flex-direction:column;gap:30px">
+      <div id="in-k1"><div class="kpi violet" id="in-n1">0</div><div class="kpil">live clinics</div></div>
+      <div id="in-k2"><div class="kpi" style="color:#15803D" id="in-n2">0%</div><div class="kpil">file their annual return on time</div></div>
+      <div id="in-k3"><div class="kpi" style="color:#B45309" id="in-n3">0%</div><div class="kpil">use a shared or virtual address</div></div>
+    </div>
+  </div>
+</div></section>
+
+<!-- 10 · guardrails -->
+<section class="scene black" id="guardrails"><div class="abs" id="gd-cam" style="inset:0">
+  <div class="abs center h2" id="gd-h" style="top:120px">Guardrails, <span class="lime">built in.</span></div>
+  <div class="abs" style="left:170px;right:170px;top:330px;display:grid;grid-template-columns:repeat(3,1fr);gap:28px">
+    <div class="rule" id="g1"><i>✓</i>Approve-then-send<small>nothing sends on its own</small></div>
+    <div class="rule" id="g2"><i>✓</i>Every fact cited<small>no source, no claim</small></div>
+    <div class="rule" id="g3"><i>✓</i>Manager assigns leads<small>fair, explainable allocation</small></div>
+    <div class="rule" id="g4"><i>✓</i>Suppression first<small>unsubscribes honoured at once</small></div>
+    <div class="rule" id="g5"><i>✓</i>Send windows<small>and holidays, per market</small></div>
+    <div class="rule" id="g6"><i>✓</i>PDPA-aware<small>business data only</small></div>
+  </div>
+</div></section>
+
+<!-- 11 · outro -->
+<section class="scene light" id="outro"><div class="abs" id="ot-cam" style="inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:34px">
+  <div class="logo" id="ot-logo">SM</div>
+  <div class="h2 center" id="ot-h" style="position:static;max-width:1500px">Your sales team’s morning,<br><span class="grad">done before coffee.</span></div>
+  <div class="sub" id="ot-s">Sales Mama · the sales harness for Claude Code</div>
+  <div class="mono" id="ot-u" style="font-size:28px;color:#6D28D9">github.com/neam-lang/sales-mama.ai</div>
+</div></section>
+
+<script>
+const TL = __TIMELINE__;
+const SEND = __SEND__;
+const $ = id => document.getElementById(id);
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const seg = (u, a, b) => clamp((u - a) / (b - a));
+const io = t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;            // ease in-out cubic
+const ox = t => t === 1 ? 1 : 1 - Math.pow(2, -10 * t);                               // ease out expo
+const lerp = (a, b, p) => a + (b - a) * p;
+function show(el, u, a, dur = .7, dy = 30) {                                           // Apple-style blur-in
+  const p = ox(seg(u, a, a + dur));
+  el.style.opacity = p; el.style.filter = `blur(${(1 - p) * 12}px)`;
+  el.style.transform = `translateY(${(1 - p) * dy}px)`;
+  return p;
+}
+function hide(el, u, a, dur = .5) {
+  const p = io(seg(u, a, a + dur));
+  el.style.opacity = (parseFloat(el.style.opacity || 1)) * (1 - p);
+  if (p > 0) el.style.filter = `blur(${p * 14}px)`;
+}
+const L = (sc, j) => (sc.lines[j] || sc.lines[sc.lines.length - 1]).rel;              // line start in the scene
+const fmt = n => Math.round(n).toLocaleString('en-SG');
+
+const DRAW = {
+  problem(u, d, sc) {
+    $('pb-cam').style.transform = `scale(${lerp(1, 1.07, io(u / d))})`;
+    show($('pb-when'), u, .3, .8);
+    const l1 = L(sc, 1), l2 = L(sc, 2), l3 = L(sc, 3);
+    const words = [['pb-a', l1], ['pb-b', l1 + 1.3], ['pb-c', l1 + 2.6]];
+    words.forEach(([id, at], i) => { const el = $(id); show(el, u, at, .55, 40); hide(el, u, i < 2 ? words[i + 1][1] - .15 : l2 - .2, .3); });
+    hide($('pb-when'), u, l2 - .2, .4);
+    ['pp1', 'pp2', 'pp3', 'pp4', 'pp5'].forEach((id, i) => {
+      const el = $(id), at = l2 + i * .55;
+      const p = ox(seg(u, at, at + 1.2));
+      const depth = [0, 1, 0, 1, 2][i];
+      el.style.opacity = p * (1 - io(seg(u, l3 - .3, l3 + .4)) * .82);
+      el.style.filter = `blur(${(1 - p) * 14 + depth * 1.2 + io(seg(u, l3 - .3, l3 + .4)) * 6}px)`;
+      el.style.transform = `translate(${Math.sin(u * .4 + i) * 14}px, ${(1 - p) * 40 + Math.cos(u * .35 + i) * 10}px) scale(${1 - depth * .06})`;
+    });
+    const r = $('pb-real'); show(r, u, l3, .8, 30); r.style.transform += ` scale(${lerp(.96, 1.04, seg(u, l3, d))})`;
+    hide(r, u, d - .35, .3);
+  },
+  reveal(u, d, sc) {
+    // white circle wipe out of black
+    const w = io(seg(u, 0, .7));
+    $('flash').style.background = w < 1 ? `radial-gradient(circle at 50% 50%, transparent ${w * 140}%, #000 ${w * 140 + 1}%)` : 'none';
+    const logo = $('rv-logo'); const pl = ox(seg(u, .25, 1.3));
+    logo.style.opacity = pl; logo.style.transform = `scale(${lerp(.55, 1, pl)}) rotate(${(1 - pl) * -8}deg)`; logo.style.filter = `blur(${(1 - pl) * 16}px)`;
+    show($('rv-name'), u, .7, .8, 40); show($('rv-tag'), u, 1.15, .8, 30);
+    const l1 = L(sc, 1);
+    const pu = io(seg(u, l1 - .2, l1 + 2.2));
+    $('rv-brand').style.transform = `translateY(${-pu * 222}px) scale(${lerp(1, .5, pu)})`;
+    const lp = $('rv-laptop');
+    lp.style.top = `${lerp(1120, 392, pu)}px`;
+    lp.style.transformOrigin = '50% 0%';
+    lp.style.transform = `rotateX(${lerp(48, 0, pu)}deg) scale(${lerp(.78, .82, pu) + seg(u, l1 + 2.2, d) * .03})`;
+    $('rv-floor').style.opacity = pu;
+    $('rv-cam').style.transform = `scale(${lerp(1.04, 1, io(u / d))})`;
+  },
+  overnight(u, d) {
+    show($('on-chip'), u, .2, .7); show($('on-h'), u, .5, .8, 40); show($('on-s'), u, 1.2, .9, 30);
+    const p = io(u / d);
+    const a = ox(seg(u, .2, 1.4));
+    $('on-panel').style.opacity = a;
+    $('on-panel').style.transform = `translateY(${(1 - a) * 60}px) scale(${lerp(.98, 1.04, p)})`;
+  },
+  manager(u, d, sc) {
+    show($('mg-e'), u, .2, .7); show($('mg-h'), u, L(sc, 1) - .1, .8, 30);
+    const p1 = io(seg(u, 0, d * .5)), p2 = io(seg(u, d * .48, d));
+    const lp = $('mg-laptop');
+    lp.style.transform = `translateY(${(1 - ox(seg(u, 0, 1.2))) * 80}px) scale(${lerp(.95, 1, p1)})`;
+    // macro push into the allocation card
+    $('mg-cam').style.transformOrigin = '40% 78%';
+    $('mg-cam').style.transform = `scale(${lerp(1, 1.55, p2)})`;
+    $('mg-img').style.transform = `translateY(${-seg(u, d * .2, d * .5) * 0}%)`;
+  },
+  rep(u, d) {
+    show($('rp-chip'), u, .2, .7); show($('rp-h'), u, .5, .8, 40); show($('rp-s'), u, 1.3, .8, 30);
+    const p = io(u / d);
+    const w1 = $('rp-w1'), w2 = $('rp-w2');
+    const a = ox(seg(u, .3, 1.6)), b = ox(seg(u, 1.4, 2.8));
+    w1.style.opacity = a; w2.style.opacity = b;
+    w1.style.transform = `translateY(${(1 - a) * 100}px)`;
+    w2.style.transform = `translateY(${(1 - b) * 140}px) scale(${lerp(1, 1.02, p)})`;
+    w1.querySelector('img').style.transform = `translateY(${-p * 10}%)`;
+  },
+  grounded(u, d) {
+    const p = io(u / d);
+    $('gr-sharp').style.transform = `scale(${lerp(1, 1.3, p)})`;
+    show($('gr-card'), u, .6, .9, 40);
+  },
+  send(u, d, sc) {
+    show($('sd-chip'), u, .1, .6);
+    const big = L(sc, 2);
+    const p = io(seg(u, 0, big));
+    $('sd-win').style.transform = `translateY(${lerp(50, 0, ox(seg(u, 0, 1.2)))}px) scale(${lerp(.97, 1, p)})`;
+    // terminal replay compressed into the scene up to the big line
+    const T = big - .3; const esc = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;');
+    const col = l => { let e = esc(l); if (e.startsWith('Preview')) return `<span class="m">${e}</span>`;
+      e = e.replace('READY', '<span class="ok">READY</span>').replace(/^(\[\d\]) sent/, '$1 <span class="ok">sent</span>');
+      if (/^\s*(\||Subject|Template)/.test(e)) return `<span class="q">${e}</span>`; if (e.startsWith('To send')) return `<span class="c">${e}</span>`; return e; };
+    const prev = SEND.preview.filter(l => l.trim() && l.trim() !== '|' && !/^\s*\| (Mei Chen|Account Executive|Reply "unsub)/.test(l));
+    const out = [];
+    const typed = (txt, at, cps) => { if (u < at) return null; const n = Math.min(txt.length, Math.floor((u - at) * cps)); return esc(txt.slice(0, n)) + (n < txt.length ? '<span style="background:#C8F031">&nbsp;</span>' : ''); };
+    const t0 = .4, tPrev = 1.4, step = Math.min(.12, (T * .45) / prev.length);
+    const a = typed('/mama-send', t0, 14); if (a !== null) out.push(`<span class="you">❯ ${a}</span>`);
+    prev.forEach((l, i) => { if (u >= tPrev + i * step) out.push(col(l)); });
+    const tAsk = tPrev + prev.length * step + .6;
+    if (u >= tAsk) out.push(`<span class="mama"><span class="lime">Mama ▸</span> 2 ready: email to Rachel, WhatsApp to Daniel. Send both?</span>`);
+    const b = typed('send 1, 2', tAsk + .7, 12); if (b !== null) out.push(`<span class="you">❯ ${b}</span>`);
+    const tApprove = tAsk + 1.8, tClick = tApprove + 1.0;
+    if (u >= tApprove) out.push(`<div class="ask">Allow <span class="c mono" style="font-size:19px">send.py --send ${SEND.pid} --items ${SEND.items}</span>?<span class="btn" style="${u >= tClick ? '' : 'background:#2E2940;color:#E9E6F2'}">${u >= tClick ? 'Approved' : 'Yes'}</span></div>`);
+    SEND.send.filter(l => l.trim()).forEach((l, i) => { if (u >= tClick + .5 + i * .45) out.push(col(l)); });
+    $('sd-term').innerHTML = out.join('\n');
+    show($('sd-chan'), u, tClick + 1.2, .7, 20);
+    const ov = io(seg(u, big - .1, big + .6));
+    $('sd-over').style.background = `rgba(7,7,12,${ov * .82})`; $('sd-over').style.backdropFilter = `blur(${ov * 10}px)`;
+    show($('sd-big'), u, big, .8, 30);
+  },
+  check(u, d, sc) {
+    show($('ck-chip'), u, .1, .6); show($('ck-h'), u, .3, .8, 40);
+    show($('ck-count'), u, .9, .7, 20); $('ck-n').textContent = fmt(624271 * io(seg(u, 1.0, 3.2)));
+    const l1 = L(sc, 1), l2 = L(sc, 2);
+    ['ck1', 'ck2', 'ck3', 'ck4'].forEach((id, i) => show($(id), u, l1 + i * .9, .6, 20));
+    show($('ck-agents'), u, l2, .7, 20);
+    [...$('ck-agents').children].forEach((el, i) => { el.style.transform = `scale(${1 + .08 * Math.max(0, Math.sin((u - l2) * 3 - i))})`; });
+    const p = io(u / d), w = $('ck-win');
+    w.style.transform = `translateY(${lerp(60, 0, ox(seg(u, 0, 1.4)))}px)`;
+    w.style.opacity = ox(seg(u, .1, 1.2));
+    $('ck-img').style.transform = `translateY(${-io(seg(u, 2.5, d - 1)) * 48}%)`;
+  },
+  insights(u, d, sc) {
+    show($('in-chip'), u, .1, .6); show($('in-h'), u, .3, .8, 40); show($('in-q'), u, .9, .7, 20);
+    const l1 = L(sc, 1);
+    show($('in-k1'), u, l1, .6, 20); show($('in-k2'), u, l1 + 1.4, .6, 20); show($('in-k3'), u, l1 + 2.8, .6, 20);
+    $('in-n1').textContent = fmt(9618 * io(seg(u, l1, l1 + 1.4)));
+    $('in-n2').textContent = (92.7 * io(seg(u, l1 + 1.4, l1 + 2.6))).toFixed(1) + '%';
+    $('in-n3').textContent = (15.9 * io(seg(u, l1 + 2.8, l1 + 3.8))).toFixed(1) + '%';
+    const p = io(u / d), w = $('in-win');
+    w.style.opacity = ox(seg(u, 0, 1.2));
+    w.style.transform = `translateY(${lerp(60, 0, ox(seg(u, 0, 1.4)))}px)`;
+    $('in-img').style.transform = `translateY(${-io(seg(u, .8, d - .6)) * 52}%)`;
+  },
+  guardrails(u, d) {
+    show($('gd-h'), u, .2, .8, 40);
+    ['g1', 'g2', 'g3', 'g4', 'g5', 'g6'].forEach((id, i) => { const el = $(id); show(el, u, .9 + i * .45, .6, 30);
+      el.style.borderColor = u > .9 + i * .45 + .5 ? '#3A4A12' : '#2A2638'; });
+    $('gd-cam').style.transform = `scale(${lerp(1.05, 1, io(u / d))})`;
+  },
+  outro(u, d) {
+    const pl = ox(seg(u, .1, 1.1)); const lg = $('ot-logo');
+    lg.style.opacity = pl; lg.style.transform = `scale(${lerp(.6, 1, pl)})`; lg.style.filter = `blur(${(1 - pl) * 14}px)`;
+    show($('ot-h'), u, .6, .9, 40); show($('ot-s'), u, 2.4, .8, 20); show($('ot-u'), u, 3.0, .8, 20);
+    $('ot-cam').style.transform = `scale(${lerp(1, 1.05, io(u / d))})`;
+  },
+};
+
+window.DURATION = TL.duration;
+window.render = function (t) {
+  $('flash').style.background = 'none';
+  let active = null;
+  for (const sc of TL.scenes) {
+    const on = t >= sc.start && (t < sc.end || sc === TL.scenes[TL.scenes.length - 1]);
+    const el = $(sc.id); el.classList.toggle('on', on);
+    if (on) active = sc;
+  }
+  if (active) DRAW[active.id](t - active.start, active.end - active.start, active);
+  // final fade to white
+  const tail = seg(t, TL.duration - .9, TL.duration);
+  if (tail > 0) $('flash').style.background = `rgba(245,245,247,${io(tail)})`;
+};
+render(0);
+</script>
+</body></html>

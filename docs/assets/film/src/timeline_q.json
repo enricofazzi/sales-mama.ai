@@ -1,0 +1,263 @@
+{
+ "bpm": 104,
+ "bar": 2.3076923076923075,
+ "duration": 132.692,
+ "scenes": [
+  {
+   "id": "problem",
+   "start": 0.0,
+   "end": 18.462,
+   "bars": 8,
+   "lines": [
+    {
+     "text": "It's Monday morning, in Singapore.",
+     "file": "vo2/00-0.wav",
+     "rel": 0.7,
+     "start": 0.7,
+     "dur": 2.251
+    },
+    {
+     "text": "Maya runs a sales team of six. Hundreds of leads. No time.",
+     "file": "vo2/00-1.wav",
+     "rel": 3.301,
+     "start": 3.301,
+     "dur": 4.942
+    },
+    {
+     "text": "Leads go cold in the CRM. Research eats the whole morning.",
+     "file": "vo2/00-2.wav",
+     "rel": 8.593,
+     "start": 8.593,
+     "dur": 4.055
+    },
+    {
+     "text": "And nobody is sure, which companies are even real.",
+     "file": "vo2/00-3.wav",
+     "rel": 12.998,
+     "start": 12.998,
+     "dur": 3.221
+    }
+   ]
+  },
+  {
+   "id": "reveal",
+   "start": 18.462,
+   "end": 27.692,
+   "bars": 4,
+   "lines": [
+    {
+     "text": "Meet Sales Mama.",
+     "file": "vo2/01-0.wav",
+     "rel": 0.7,
+     "start": 19.162,
+     "dur": 1.124
+    },
+    {
+     "text": "An AI sales harness, that runs inside Claude Code. The repo is the system.",
+     "file": "vo2/01-1.wav",
+     "rel": 2.174,
+     "start": 20.636,
+     "dur": 5.19
+    }
+   ]
+  },
+  {
+   "id": "overnight",
+   "start": 27.692,
+   "end": 39.231,
+   "bars": 5,
+   "lines": [
+    {
+     "text": "At two a.m., scouts scan news, tenders and registries.",
+     "file": "vo2/02-0.wav",
+     "rel": 0.7,
+     "start": 28.392,
+     "dur": 4.151
+    },
+    {
+     "text": "Every lead is scored. And a virtual account manager watches every book.",
+     "file": "vo2/02-1.wav",
+     "rel": 5.201,
+     "start": 32.893,
+     "dur": 4.256
+    }
+   ]
+  },
+  {
+   "id": "manager",
+   "start": 39.231,
+   "end": 50.769,
+   "bars": 5,
+   "lines": [
+    {
+     "text": "At eight thirty, the manager opens the cockpit.",
+     "file": "vo2/03-0.wav",
+     "rel": 0.7,
+     "start": 39.931,
+     "dur": 2.783
+    },
+    {
+     "text": "Last night's run. The hot accounts. And a fair allocation, approved in one click.",
+     "file": "vo2/03-1.wav",
+     "rel": 3.833,
+     "start": 43.063,
+     "dur": 5.933
+    }
+   ]
+  },
+  {
+   "id": "rep",
+   "start": 50.769,
+   "end": 62.308,
+   "bars": 5,
+   "lines": [
+    {
+     "text": "Reps type, mama day.",
+     "file": "vo2/04-0.wav",
+     "rel": 0.7,
+     "start": 51.469,
+     "dur": 1.589
+    },
+    {
+     "text": "Replies are triaged. New accounts are researched in parallel. And drafts are written in their own voice.",
+     "file": "vo2/04-1.wav",
+     "rel": 2.639,
+     "start": 53.409,
+     "dur": 6.355
+    }
+   ]
+  },
+  {
+   "id": "grounded",
+   "start": 62.308,
+   "end": 69.231,
+   "bars": 3,
+   "lines": [
+    {
+     "text": "Every fact links back to its source. No source, no claim.",
+     "file": "vo2/05-0.wav",
+     "rel": 0.7,
+     "start": 63.008,
+     "dur": 4.413
+    }
+   ]
+  },
+  {
+   "id": "send",
+   "start": 69.231,
+   "end": 83.077,
+   "bars": 6,
+   "lines": [
+    {
+     "text": "In the send window, mama send shows the whole batch.",
+     "file": "vo2/06-0.wav",
+     "rel": 0.7,
+     "start": 69.931,
+     "dur": 3.065
+    },
+    {
+     "text": "The rep picks, approves once, and Sales Mama sends email and WhatsApp, logging every touch.",
+     "file": "vo2/06-1.wav",
+     "rel": 4.115,
+     "start": 73.345,
+     "dur": 5.965
+    },
+    {
+     "text": "Nothing goes out, without approval.",
+     "file": "vo2/06-2.wav",
+     "rel": 10.429,
+     "start": 79.66,
+     "dur": 2.124
+    }
+   ]
+  },
+  {
+   "id": "check",
+   "start": 83.077,
+   "end": 101.538,
+   "bars": 8,
+   "lines": [
+    {
+     "text": "Before anyone sells, company check asks: is this company real?",
+     "file": "vo2/07-0.wav",
+     "rel": 0.7,
+     "start": 83.777,
+     "dur": 4.632
+    },
+    {
+     "text": "Live with ACRA. Filing on time. A real office, not a virtual one. And more than three staff.",
+     "file": "vo2/07-1.wav",
+     "rel": 5.682,
+     "start": 88.759,
+     "dur": 6.95
+    },
+    {
+     "text": "Three verifier agents, gather the evidence.",
+     "file": "vo2/07-2.wav",
+     "rel": 12.983,
+     "start": 96.06,
+     "dur": 2.96
+    }
+   ]
+  },
+  {
+   "id": "insights",
+   "start": 101.538,
+   "end": 113.077,
+   "bars": 5,
+   "lines": [
+    {
+     "text": "Ask a question. Get a report.",
+     "file": "vo2/08-0.wav",
+     "rel": 0.7,
+     "start": 102.238,
+     "dur": 2.356
+    },
+    {
+     "text": "Nine thousand six hundred clinics. Ninety-three percent filing on time. And the best new leads.",
+     "file": "vo2/08-1.wav",
+     "rel": 3.406,
+     "start": 104.945,
+     "dur": 6.625
+    }
+   ]
+  },
+  {
+   "id": "guardrails",
+   "start": 113.077,
+   "end": 122.308,
+   "bars": 4,
+   "lines": [
+    {
+     "text": "Guardrails are built in. Approvals, citations, suppression lists, and rules for every market.",
+     "file": "vo2/09-0.wav",
+     "rel": 0.7,
+     "start": 113.777,
+     "dur": 6.773
+    }
+   ]
+  },
+  {
+   "id": "outro",
+   "start": 122.308,
+   "end": 131.538,
+   "bars": 4,
+   "lines": [
+    {
+     "text": "Sales Mama.",
+     "file": "vo2/10-0.wav",
+     "rel": 0.7,
+     "start": 123.008,
+     "dur": 0.911
+    },
+    {
+     "text": "Your sales team's morning, done before coffee.",
+     "file": "vo2/10-1.wav",
+     "rel": 1.961,
+     "start": 124.269,
+     "dur": 2.884
+    }
+   ]
+  }
+ ]
+}

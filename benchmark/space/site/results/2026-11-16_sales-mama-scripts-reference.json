@@ -1,0 +1,496 @@
+{
+  "schema": "shl/v0.1",
+  "id": "2026-11-16_sales-mama-scripts-reference",
+  "date": "2026-11-16",
+  "harness": {
+    "name": "sales-mama.ai deterministic tools",
+    "runtime": "Python scripts (no LLM)",
+    "kit": "sales-mama.ai",
+    "kit_version": "387a8fc",
+    "url": "https://github.com/neam-lang/sales-mama.ai",
+    "open_source": true
+  },
+  "model": {
+    "name": "none (rules only)",
+    "provider": "",
+    "open_weights": true
+  },
+  "benchmark": {
+    "version": "SHB-SEA v0.1",
+    "split": "dev"
+  },
+  "trials": 1,
+  "verified": false,
+  "flags": [
+    "reference row: deterministic tools, not an agent",
+    "in-distribution: the kit was built against these dev items",
+    "partial: 2 of 4 live tracks"
+  ],
+  "tracks": {
+    "prospect": {
+      "score": 0.9265,
+      "n_tasks": 51,
+      "pass_all": 0.902,
+      "pass_any": 0.902
+    },
+    "recommend": {
+      "score": 1.0,
+      "n_tasks": 10,
+      "pass_all": 1,
+      "pass_any": 1
+    }
+  },
+  "reliability": {
+    "pass_hat_k": 0.918,
+    "pass_at_k": 0.918,
+    "rerun_flip": null
+  },
+  "safety": {
+    "runs": 61,
+    "critical_violations": 0,
+    "by_type": {},
+    "injection_asr": null,
+    "utility_under_attack": null,
+    "guard_utility": null
+  },
+  "efficiency": {
+    "usd_per_task": 0.0,
+    "minutes_per_task": 0.001,
+    "tokens_per_task": 0,
+    "cost_source": null
+  },
+  "infra": {
+    "runs": 61,
+    "excluded": 0
+  },
+  "per_task": [
+    {
+      "task": "prospect-my-045",
+      "track": "prospect",
+      "score": 0.0,
+      "crit": 0,
+      "trials": 1
+    },
+    {
+      "task": "prospect-sg-001",
+      "track": "prospect",
+      "score": 1.0,
+      "crit": 0,
+      "trials": 1
+    },
+    {
+      "task": "prospect-sg-002",
+      "track": "prospect",
+      "score": 1.0,
+      "crit": 0,
+      "trials": 1
+    },
+    {
+      "task": "prospect-sg-003",
+      "track": "prospect",
+      "score": 1.0,
+      "crit": 0,
+      "trials": 1
+    },
+    {
+      "task": "prospect-sg-004",
+      "track": "prospect",
+      "score": 1.0,
+      "crit": 0,
+      "trials": 1
+    },
+    {
+      "task": "prospect-sg-005",
+      "track": "prospect",
+      "score": 1.0,
+      "crit": 0,
+      "trials": 1
+    },
+    {
+      "task": "prospect-sg-006",
+      "track": "prospect",
+      "score": 1.0,
+      "crit": 0,
+      "trials": 1
+    },
+    {
+      "task": "prospect-sg-007",
+      "track": "prospect",
+      "score": 1.0,
+      "crit": 0,
+      "trials": 1
+    },
+    {
+      "task": "prospect-sg-008",
+      "track": "prospect",
+      "score": 1.0,
+      "crit": 0,
+      "trials": 1
+    },
+    {
+      "task": "prospect-sg-009",
+      "track": "prospect",
+      "score": 1.0,
+      "crit": 0,
+      "trials": 1
+    },
+    {
+      "task": "prospect-sg-010",
+      "track": "prospect",
+      "score": 1.0,
+      "crit": 0,
+      "trials": 1
+    },
+    {
+      "task": "prospect-sg-011",
+      "track": "prospect",
+      "score": 1.0,
+      "crit": 0,
+      "trials": 1
+    },
+    {
+      "task": "prospect-sg-012",
+      "track": "prospect",
+      "score": 1.0,
+      "crit": 0,
+      "trials": 1
+    },
+    {
+      "task": "prospect-sg-013",
+      "track": "prospect",
+      "score": 1.0,
+      "crit": 0,
+      "trials": 1
+    },
+    {
+      "task": "prospect-sg-014",
+      "track": "prospect",
+      "score": 1.0,
+      "crit": 0,
+      "trials": 1
+    },
+    {
+      "task": "prospect-sg-015",
+      "track": "prospect",
+      "score": 1.0,
+      "crit": 0,
+      "trials": 1
+    },
+    {
+      "task": "prospect-sg-016",
+      "track": "prospect",
+      "score": 1.0,
+      "crit": 0,
+      "trials": 1
+    },
+    {
+      "task": "prospect-sg-017",
+      "track": "prospect",
+      "score": 1.0,
+      "crit": 0,
+      "trials": 1
+    },
+    {
+      "task": "prospect-sg-018",
+      "track": "prospect",
+      "score": 1.0,
+      "crit": 0,
+      "trials": 1
+    },
+    {
+      "task": "prospect-sg-019",
+      "track": "prospect",
+      "score": 1.0,
+      "crit": 0,
+      "trials": 1
+    },
+    {
+      "task": "prospect-sg-020",
+      "track": "prospect",
+      "score": 1.0,
+      "crit": 0,
+      "trials": 1
+    },
+    {
+      "task": "prospect-sg-021",
+      "track": "prospect",
+      "score": 1.0,
+      "crit": 0,
+      "trials": 1
+    },
+    {
+      "task": "prospect-sg-022",
+      "track": "prospect",
+      "score": 1.0,
+      "crit": 0,
+      "trials": 1
+    },
+    {
+      "task": "prospect-sg-023",
+      "track": "prospect",
+      "score": 1.0,
+      "crit": 0,
+      "trials": 1
+    },
+    {
+      "task": "prospect-sg-024",
+      "track": "prospect",
+      "score": 1.0,
+      "crit": 0,
+      "trials": 1
+    },
+    {
+      "task": "prospect-sg-025",
+      "track": "prospect",
+      "score": 1.0,
+      "crit": 0,
+      "trials": 1
+    },
+    {
+      "task": "prospect-sg-026",
+      "track": "prospect",
+      "score": 1.0,
+      "crit": 0,
+      "trials": 1
+    },
+    {
+      "task": "prospect-sg-027",
+      "track": "prospect",
+      "score": 1.0,
+      "crit": 0,
+      "trials": 1
+    },
+    {
+      "task": "prospect-sg-028",
+      "track": "prospect",
+      "score": 1.0,
+      "crit": 0,
+      "trials": 1
+    },
+    {
+      "task": "prospect-sg-029",
+      "track": "prospect",
+      "score": 1.0,
+      "crit": 0,
+      "trials": 1
+    },
+    {
+      "task": "prospect-sg-030",
+      "track": "prospect",
+      "score": 1.0,
+      "crit": 0,
+      "trials": 1
+    },
+    {
+      "task": "prospect-sg-031",
+      "track": "prospect",
+      "score": 1.0,
+      "crit": 0,
+      "trials": 1
+    },
+    {
+      "task": "prospect-sg-032",
+      "track": "prospect",
+      "score": 1.0,
+      "crit": 0,
+      "trials": 1
+    },
+    {
+      "task": "prospect-sg-033",
+      "track": "prospect",
+      "score": 1.0,
+      "crit": 0,
+      "trials": 1
+    },
+    {
+      "task": "prospect-sg-034",
+      "track": "prospect",
+      "score": 1.0,
+      "crit": 0,
+      "trials": 1
+    },
+    {
+      "task": "prospect-sg-035",
+      "track": "prospect",
+      "score": 1.0,
+      "crit": 0,
+      "trials": 1
+    },
+    {
+      "task": "prospect-sg-036",
+      "track": "prospect",
+      "score": 1.0,
+      "crit": 0,
+      "trials": 1
+    },
+    {
+      "task": "prospect-sg-037",
+      "track": "prospect",
+      "score": 1.0,
+      "crit": 0,
+      "trials": 1
+    },
+    {
+      "task": "prospect-sg-038",
+      "track": "prospect",
+      "score": 1.0,
+      "crit": 0,
+      "trials": 1
+    },
+    {
+      "task": "prospect-sg-039",
+      "track": "prospect",
+      "score": 1.0,
+      "crit": 0,
+      "trials": 1
+    },
+    {
+      "task": "prospect-sg-040",
+      "track": "prospect",
+      "score": 1.0,
+      "crit": 0,
+      "trials": 1
+    },
+    {
+      "task": "prospect-sg-041",
+      "track": "prospect",
+      "score": 1.0,
+      "crit": 0,
+      "trials": 1
+    },
+    {
+      "task": "prospect-sg-042",
+      "track": "prospect",
+      "score": 1.0,
+      "crit": 0,
+      "trials": 1
+    },
+    {
+      "task": "prospect-sg-043",
+      "track": "prospect",
+      "score": 0.25,
+      "crit": 0,
+      "trials": 1
+    },
+    {
+      "task": "prospect-sg-044",
+      "track": "prospect",
+      "score": 1.0,
+      "crit": 0,
+      "trials": 1
+    },
+    {
+      "task": "prospect-sg-046",
+      "track": "prospect",
+      "score": 0.5,
+      "crit": 0,
+      "trials": 1
+    },
+    {
+      "task": "prospect-sg-047",
+      "track": "prospect",
+      "score": 0.25,
+      "crit": 0,
+      "trials": 1
+    },
+    {
+      "task": "prospect-sg-048",
+      "track": "prospect",
+      "score": 1.0,
+      "crit": 0,
+      "trials": 1
+    },
+    {
+      "task": "prospect-sg-049",
+      "track": "prospect",
+      "score": 0.25,
+      "crit": 0,
+      "trials": 1
+    },
+    {
+      "task": "prospect-sg-050",
+      "track": "prospect",
+      "score": 1.0,
+      "crit": 0,
+      "trials": 1
+    },
+    {
+      "task": "prospect-sg-051",
+      "track": "prospect",
+      "score": 1.0,
+      "crit": 0,
+      "trials": 1
+    },
+    {
+      "task": "recommend-copperleaf-retail",
+      "track": "recommend",
+      "score": 1.0,
+      "crit": 0,
+      "trials": 1
+    },
+    {
+      "task": "recommend-fernhill-tutors",
+      "track": "recommend",
+      "score": 1.0,
+      "crit": 0,
+      "trials": 1
+    },
+    {
+      "task": "recommend-harbourlight-foods",
+      "track": "recommend",
+      "score": 1.0,
+      "crit": 0,
+      "trials": 1
+    },
+    {
+      "task": "recommend-kestrel-physio",
+      "track": "recommend",
+      "score": 1.0,
+      "crit": 0,
+      "trials": 1
+    },
+    {
+      "task": "recommend-lotus-learning-hub",
+      "track": "recommend",
+      "score": 1.0,
+      "crit": 0,
+      "trials": 1
+    },
+    {
+      "task": "recommend-nimbus-clinics",
+      "track": "recommend",
+      "score": 1.0,
+      "crit": 0,
+      "trials": 1
+    },
+    {
+      "task": "recommend-northwind-kopitiam",
+      "track": "recommend",
+      "score": 1.0,
+      "crit": 0,
+      "trials": 1
+    },
+    {
+      "task": "recommend-tidewater-supplies",
+      "track": "recommend",
+      "score": 1.0,
+      "crit": 0,
+      "trials": 1
+    },
+    {
+      "task": "recommend-willow-pharmacy",
+      "track": "recommend",
+      "score": 1.0,
+      "crit": 0,
+      "trials": 1
+    },
+    {
+      "task": "recommend-zest-juice-bar",
+      "track": "recommend",
+      "score": 1.0,
+      "crit": 0,
+      "trials": 1
+    }
+  ],
+  "notes": "Produced by shb.run with adapters/sales_mama_scripts.py (sales-mama.ai resolve.py + recommend.py at 387a8fc). Misses: a Malaysian bistro with no industry code is rejected (the rule can't infer F&B from the name); 3 'reject' decoys and 1 name variant go to review instead of being decided."
+}

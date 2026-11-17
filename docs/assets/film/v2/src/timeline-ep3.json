@@ -1,0 +1,627 @@
+{
+ "bpm": 104,
+ "beat": 0.5769230769230769,
+ "bar": 2.3076923076923075,
+ "duration": 301.1538,
+ "scenes": [
+  {
+   "type": "words",
+   "bg": "black",
+   "mus": "intro",
+   "bars": 8,
+   "items": [
+    {
+     "cls": "eyebrow",
+     "text": "Monday \u00b7 the outbox",
+     "at": 0.5,
+     "out": 7.4,
+     "y": 330
+    },
+    {
+     "cls": "h1",
+     "text": "\u201cDear Sir/Madam,\u201d",
+     "at": 2,
+     "out": 3.8
+    },
+    {
+     "cls": "h1",
+     "text": "\u201cJust checking in\u2026\u201d",
+     "at": 4,
+     "out": 5.8
+    },
+    {
+     "cls": "h1",
+     "text": "Sent at 11:48 pm.",
+     "at": 6,
+     "out": 7.8
+    },
+    {
+     "cls": "h2",
+     "text": "Why does nobody<br><span class=\"red\">reply?</span>",
+     "at": 24,
+     "out": 31.6,
+     "y": 400
+    }
+   ],
+   "pains": [
+    [
+     "Same email to everyone",
+     180,
+     210
+    ],
+    [
+     "No reason to reply",
+     1060,
+     270
+    ],
+    [
+     "Wrong person",
+     260,
+     760
+    ],
+    [
+     "Wrong time zone",
+     1210,
+     820
+    ],
+    [
+     "Unsubscribes ignored",
+     720,
+     130
+    ],
+    [
+     "Replies lost in the inbox",
+     690,
+     930
+    ]
+   ],
+   "pains_at": 8.5,
+   "pains_out": 22.5,
+   "id": "s0",
+   "key": "words",
+   "start": 0.0,
+   "end": 18.4615
+  },
+  {
+   "type": "words",
+   "bg": "dark",
+   "mus": "break",
+   "bars": 4,
+   "items": [
+    {
+     "cls": "h2",
+     "text": "Buyers answer<br><span class=\"lime\">about their business.</span>",
+     "at": 0.5,
+     "out": 8.5,
+     "y": 360
+    },
+    {
+     "cls": "h3",
+     "text": "At the right moment,<br>from someone who did the homework.",
+     "at": 8.8,
+     "out": 15.7,
+     "y": 420
+    }
+   ],
+   "id": "s1",
+   "key": "words",
+   "start": 18.4615,
+   "end": 27.6923
+  },
+  {
+   "type": "title",
+   "bg": "light",
+   "mus": "groove",
+   "hit": true,
+   "bars": 4,
+   "eyebrow": "Episode 3 of 5",
+   "title": "Outreach that gets ignored",
+   "sub": "How Sales Mama fixes it, step by step.",
+   "id": "s2",
+   "key": "title",
+   "start": 27.6923,
+   "end": 36.9231
+  },
+  {
+   "type": "words",
+   "bg": "light",
+   "mus": "groove",
+   "bars": 3,
+   "items": [
+    {
+     "cls": "h1",
+     "text": "Mei and Arun.",
+     "at": 0.3,
+     "out": 11.6,
+     "y": 380
+    },
+    {
+     "cls": "sub",
+     "text": "Account executives \u00b7 Singapore, Malaysia and India",
+     "at": 1.5,
+     "out": 11.6,
+     "y": 560
+    }
+   ],
+   "id": "s3",
+   "key": "words",
+   "start": 36.9231,
+   "end": 43.8462
+  },
+  {
+   "type": "chapter",
+   "bg": "black",
+   "mus": "groove",
+   "hit": true,
+   "bars": 1,
+   "num": "STEP 1",
+   "title": "Find the right person",
+   "id": "s4",
+   "key": "chapter",
+   "start": 43.8462,
+   "end": 46.1538
+  },
+  {
+   "type": "ask",
+   "bg": "light",
+   "mus": "groove",
+   "bars": 3,
+   "who": "Mei types",
+   "prompt": "/mama-research nimbus-clinics",
+   "sub": "Sales Mama researches the account and saves every fact with its source.",
+   "id": "s5",
+   "key": "ask",
+   "start": 46.1538,
+   "end": 53.0769
+  },
+  {
+   "type": "device",
+   "bg": "dark",
+   "mus": "groove",
+   "layout": "full",
+   "media": {
+    "clip": "ep3-research",
+    "at": 0.5
+   },
+   "h": "Homework,<br><span class=\"grad\">done for you.</span>",
+   "sub": "Who runs operations, and why they'd talk now. Each fact saved with its source.",
+   "bars": 10,
+   "pill": "Step 1 \u00b7 Find the right person",
+   "cam": [
+    {
+     "at": 6,
+     "dur": 3,
+     "z": 1.35,
+     "x": 600,
+     "y": 330
+    },
+    {
+     "at": 14,
+     "dur": 3,
+     "z": 1,
+     "x": 720,
+     "y": 450
+    }
+   ],
+   "spot": [],
+   "cap_at": 1,
+   "id": "s6",
+   "key": "device",
+   "start": 53.0769,
+   "end": 76.1538
+  },
+  {
+   "type": "device",
+   "bg": "light",
+   "mus": "groove",
+   "layout": "right",
+   "media": {
+    "still": "ep3-research-end"
+   },
+   "h": "Daniel Ong,<br><span class=\"grad\">Operations Manager.</span>",
+   "sub": "The right person, and the reason: the IT contract ends on 31 December.",
+   "bars": 6,
+   "pill": "Step 1 \u00b7 Find the right person",
+   "cam": [
+    {
+     "at": 3,
+     "dur": 4,
+     "z": 1.4,
+     "x": 600,
+     "y": 430
+    }
+   ],
+   "spot": [],
+   "cap_at": 1,
+   "id": "s7",
+   "key": "device",
+   "start": 76.1538,
+   "end": 90.0
+  },
+  {
+   "type": "chapter",
+   "bg": "black",
+   "mus": "groove",
+   "hit": true,
+   "bars": 1,
+   "num": "STEP 2",
+   "title": "Know what to offer",
+   "id": "s8",
+   "key": "chapter",
+   "start": 90.0,
+   "end": 92.3077
+  },
+  {
+   "type": "ask",
+   "bg": "light",
+   "mus": "groove",
+   "bars": 3,
+   "who": "Mei asks",
+   "prompt": "What should I offer Nimbus?",
+   "sub": "Sales Mama only recommends your own products, and shows why.",
+   "id": "s9",
+   "key": "ask",
+   "start": 92.3077,
+   "end": 99.2308
+  },
+  {
+   "type": "device",
+   "bg": "light",
+   "mus": "groove",
+   "layout": "right",
+   "media": {
+    "clip": "ep3-pitch",
+    "at": 0.5
+   },
+   "h": "The offer that<br><span class=\"grad\">fits their moment.</span>",
+   "sub": "Contract ending \u2192 time to review support \u2192 IT Care.",
+   "bars": 8,
+   "pill": "Step 2 \u00b7 Know what to offer",
+   "cam": [],
+   "spot": [],
+   "cap_at": 1,
+   "id": "s10",
+   "key": "device",
+   "start": 99.2308,
+   "end": 117.6923
+  },
+  {
+   "type": "device",
+   "bg": "light",
+   "mus": "groove",
+   "layout": "right",
+   "media": {
+    "still": "ep3-pitch-end"
+   },
+   "h": "With a line<br><span class=\"lime\">you can say.</span>",
+   "sub": "\u201cBefore your contract ends, let's make sure all three clinics have one helpdesk.\u201d",
+   "bars": 6,
+   "pill": "Step 2 \u00b7 Know what to offer",
+   "cam": [
+    {
+     "at": 3,
+     "dur": 4,
+     "z": 1.6,
+     "x": 600,
+     "y": 500
+    }
+   ],
+   "spot": [
+    {
+     "at": 4,
+     "out": 99,
+     "r": [
+      250,
+      430,
+      962,
+      600
+     ]
+    }
+   ],
+   "cap_at": 1,
+   "id": "s11",
+   "key": "device",
+   "start": 117.6923,
+   "end": 131.5385
+  },
+  {
+   "type": "chapter",
+   "bg": "black",
+   "mus": "groove",
+   "hit": true,
+   "bars": 1,
+   "num": "STEP 3",
+   "title": "Write about them, not you",
+   "id": "s12",
+   "key": "chapter",
+   "start": 131.5385,
+   "end": 133.8462
+  },
+  {
+   "type": "ask",
+   "bg": "light",
+   "mus": "groove",
+   "bars": 3,
+   "who": "Mei types",
+   "prompt": "Draft follow-up 1 for Nimbus",
+   "sub": "A draft that opens with their reason to talk, in your voice.",
+   "id": "s13",
+   "key": "ask",
+   "start": 133.8462,
+   "end": 140.7692
+  },
+  {
+   "type": "device",
+   "bg": "light",
+   "mus": "groove",
+   "layout": "right",
+   "media": {
+    "clip": "ep3-draft",
+    "at": 0.5
+   },
+   "h": "Their reason<br><span class=\"grad\">in the first line.</span>",
+   "sub": "Only facts from the account page. No invented claims.",
+   "bars": 7,
+   "pill": "Step 3 \u00b7 Write about them, not you",
+   "cam": [],
+   "spot": [],
+   "cap_at": 1,
+   "id": "s14",
+   "key": "device",
+   "start": 140.7692,
+   "end": 156.9231
+  },
+  {
+   "type": "device",
+   "bg": "light",
+   "mus": "groove",
+   "layout": "right",
+   "media": {
+    "still": "ep3-draft-end"
+   },
+   "h": "Checked before<br><span class=\"lime\">you see it.</span>",
+   "sub": "Not unsubscribed, facts cited, inside the Singapore send window.",
+   "bars": 7,
+   "pill": "Step 3 \u00b7 Write about them, not you",
+   "cam": [
+    {
+     "at": 3,
+     "dur": 4,
+     "z": 1.45,
+     "x": 600,
+     "y": 460
+    }
+   ],
+   "spot": [
+    {
+     "at": 4,
+     "out": 99,
+     "r": [
+      240,
+      270,
+      965,
+      640
+     ]
+    }
+   ],
+   "cap_at": 1,
+   "id": "s15",
+   "key": "device",
+   "start": 156.9231,
+   "end": 173.0769
+  },
+  {
+   "type": "chapter",
+   "bg": "black",
+   "mus": "groove",
+   "hit": true,
+   "bars": 1,
+   "num": "STEP 4",
+   "title": "Right channel, right hour",
+   "id": "s16",
+   "key": "chapter",
+   "start": 173.0769,
+   "end": 175.3846
+  },
+  {
+   "type": "ask",
+   "bg": "light",
+   "mus": "groove",
+   "bars": 3,
+   "who": "Arun asks",
+   "prompt": "Draft the proposal follow-up for Seri Kasih on WhatsApp",
+   "sub": "WhatsApp only for contacts who opted in, and only inside each market's window.",
+   "id": "s17",
+   "key": "ask",
+   "start": 175.3846,
+   "end": 182.3077
+  },
+  {
+   "type": "device",
+   "bg": "light",
+   "mus": "groove",
+   "layout": "right",
+   "media": {
+    "clip": "ep3-wa",
+    "at": 0.5
+   },
+   "h": "WhatsApp in Malaysia.<br><span class=\"grad\">With consent.</span>",
+   "sub": "Farid opted in for business messages. It goes out between 09:30 and 11:30 MYT.",
+   "bars": 9,
+   "pill": "Step 4 \u00b7 Right channel, right hour",
+   "cam": [],
+   "spot": [],
+   "cap_at": 1,
+   "id": "s18",
+   "key": "device",
+   "start": 182.3077,
+   "end": 203.0769
+  },
+  {
+   "type": "markets",
+   "bg": "light",
+   "mus": "lift",
+   "bars": 5,
+   "h": "Three markets.<br><span class=\"grad\">Their hours.</span>",
+   "sub": "Each market's time zone, send window, holidays and channels, applied for you.",
+   "pill": "Step 4 \u00b7 Right channel, right hour",
+   "id": "s19",
+   "key": "markets",
+   "start": 203.0769,
+   "end": 214.6154
+  },
+  {
+   "type": "chapter",
+   "bg": "black",
+   "mus": "groove",
+   "hit": true,
+   "bars": 1,
+   "num": "STEP 5",
+   "title": "Catch every reply",
+   "id": "s20",
+   "key": "chapter",
+   "start": 214.6154,
+   "end": 216.9231
+  },
+  {
+   "type": "ask",
+   "bg": "light",
+   "mus": "groove",
+   "bars": 3,
+   "who": "Mei types",
+   "prompt": "Check my replies",
+   "sub": "Replies are read and sorted: interested, meeting request, not now, unsubscribe.",
+   "id": "s21",
+   "key": "ask",
+   "start": 216.9231,
+   "end": 223.8462
+  },
+  {
+   "type": "device",
+   "bg": "light",
+   "mus": "lift",
+   "layout": "right",
+   "media": {
+    "clip": "ep3-replies",
+    "at": 0.5
+   },
+   "h": "\u201cThursday 10:00<br><span class=\"grad\">works for me.\u201d</span>",
+   "sub": "Daniel wants a call. Sales Mama spotted it and suggests the booking.",
+   "bars": 7,
+   "pill": "Step 5 \u00b7 Catch every reply",
+   "cam": [],
+   "spot": [],
+   "cap_at": 1,
+   "id": "s22",
+   "key": "device",
+   "start": 223.8462,
+   "end": 240.0
+  },
+  {
+   "type": "device",
+   "bg": "light",
+   "mus": "groove",
+   "layout": "right",
+   "media": {
+    "still": "ep3-replies-end"
+   },
+   "h": "From reply<br><span class=\"lime\">to meeting.</span>",
+   "sub": "One click books Thursday 10:00. Unsubscribes are honoured at once.",
+   "bars": 6,
+   "pill": "Step 5 \u00b7 Catch every reply",
+   "cam": [
+    {
+     "at": 3,
+     "dur": 4,
+     "z": 1.5,
+     "x": 600,
+     "y": 430
+    }
+   ],
+   "spot": [
+    {
+     "at": 4,
+     "out": 99,
+     "r": [
+      240,
+      300,
+      965,
+      540
+     ]
+    }
+   ],
+   "cap_at": 1,
+   "id": "s23",
+   "key": "device",
+   "start": 240.0,
+   "end": 253.8462
+  },
+  {
+   "type": "compare",
+   "bg": "light",
+   "mus": "lift",
+   "bars": 8,
+   "h": "Messages that get answers.",
+   "before": [
+    "One template for everyone",
+    "Sent whenever, in any time zone",
+    "Replies lost in the inbox"
+   ],
+   "after": [
+    "Every message opens with their reason",
+    "Sent in each market's window",
+    "Replies sorted, meetings booked"
+   ],
+   "id": "s24",
+   "key": "compare",
+   "start": 253.8462,
+   "end": 272.3077
+  },
+  {
+   "type": "recap",
+   "bg": "light",
+   "mus": "groove",
+   "bars": 6,
+   "eyebrow": "Episode 3 \u00b7 Outreach that gets ignored",
+   "h": "Five steps to replies.",
+   "items": [
+    [
+     "Find the right person",
+     "Research: the right person and the reason, cited"
+    ],
+    [
+     "Know what to offer",
+     "Offer what fits their situation"
+    ],
+    [
+     "Write about them, not you",
+     "Drafts that open with their reason"
+    ],
+    [
+     "Right channel, right hour",
+     "WhatsApp with opt-in, in each market's window"
+    ],
+    [
+     "Catch every reply",
+     "Replies sorted, meetings one click away"
+    ]
+   ],
+   "id": "s25",
+   "key": "recap",
+   "start": 272.3077,
+   "end": 286.1538
+  },
+  {
+   "type": "epout",
+   "bg": "light",
+   "mus": "outro",
+   "bars": 6,
+   "h": "Messages people<br><span class=\"grad\">want to answer.</span>",
+   "next": "Episode 4 \u00b7 Meetings that slip",
+   "id": "s26",
+   "key": "epout",
+   "start": 286.1538,
+   "end": 300.0
+  }
+ ]
+}

@@ -1,0 +1,516 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800;900&family=Geist+Mono:wght@400;500;600&display=block" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; }
+  html, body { width: 1920px; height: 1080px; overflow: hidden; background: #000; }
+  body { font-family: Geist, -apple-system, system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  .scene { position: absolute; inset: 0; overflow: hidden; display: none; perspective: 2400px; }
+  .scene.on { display: block; }
+  .light { background: radial-gradient(ellipse at 50% 30%, #FFFFFF 0%, #F5F5F7 55%, #EBEBF0 100%); color: #1D1D1F; }
+  .dark { background: radial-gradient(ellipse at 50% 20%, #17142A 0%, #08070E 60%, #000 100%); color: #F5F5F7; }
+  .black { background: #000; color: #F5F5F7; }
+  .abs { position: absolute; }
+  .cam { position: absolute; inset: 0; transform-style: preserve-3d; }
+  .center { left: 0; right: 0; text-align: center; }
+  .eyebrow { font: 600 28px Geist; letter-spacing: .5px; color: #86868B; }
+  .h1 { font: 800 140px/1 Geist; letter-spacing: -5.5px; }
+  .h2 { font: 800 96px/1.02 Geist; letter-spacing: -3.5px; }
+  .h2s { font: 800 74px/1.05 Geist; letter-spacing: -2.8px; }
+  .h3 { font: 700 64px/1.1 Geist; letter-spacing: -2px; }
+  .sub { font: 500 32px/1.38 Geist; color: #6E6E73; letter-spacing: -.3px; }
+  .dark .sub, .black .sub { color: #A1A1A6; }
+  .lime { color: #C8F031; } .red { color: #FF6B6B; } .violet { color: #6D28D9; }
+  .grad { background: linear-gradient(90deg, #6D28D9, #0F766E 55%, #1D4ED8); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .dark .grad, .black .grad { background: linear-gradient(90deg, #C4B5FD, #5EEAD4 55%, #93C5FD); -webkit-background-clip: text; background-clip: text; }
+  .mono { font-family: 'Geist Mono', ui-monospace, monospace; }
+  .pill { display: inline-flex; align-items: center; gap: 10px; padding: 12px 24px; border-radius: 999px; font: 600 26px 'Geist Mono'; background: #16131F; color: #C8F031; }
+  .dark .pill { background: #221D35; }
+  /* window */
+  .win { position: absolute; background: #fff; border-radius: 20px; overflow: hidden; box-shadow: 0 70px 160px -40px rgba(20,10,60,.45), 0 0 0 1px rgba(0,0,0,.07); transform-style: preserve-3d; }
+  .dark .win { box-shadow: 0 70px 180px -30px rgba(0,0,0,.95), 0 0 0 1px #2A2638, 0 0 120px -20px rgba(109,40,217,.35); }
+  .win .bar { height: 40px; background: #ECECF0; display: flex; align-items: center; gap: 9px; padding: 0 16px; }
+  .dark .win .bar { background: #1C1926; }
+  .win .bar i { width: 13px; height: 13px; border-radius: 50%; } .win .bar i:nth-child(1) { background: #FF5F57; } .win .bar i:nth-child(2) { background: #FEBC2E; } .win .bar i:nth-child(3) { background: #28C840; }
+  .win .bar span { margin-left: 14px; font: 500 15px Geist; color: #86868B; }
+  .win .body { position: relative; overflow: hidden; }
+  .ui { position: absolute; left: 0; top: 0; transform-origin: 0 0; }
+  .ui img { position: absolute; left: 0; top: 0; width: 100%; height: 100%; }
+  .sheen { position: absolute; inset: 0; pointer-events: none; background: linear-gradient(115deg, transparent 30%, rgba(255,255,255,.28) 45%, transparent 60%); mix-blend-mode: soft-light; }
+  .spot { position: absolute; border-radius: 16px; box-shadow: 0 0 0 4000px rgba(12,9,24,.5), 0 0 0 3px #C8F031, 0 0 50px 6px rgba(200,240,49,.45); }
+  .glass { position: absolute; background: rgba(255,255,255,.78); backdrop-filter: blur(24px) saturate(1.4); border-radius: 30px; padding: 34px 44px; box-shadow: 0 40px 100px -40px rgba(0,0,0,.45), 0 0 0 1px rgba(255,255,255,.6) inset; color: #1D1D1F; }
+  .dark .glass { background: rgba(22,19,34,.72); color: #F5F5F7; box-shadow: 0 40px 100px -30px rgba(0,0,0,.8), 0 0 0 1px rgba(255,255,255,.08) inset; }
+  .glass .sub { font-size: 28px; margin-top: 12px; }
+  /* laptop */
+  .laptop { position: absolute; width: 1240px; transform-style: preserve-3d; }
+  .lid { background: #1D1D1F; border-radius: 30px 30px 8px 8px; padding: 18px 18px 22px; box-shadow: 0 0 0 2px #3A3A3C inset; }
+  .lid .scr { border-radius: 12px; overflow: hidden; aspect-ratio: 16/10; background: #fff; position: relative; }
+  .lid .scr img { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .deck { height: 30px; margin: 0 -80px; background: linear-gradient(180deg, #E8E8ED 0%, #C7C7CC 70%, #A1A1A6 100%); border-radius: 0 0 26px 26px; position: relative; }
+  .deck::after { content: ''; position: absolute; left: 50%; top: 0; width: 220px; height: 12px; transform: translateX(-50%); background: #B4B4BA; border-radius: 0 0 14px 14px; }
+  .floor { position: absolute; height: 80px; border-radius: 50%; background: radial-gradient(closest-side, rgba(0,0,0,.28), rgba(0,0,0,0)); filter: blur(8px); }
+  .logo { width: 190px; height: 190px; border-radius: 46px; background: #16131F; color: #C8F031; display: grid; place-items: center; font: 900 84px Geist; letter-spacing: -3px; box-shadow: 0 40px 80px -30px rgba(22,19,31,.6), inset 0 2px 0 rgba(255,255,255,.08); }
+  .pain { position: absolute; font: 600 44px Geist; color: #F5F5F7; white-space: nowrap; letter-spacing: -1px; }
+  .pain b { color: #FF6B6B; }
+  .chk { display: flex; align-items: center; gap: 18px; font: 600 36px Geist; letter-spacing: -.6px; }
+  .chk i { width: 46px; height: 46px; border-radius: 50%; background: #16131F; color: #C8F031; display: grid; place-items: center; font: 900 26px Geist; font-style: normal; flex: none; }
+  .rule { background: #111015; border: 1px solid #2A2638; border-radius: 28px; padding: 32px 36px; font: 700 40px/1.15 Geist; letter-spacing: -1px; display: flex; flex-direction: column; gap: 16px; }
+  .rule i { width: 50px; height: 50px; border-radius: 14px; background: #C8F031; color: #16131F; display: grid; place-items: center; font: 900 28px Geist; font-style: normal; }
+  .rule small { font: 500 23px Geist; color: #8A84A3; letter-spacing: 0; }
+  .kpi { font: 800 120px/1 Geist; letter-spacing: -4.5px; font-variant-numeric: tabular-nums; }
+  .kpil { font: 600 26px Geist; color: #6E6E73; margin-top: 8px; }
+  .dark .kpil { color: #A1A1A6; }
+  .stat { background: rgba(255,255,255,.04); border: 1px solid #2A2638; border-radius: 32px; padding: 40px 44px; }
+  .mk { background: #fff; border-radius: 32px; padding: 38px 40px; box-shadow: 0 40px 100px -50px rgba(20,10,60,.45), 0 0 0 1px rgba(0,0,0,.05); display: flex; flex-direction: column; gap: 18px; }
+  .mk .code { display: inline-block; padding: 8px 16px; border-radius: 12px; font: 800 26px 'Geist Mono'; color: #fff; }
+  .mk .time { font: 800 104px/1 Geist; letter-spacing: -4px; font-variant-numeric: tabular-nums; }
+  .mk .row { font: 500 25px Geist; color: #4B4B55; display: flex; justify-content: space-between; border-top: 1px solid #EEE; padding-top: 14px; }
+  .mk .row b { color: #1D1D1F; font-weight: 700; }
+  .tile { position: absolute; border-radius: 26px; overflow: hidden; background: #fff; box-shadow: 0 30px 80px -40px rgba(20,10,60,.4), 0 0 0 1px rgba(0,0,0,.06); }
+  .tile .img { position: absolute; inset: 0 0 64px 0; background-repeat: no-repeat; }
+  .tile .lab { position: absolute; left: 0; right: 0; bottom: 0; height: 64px; display: flex; align-items: center; padding: 0 24px; font: 700 26px Geist; letter-spacing: -.5px; border-top: 1px solid #EEE; }
+  .phone { position: absolute; width: 340px; height: 736px; border-radius: 58px; background: #111; padding: 14px; box-shadow: 0 60px 120px -40px rgba(20,10,60,.5), 0 0 0 2px #2c2c2e inset; }
+  .phone .s { width: 100%; height: 100%; border-radius: 46px; overflow: hidden; position: relative; background: #fff; }
+  .phone .s img { width: 100%; }
+  .phone .isl { position: absolute; left: 50%; top: 26px; width: 104px; height: 30px; transform: translateX(-50%); background: #000; border-radius: 20px; z-index: 2; }
+  .chnum { font: 600 40px 'Geist Mono'; color: #C8F031; letter-spacing: 2px; }
+  .chline { height: 3px; background: #C8F031; border-radius: 3px; }
+  .askbar { position: absolute; left: 260px; right: 260px; height: 150px; border-radius: 75px; background: #fff; box-shadow: 0 50px 120px -40px rgba(20,10,60,.45), 0 0 0 2px #C8F031; display: flex; align-items: center; padding: 0 30px 0 60px; gap: 20px; }
+  .askbar .tx { flex: 1; font: 600 50px Geist; letter-spacing: -1.4px; white-space: nowrap; overflow: hidden; color: #16131F; }
+  .askbar .tx.cmd { font-family: 'Geist Mono'; font-weight: 500; font-size: 46px; color: #6D28D9; }
+  .askbar .car { display: inline-block; width: 4px; height: 54px; background: #6D28D9; vertical-align: -8px; margin-left: 4px; }
+  .askbar .go { width: 96px; height: 96px; border-radius: 50%; background: #C8F031; display: grid; place-items: center; font: 800 46px Geist; color: #16131F; }
+  .who { font: 600 28px Geist; color: #6D28D9; letter-spacing: .3px; }
+  .cmp { border-radius: 32px; padding: 40px 44px; display: flex; flex-direction: column; gap: 26px; }
+  .cmp h4 { font: 700 30px Geist; letter-spacing: .5px; text-transform: uppercase; }
+  .cmp .it { display: flex; gap: 18px; align-items: center; font: 600 36px/1.2 Geist; letter-spacing: -.8px; }
+  .cmp .it i { flex: none; width: 46px; height: 46px; border-radius: 50%; display: grid; place-items: center; font: 900 24px Geist; font-style: normal; }
+  .rc { display: flex; align-items: center; gap: 26px; font: 700 44px Geist; letter-spacing: -1.2px; }
+  .rc b { flex: none; width: 70px; height: 70px; border-radius: 20px; background: #16131F; color: #C8F031; display: grid; place-items: center; font: 800 32px 'Geist Mono'; }
+  .rc small { font: 500 28px Geist; color: #6E6E73; letter-spacing: 0; margin-left: 6px; }
+  #flash { position: absolute; inset: 0; pointer-events: none; z-index: 50; }
+</style></head>
+<body>
+<div id="flash"></div>
+<div id="stage"></div>
+<script>
+const TL = __TIMELINE__;
+const CLIPS = __CLIPS__;
+const BEAT = TL.beat;
+const $ = id => document.getElementById(id);
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const seg = (u, a, b) => clamp((u - a) / (b - a));
+const io = t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+const ox = t => t === 1 ? 1 : 1 - Math.pow(2, -10 * t);
+const lerp = (a, b, p) => a + (b - a) * p;
+const fmt = (n, dec = 0) => dec ? n.toFixed(dec) : Math.round(n).toLocaleString('en-SG');
+function show(el, u, a, dur = .7, dy = 30) {
+  const p = ox(seg(u, a, a + dur));
+  el.style.opacity = p; el.style.filter = p < 1 ? `blur(${(1 - p) * 12}px)` : 'none';
+  el.style.transform = `translateY(${(1 - p) * dy}px)`;
+  return p;
+}
+function hide(el, u, a, dur = .45) {
+  const p = io(seg(u, a, a + dur));
+  if (p <= 0) return;
+  el.style.opacity = (parseFloat(el.style.opacity || 1)) * (1 - p);
+  el.style.filter = `blur(${p * 14}px)`;
+}
+const B = b => b * BEAT;                // beats → seconds
+const PENDING = [];
+function setSrc(img, src) { if (img.getAttribute('src') !== src) { img.setAttribute('src', src); PENDING.push(img.decode().catch(() => {})); } }
+function media(img, m, u) {
+  if (!m) return;
+  if (m.clip) {
+    const L = CLIPS[m.clip], t = Math.max(0, u - B(m.at || 0)) * (m.rate || 1) + (m.from_ || 0);
+    setSrc(img, `c/${m.clip}/${L[clamp(Math.floor(t * 30), 0, L.length - 1)]}`);
+  } else setSrc(img, `c/${m.still}.jpg`);
+}
+const stillSrc = s => s.includes('/') ? `c/${s}` : `c/${s}.jpg`;
+const h = (html) => { const d = document.createElement('div'); d.innerHTML = html.trim(); return d.firstElementChild; };
+
+// ---- camera inside a window: zoom toward a UI point, clamped to the screen
+function camState(cam, ub) {
+  let z = 1, x = 720, y = 450;
+  for (const k of cam || []) { const p = io(seg(ub, k.at, k.at + k.dur)); z = lerp(z, k.z, p); x = lerp(x, k.x, p); y = lerp(y, k.y, p); }
+  return { z, x, y };
+}
+function applyCam(ui, s, st) {
+  const W = 1440 * s, H = 900 * s;
+  let tx = W / 2 - st.x * s * st.z, ty = H / 2 - st.y * s * st.z;
+  const blend = clamp((st.z - 1) / .15);   // at z≈1 stay centred
+  tx = clamp(tx * blend, W - W * st.z, 0); ty = clamp(ty * blend, H - H * st.z, 0);
+  ui.style.transform = `translate(${tx}px,${ty}px) scale(${st.z})`;
+}
+function makeWin(s, title, dark) {
+  const w = h(`<div class="win"><div class="bar"><i></i><i></i><i></i><span>${title}</span></div>
+    <div class="body" style="width:${1440 * s}px;height:${900 * s}px"><div class="ui" style="width:${1440 * s}px;height:${900 * s}px"><img></div><div class="sheen"></div></div></div>`);
+  return w;
+}
+function spots(ui, list, s) {
+  return (list || []).map(sp => { const el = h(`<div class="spot"></div>`); const [a, b, c, d] = sp.r;
+    Object.assign(el.style, { left: a * s - 8 + 'px', top: b * s - 8 + 'px', width: (c - a) * s + 16 + 'px', height: (d - b) * s + 16 + 'px', opacity: 0 }); ui.appendChild(el); return { el, sp }; });
+}
+function drawSpots(arr, ub) {
+  for (const { el, sp } of arr) {
+    const p = ox(seg(ub, sp.at, sp.at + 1.2)) * (1 - io(seg(ub, sp.out - .8, sp.out)));
+    el.style.opacity = p;
+  }
+}
+const TITLES = { today: 'Sales Mama · Today', chatday: 'Sales Mama · Chat', 'chatday-end': 'Sales Mama · Chat', slash: 'Sales Mama · Chat', palette: 'Sales Mama · ⌘K',
+  brief: 'Sales Mama · Chat', send: 'Sales Mama · Chat', calendar: 'Sales Mama · Calendar', 'cal-busy': 'Sales Mama · Calendar', 'cal-team': 'Sales Mama · Calendar · Team',
+  manager: 'Sales Mama · Manager', 'canvas-alloc': 'Sales Mama · Reports', company: 'Sales Mama · Company check', 'canvas-insights': 'Sales Mama · Reports' };
+const titleOf = m => TITLES[m.clip || m.still] || (String(m.clip || m.still).startsWith('ep') ? 'Sales Mama · Chat' : String(m.clip || m.still).startsWith('cal') ? 'Sales Mama · Calendar' : 'Sales Mama');
+
+// ---- scene builders: BUILD[type](sc, root) returns state; DRAW[type](st, u, d, ub)
+const BUILD = {}, DRAW = {};
+
+BUILD.words = (sc, root) => {
+  const cam = h(`<div class="cam"></div>`); root.appendChild(cam);
+  const items = sc.items.map(it => { const el = h(`<div class="abs center ${it.cls}" style="top:${it.y ?? 410}px">${it.text}</div>`); el.style.opacity = 0; cam.appendChild(el); return { el, it }; });
+  const pains = (sc.pains || []).map(([t, x, y]) => { const el = h(`<div class="pain" style="left:${x}px;top:${y}px"><b>●</b> ${t}</div>`); el.style.opacity = 0; cam.appendChild(el); return el; });
+  return { cam, items, pains };
+};
+DRAW.words = (st, u, d, ub, sc) => {
+  st.cam.style.transform = `scale(${lerp(1, 1.07, io(u / d))})`;
+  for (const { el, it } of st.items) { show(el, u, B(it.at), .6, 40); hide(el, u, B(it.out) - .2, .3); if (it.cls === 'h2' || it.cls === 'h3') el.style.transform += ` scale(${lerp(.97, 1.03, seg(u, B(it.at), B(it.out)))})`; }
+  st.pains.forEach((el, i) => {
+    const a = B(sc.pains_at) + i * B(1), p = ox(seg(u, a, a + 1.2)), depth = [0, 1, 0, 1, 2, 1][i], q = io(seg(u, B(sc.pains_out) - .4, B(sc.pains_out) + .3));
+    el.style.opacity = p * (1 - q);
+    el.style.filter = `blur(${(1 - p) * 14 + depth * 1.2 + q * 10}px)`;
+    el.style.transform = `translate(${Math.sin(u * .4 + i) * 14}px, ${(1 - p) * 40 + Math.cos(u * .35 + i) * 10}px) scale(${1 - depth * .06})`;
+  });
+};
+
+BUILD.reveal = (sc, root) => {
+  const cam = h(`<div class="cam"></div>`); root.appendChild(cam);
+  const brand = h(`<div class="abs" style="left:0;right:0;top:250px;display:flex;flex-direction:column;align-items:center;gap:30px">
+    <div class="logo">SM</div><div class="h1">Sales Mama</div><div class="sub">The next-gen sales buddy.</div></div>`);
+  const floor = h(`<div class="floor" style="left:460px;width:1000px;top:1000px"></div>`);
+  const lap = h(`<div class="laptop" style="left:340px;top:1120px"><div class="lid"><div class="scr"><img></div></div><div class="deck"></div></div>`);
+  cam.append(brand, floor, lap);
+  return { cam, brand, logo: brand.children[0], name: brand.children[1], tag: brand.children[2], floor, lap, img: lap.querySelector('img') };
+};
+DRAW.reveal = (st, u, d, ub, sc) => {
+  const w = io(seg(u, 0, .7));
+  $('flash').style.background = w < 1 ? `radial-gradient(circle at 50% 50%, transparent ${w * 140}%, #000 ${w * 140 + 1}%)` : 'none';
+  const pl = ox(seg(u, .25, 1.3));
+  st.logo.style.opacity = pl; st.logo.style.transform = `scale(${lerp(.55, 1, pl)}) rotate(${(1 - pl) * -8}deg)`; st.logo.style.filter = `blur(${(1 - pl) * 16}px)`;
+  show(st.name, u, .7, .8, 40); show(st.tag, u, 1.3, .8, 30);
+  const l1 = B(sc.media.at) - .4, pu = io(seg(u, l1, l1 + 2.2));
+  st.brand.style.transform = `translateY(${-pu * 222}px) scale(${lerp(1, .5, pu)})`;
+  st.lap.style.top = `${lerp(1120, 392, pu)}px`; st.lap.style.transformOrigin = '50% 0%';
+  st.lap.style.transform = `rotateX(${lerp(52, 0, pu)}deg) scale(${lerp(.78, .82, pu) + seg(u, l1 + 2.2, d) * .035})`;
+  st.floor.style.opacity = pu;
+  st.cam.style.transform = `scale(${lerp(1.04, 1, io(u / d))})`;
+  media(st.img, { ...sc.media, at: sc.media.at - 1 }, u);
+};
+
+BUILD.chapter = (sc, root) => {
+  const box = h(`<div class="abs" style="left:0;right:0;top:400px;display:flex;flex-direction:column;align-items:center;gap:26px">
+    <div class="chnum">${sc.num}</div><div class="h1">${sc.title}</div><div class="chline" style="width:0"></div></div>`);
+  root.appendChild(box); return { box, n: box.children[0], t: box.children[1], line: box.children[2] };
+};
+DRAW.chapter = (st, u, d) => {
+  const f = 1 - io(seg(u, 0, .35));
+  $('flash').style.background = `rgba(200,240,49,${f * .55})`;
+  show(st.n, u, .05, .4, 20); show(st.t, u, .15, .5, 50);
+  st.t.style.letterSpacing = `${lerp(10, -5.5, ox(seg(u, .15, 1.2)))}px`;
+  st.line.style.width = `${ox(seg(u, .3, 1.3)) * 420}px`;
+  st.box.style.transform = `scale(${lerp(1, 1.06, u / d)})`;
+  hide(st.box, u, d - .35, .3);
+};
+
+const LAYOUTS = {
+  right: { s: .72, left: 770, text: { left: 100, top: 0, width: 630 } },
+  left: { s: .72, left: 90, text: { left: 1180, top: 0, width: 650 } },
+  full: { s: 1.05, left: 204, text: null },
+};
+BUILD.device = (sc, root) => {
+  const L = LAYOUTS[sc.layout], s = L.s, dark = sc.bg !== 'light';
+  const cam = h(`<div class="cam"></div>`); root.appendChild(cam);
+  const win = makeWin(s, titleOf(sc.media), dark);
+  const H = 900 * s + 40; win.style.left = L.left + 'px'; win.style.top = ((1080 - H) / 2) + 'px';
+  cam.appendChild(win);
+  const ui = win.querySelector('.ui'), img = ui.querySelector('img');
+  const st = { cam, win, ui, img, s, spots: spots(ui, sc.spot, s), sheen: win.querySelector('.sheen') };
+  if (L.text) {
+    const t = h(`<div class="abs" style="left:${L.text.left}px;width:${L.text.width}px;top:0;bottom:0;display:flex;flex-direction:column;justify-content:center">
+      ${sc.pill ? `<div><div class="pill">${sc.pill}</div></div>` : ''}<div class="h2s" style="margin-top:34px">${sc.h}</div><div class="sub" style="margin-top:28px">${sc.sub || ''}</div></div>`);
+    cam.appendChild(t); st.parts = [...t.children];
+  } else {
+    const g = h(`<div class="glass" style="left:96px;bottom:70px;max-width:900px"><div class="h2s">${sc.h}</div><div class="sub">${sc.sub || ''}</div></div>`);
+    cam.appendChild(g); st.glass = g;
+  }
+  return st;
+};
+DRAW.device = (st, u, d, ub, sc) => {
+  const enter = ox(seg(u, 0, 1.3)), drift = io(u / d);
+  const ry = sc.layout === 'right' ? -16 : sc.layout === 'left' ? 16 : 0, rx = sc.layout === 'full' ? 14 : 4;
+  st.win.style.transform = `translateY(${(1 - enter) * 120}px) rotateY(${(1 - enter) * ry}deg) rotateX(${(1 - enter) * rx}deg) scale(${lerp(.9, 1, enter) * lerp(1, 1.025, drift)})`;
+  st.win.style.opacity = clamp(enter * 1.4);
+  st.sheen.style.transform = `translateX(${lerp(-110, 110, seg(u, .2, 1.8))}%)`;
+  media(st.img, sc.media, u);
+  applyCam(st.ui, st.s, camState(sc.cam, ub));
+  drawSpots(st.spots, ub);
+  if (st.parts) st.parts.forEach((el, i) => show(el, u, .25 + i * .35, .8, 36));
+  if (st.glass) { const a = B(sc.cap_at || 1); show(st.glass, u, a, .9, 40); }
+};
+
+BUILD.trio = (sc, root) => {
+  const cam = h(`<div class="cam"></div>`); root.appendChild(cam);
+  const t = h(`<div class="abs center" style="top:70px"><div class="h2s">${sc.h}</div>${sc.sub ? `<div class="sub" style="margin-top:18px">${sc.sub}</div>` : ''}</div>`);
+  cam.appendChild(t);
+  const s = .56, wins = sc.imgs.map((src, i) => { const w = makeWin(s, 'Sales Mama', sc.bg !== 'light'); w.style.left = (960 - 1440 * s / 2) + 'px'; w.style.top = '370px';
+    w.querySelector('img').src = stillSrc(src); cam.appendChild(w); return w; });
+  return { cam, t, wins };
+};
+DRAW.trio = (st, u, d) => {
+  show(st.t, u, .2, .8, 40);
+  const pos = [[-500, 50, 20], [0, 0, 0], [500, 50, -20]], order = [0, 2, 1];
+  st.wins.forEach((w, i) => {
+    const a = .5 + order.indexOf(i) * .35, p = ox(seg(u, a, a + 1.3)), f = io(u / d);
+    const [x, y, ry] = pos[i];
+    w.style.zIndex = i === 1 ? 3 : 1; if (i !== 1) w.style.filter = `brightness(${lerp(1, .82, p)})`;
+    w.style.opacity = clamp(p * 1.3);
+    w.style.transform = `translate(${x * p + (i === 1 ? 0 : (i === 0 ? -1 : 1) * f * 20)}px, ${y + (1 - p) * 200}px) rotateY(${ry * p}deg) scale(${(i === 1 ? 1.12 : .94) * lerp(.85, 1, p) * lerp(1, 1.03, f)})`;
+  });
+  st.cam.style.transform = `scale(${lerp(1.02, 1, io(u / d))})`;
+};
+
+BUILD.stats = (sc, root) => {
+  const t = h(`<div class="abs" style="left:150px;top:150px;width:1620px"><div class="pill">${sc.pill}</div><div class="h2" style="margin-top:30px">${sc.h}</div><div class="sub" style="margin-top:20px;max-width:1200px">${sc.sub}</div></div>`);
+  const g = h(`<div class="abs" style="left:150px;right:150px;top:600px;display:grid;grid-template-columns:repeat(4,1fr);gap:28px"></div>`);
+  const k = sc.items.map(it => { const el = h(`<div class="stat"><div class="kpi lime">0</div><div class="kpil">${it.label}</div></div>`); g.appendChild(el); return el; });
+  root.append(t, g); return { parts: [...t.children], k };
+};
+DRAW.stats = (st, u, d, ub, sc) => {
+  st.parts.forEach((el, i) => show(el, u, .2 + i * .35, .8, 36));
+  st.k.forEach((el, i) => { const a = 1.4 + i * .45; show(el, u, a, .7, 40); el.firstChild.textContent = fmt(sc.items[i].n * io(seg(u, a, a + 1.4))); });
+};
+
+BUILD.markets = (sc, root) => {
+  const t = h(`<div class="abs center" style="top:90px"><div class="h2s">${sc.h}</div><div class="sub" style="margin-top:18px">${sc.sub}</div></div>`);
+  const M = [['SG', 'Singapore', '#C8102E', 8 * 60 + 40, '09:00–11:30', 'Mon–Thu', 'Email, LinkedIn'],
+             ['MY', 'Kuala Lumpur', '#1D4ED8', 8 * 60 + 40, '09:30–11:30', 'Mon–Thu', 'Email, WhatsApp opt-in'],
+             ['IN', 'Bengaluru', '#EA580C', 6 * 60 + 10, '10:00–12:30', 'Mon–Fri', 'Email, WhatsApp opt-in']];
+  const g = h(`<div class="abs" style="left:150px;right:150px;top:400px;display:grid;grid-template-columns:repeat(3,1fr);gap:32px"></div>`);
+  const cards = M.map(m => { const el = h(`<div class="mk"><div><span class="code" style="background:${m[2]}">${m[0]}</span> <span style="font:600 28px Geist;color:#6E6E73;margin-left:10px">${m[1]}</span></div>
+     <div class="time">00:00</div><div class="row"><span>Send window</span><b>${m[4]}</b></div><div class="row"><span>Days</span><b>${m[5]}</b></div><div class="row"><span>Channels</span><b>${m[6]}</b></div></div>`);
+    g.appendChild(el); return { el, m }; });
+  root.append(t, g); return { t, cards };
+};
+DRAW.markets = (st, u, d) => {
+  show(st.t, u, .2, .8, 40);
+  st.cards.forEach(({ el, m }, i) => {
+    const a = .9 + i * .4; show(el, u, a, .8, 60);
+    const mins = m[3] + Math.floor(u * 6);
+    el.querySelector('.time').textContent = `${String(Math.floor(mins / 60) % 24).padStart(2, '0')}:${String(mins % 60).padStart(2, '0')}`;
+  });
+};
+
+BUILD.check = (sc, root) => {
+  const t = h(`<div class="abs" style="left:110px;top:0;bottom:0;width:640px;display:flex;flex-direction:column;justify-content:center;gap:0">
+    <div><div class="pill">${sc.pill}</div></div><div class="h2s" style="margin-top:30px">${sc.h}</div>
+    <div style="margin-top:44px;display:flex;flex-direction:column;gap:22px">${sc.checks.map(c => `<div class="chk"><i>✓</i>${c}</div>`).join('')}</div></div>`);
+  const L = LAYOUTS.right, s = L.s, w = makeWin(s, titleOf(sc.media)); w.style.left = L.left + 'px'; w.style.top = ((1080 - 900 * s - 40) / 2) + 'px';
+  root.append(t, w);
+  return { parts: [t.children[0], t.children[1]], checks: [...t.children[2].children], win: w, ui: w.querySelector('.ui'), img: w.querySelector('img'), s };
+};
+DRAW.check = (st, u, d, ub, sc) => {
+  st.parts.forEach((el, i) => show(el, u, .2 + i * .35, .8, 36));
+  st.checks.forEach((el, i) => show(el, u, 1.3 + i * .55, .6, 24));
+  const enter = ox(seg(u, 0, 1.3));
+  st.win.style.transform = `translateY(${(1 - enter) * 120}px) rotateY(${(1 - enter) * -16}deg) scale(${lerp(.9, 1, enter)})`; st.win.style.opacity = clamp(enter * 1.4);
+  media(st.img, sc.media, u); applyCam(st.ui, st.s, camState(sc.cam, ub));
+};
+
+BUILD.insights = (sc, root) => {
+  const t = h(`<div class="abs" style="left:110px;top:0;bottom:0;width:640px;display:flex;flex-direction:column;justify-content:center">
+    <div><div class="pill">${sc.pill}</div></div><div class="h2s" style="margin-top:30px">${sc.h}</div><div class="sub" style="margin-top:16px">${sc.q}</div>
+    <div style="margin-top:40px;display:flex;flex-direction:column;gap:28px">${sc.kpis.map(k => `<div><div class="kpi" style="color:${k.color};font-size:104px">0</div><div class="kpil">${k.label}</div></div>`).join('')}</div></div>`);
+  const L = LAYOUTS.right, s = L.s, w = makeWin(s, titleOf(sc.media)); w.style.left = L.left + 'px'; w.style.top = ((1080 - 900 * s - 40) / 2) + 'px';
+  root.append(t, w);
+  return { parts: [t.children[0], t.children[1], t.children[2]], k: [...t.children[3].children], win: w, ui: w.querySelector('.ui'), img: w.querySelector('img'), s };
+};
+DRAW.insights = (st, u, d, ub, sc) => {
+  st.parts.forEach((el, i) => show(el, u, .2 + i * .3, .8, 36));
+  st.k.forEach((el, i) => { const a = 1.4 + i * 1.1, k = sc.kpis[i]; show(el, u, a, .6, 24); el.firstChild.textContent = fmt(k.n * io(seg(u, a, a + 1.2)), k.dec) + (k.unit || ''); });
+  const enter = ox(seg(u, 0, 1.3));
+  st.win.style.transform = `translateY(${(1 - enter) * 120}px) rotateY(${(1 - enter) * -16}deg) scale(${lerp(.9, 1, enter)})`; st.win.style.opacity = clamp(enter * 1.4);
+  media(st.img, sc.media, u); applyCam(st.ui, st.s, camState(sc.cam, ub));
+};
+
+BUILD.guard = (sc, root) => {
+  const cam = h(`<div class="cam"></div>`); root.appendChild(cam);
+  const t = h(`<div class="abs center h2" style="top:120px">${sc.h}</div>`);
+  const g = h(`<div class="abs" style="left:170px;right:170px;top:330px;display:grid;grid-template-columns:repeat(3,1fr);gap:28px">${sc.rules.map(r => `<div class="rule"><i>✓</i>${r[0]}<small>${r[1]}</small></div>`).join('')}</div>`);
+  cam.append(t, g); return { cam, t, r: [...g.children] };
+};
+DRAW.guard = (st, u, d) => {
+  show(st.t, u, .2, .8, 40);
+  const gap = Math.min(.5, (d - 2.5) / 6);
+  st.r.forEach((el, i) => { const a = 1 + i * gap; show(el, u, a, .6, 30); el.style.borderColor = u > a + .5 ? '#4A5E14' : '#2A2638'; });
+  st.cam.style.transform = `scale(${lerp(1.05, 1, io(u / d))})`;
+};
+
+BUILD.split = (sc, root) => {
+  const t = h(`<div class="abs" style="left:110px;top:0;bottom:0;width:560px;display:flex;flex-direction:column;justify-content:center"><div class="h2s">${sc.h}</div></div>`);
+  const s = .82, w = makeWin(s, 'Sales Mama', true); w.style.left = '640px'; w.style.top = ((1080 - 900 * s - 40) / 2) + 'px';
+  const ui = w.querySelector('.ui'); ui.querySelector('img').src = stillSrc(sc.a);
+  const b = h(`<img style="position:absolute;inset:0;width:100%;height:100%">`); b.src = stillSrc(sc.b); ui.appendChild(b);
+  const edge = h(`<div style="position:absolute;top:-40px;bottom:-40px;width:4px;background:#C8F031;box-shadow:0 0 40px 8px rgba(200,240,49,.6)"></div>`); ui.appendChild(edge);
+  root.append(t, w); return { t, w, b, edge, s };
+};
+DRAW.split = (st, u, d) => {
+  show(st.t, u, .3, .8, 36);
+  const enter = ox(seg(u, 0, 1.2));
+  st.w.style.transform = `translateY(${(1 - enter) * 100}px) rotateY(${(1 - enter) * -14}deg) scale(${lerp(.9, 1, enter) * lerp(1, 1.03, u / d)})`; st.w.style.opacity = clamp(enter * 1.4);
+  const p = io(seg(u, d * .3, d * .3 + 1.6)), W = 1440 * st.s;
+  st.b.style.clipPath = `inset(0 0 0 ${(1 - p) * 100}%)`;
+  st.edge.style.left = `${(1 - p) * W - 2}px`; st.edge.style.opacity = p > 0 && p < 1 ? 1 : 0;
+};
+
+BUILD.phones = (sc, root) => {
+  const t = h(`<div class="abs" style="left:110px;top:0;bottom:0;width:620px;display:flex;flex-direction:column;justify-content:center"><div class="h2s">${sc.h}</div><div class="sub" style="margin-top:24px">Today, chat and calendar on a phone, light and fast.</div></div>`);
+  root.appendChild(t);
+  const ph = sc.imgs.map((src, i) => { const p = h(`<div class="phone" style="left:${800 + i * 330}px;top:172px"><div class="s"><div class="isl"></div><img src="${stillSrc(src)}"></div></div>`); root.appendChild(p); return p; });
+  return { parts: [...t.children], ph };
+};
+DRAW.phones = (st, u, d) => {
+  st.parts.forEach((el, i) => show(el, u, .2 + i * .35, .8, 36));
+  st.ph.forEach((p, i) => { const a = .4 + [1, 0, 2][i] * .3, e = ox(seg(u, a, a + 1.3)), f = io(u / d);
+    p.style.opacity = clamp(e * 1.4); p.style.zIndex = i === 1 ? 3 : 1;
+    p.style.transform = `translateY(${(1 - e) * 300 + (i === 1 ? -20 : 30) - f * (i === 1 ? 14 : 4)}px) rotate(${(i - 1) * 6 * e}deg) scale(${i === 1 ? 1.08 : .96})`; });
+};
+
+BUILD.bento = (sc, root) => {
+  const cam = h(`<div class="cam"></div>`); root.appendChild(cam);
+  const t = h(`<div class="abs center h2s" style="top:60px">${sc.h}</div>`); cam.appendChild(t);
+  // 4-column grid, 2 rows: spans fill left to right
+  const X0 = 110, Y0 = 210, GW = 1700, GH = 810, gap = 24, cw = (GW - 3 * gap) / 4, rh = (GH - gap) / 2;
+  let col = 0, row = 0;
+  const tiles = sc.tiles.map(tl => {
+    if (col + tl.span > 4) { col = 0; row++; }
+    const w = cw * tl.span + gap * (tl.span - 1), x = X0 + col * (cw + gap), y = Y0 + row * (rh + gap); col += tl.span;
+    const el = h(`<div class="tile" style="left:${x}px;top:${y}px;width:${w}px;height:${rh}px"><div class="img"></div><div class="lab">${tl.label}</div></div>`);
+    const [cx, cy, cwid, chei] = tl.crop, th = rh - 64, k = Math.max(w / cwid, th / chei);
+    const im = el.querySelector('.img'); im.style.backgroundImage = `url(${stillSrc(tl.src)})`; im.style.backgroundSize = `${1440 * k}px ${900 * k}px`;
+    im.style.backgroundPosition = `${-cx * k + (w - cwid * k) / 2}px ${-cy * k + (th - chei * k) / 2}px`;
+    cam.appendChild(el); return el;
+  });
+  return { cam, t, tiles };
+};
+DRAW.bento = (st, u, d) => {
+  show(st.t, u, .1, .7, 30);
+  st.tiles.forEach((el, i) => { const a = .3 + i * .22, p = ox(seg(u, a, a + 1)); el.style.opacity = clamp(p * 1.3);
+    el.style.transform = `translateY(${(1 - p) * 80}px) scale(${lerp(.9, 1, p)})`; el.style.filter = p < 1 ? `blur(${(1 - p) * 10}px)` : 'none'; });
+  st.cam.style.transform = `scale(${lerp(1.0, 1.05, io(u / d))})`;
+};
+
+BUILD.outro = (sc, root) => {
+  const c = h(`<div class="cam" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:34px">
+    <div class="logo">SM</div><div class="h2 center" style="position:static">Drive sales.<br><span class="grad">Engage customers.</span></div>
+    <div class="sub">Sales Mama · the next-gen sales buddy</div><div class="mono" style="font-size:28px;color:#6D28D9">github.com/neam-lang/sales-mama.ai</div></div>`);
+  root.appendChild(c); return { c, k: [...c.children] };
+};
+DRAW.outro = (st, u, d) => {
+  const pl = ox(seg(u, .1, 1.1)), lg = st.k[0];
+  lg.style.opacity = pl; lg.style.transform = `scale(${lerp(.6, 1, pl)})`; lg.style.filter = `blur(${(1 - pl) * 14}px)`;
+  show(st.k[1], u, .6, .9, 40); show(st.k[2], u, 2.2, .8, 20); show(st.k[3], u, 2.8, .8, 20);
+  st.c.style.transform = `scale(${lerp(1, 1.05, io(u / d))})`;
+};
+
+BUILD.ask = (sc, root) => {
+  const who = h(`<div class="abs center who" style="top:330px">${sc.who}</div>`);
+  const bar = h(`<div class="askbar" style="top:400px"><div class="tx${sc.prompt.startsWith('/') ? ' cmd' : ''}"></div><div class="go">↑</div></div>`);
+  const sub = h(`<div class="abs center sub" style="top:610px;padding:0 260px">${sc.sub || ''}</div>`);
+  root.append(who, bar, sub); return { who, bar, tx: bar.firstChild, go: bar.lastChild, sub };
+};
+DRAW.ask = (st, u, d, ub, sc) => {
+  show(st.who, u, .15, .6, 20);
+  const e = ox(seg(u, 0, 1)); st.bar.style.opacity = e; st.bar.style.transform = `translateY(${(1 - e) * 60}px) scale(${lerp(.92, 1, e)})`;
+  const t0 = .7, cps = Math.max(16, sc.prompt.length / (d * .45)), n = Math.min(sc.prompt.length, Math.floor(Math.max(0, u - t0) * cps));
+  const done = n >= sc.prompt.length, tEnd = t0 + sc.prompt.length / cps;
+  const blink = done ? (Math.floor(u * 2.2) % 2 ? 0 : 1) : 1;
+  st.tx.innerHTML = sc.prompt.slice(0, n).replace(/&/g, '&amp;').replace(/</g, '&lt;') + `<span class="car" style="opacity:${blink}"></span>`;
+  const tx = st.tx; tx.scrollLeft = tx.scrollWidth;
+  const press = seg(u, tEnd + .5, tEnd + .75), rel = seg(u, tEnd + .75, tEnd + 1.1);
+  st.go.style.transform = `scale(${1 - .18 * press + .18 * rel})`;
+  st.go.style.boxShadow = press > 0 ? `0 0 0 ${rel * 40}px rgba(200,240,49,${.5 * (1 - rel)})` : 'none';
+  show(st.sub, u, tEnd + .9, .8, 24);
+  st.bar.style.transform += ` translateY(${-io(seg(u, d - .6, d)) * 30}px)`;
+};
+BUILD.title = (sc, root) => {
+  const c = h(`<div class="cam" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:26px">
+    <div class="logo" style="width:120px;height:120px;border-radius:30px;font-size:52px">SM</div><div class="eyebrow">${sc.eyebrow}</div>
+    <div class="h1 center" style="position:static;max-width:1700px">${sc.title}</div><div class="sub">${sc.sub}</div></div>`);
+  root.appendChild(c); return { c, k: [...c.children] };
+};
+DRAW.title = (st, u, d) => {
+  const w = io(seg(u, 0, .7));
+  $('flash').style.background = w < 1 ? `radial-gradient(circle at 50% 50%, transparent ${w * 140}%, #000 ${w * 140 + 1}%)` : 'none';
+  const pl = ox(seg(u, .2, 1.1)); st.k[0].style.opacity = pl; st.k[0].style.transform = `scale(${lerp(.5, 1, pl)}) rotate(${(1 - pl) * -10}deg)`;
+  show(st.k[1], u, .5, .7, 20); show(st.k[2], u, .7, .9, 50); show(st.k[3], u, 1.5, .8, 24);
+  st.k[2].style.letterSpacing = `${lerp(4, -5.5, ox(seg(u, .7, 2)))}px`;
+  st.c.style.transform = `scale(${lerp(1, 1.05, io(u / d))})`;
+};
+BUILD.compare = (sc, root) => {
+  const t = h(`<div class="abs center h2s" style="top:110px">${sc.h}</div>`);
+  const g = h(`<div class="abs" style="left:170px;right:170px;top:290px;display:grid;grid-template-columns:1fr 1fr;gap:36px">
+    <div class="cmp" style="background:#fff;box-shadow:0 30px 80px -50px rgba(0,0,0,.4)"><h4 style="color:#B91C1C">Before</h4>${sc.before.map(x => `<div class="it" style="color:#6E6E73"><i style="background:#FEE2E2;color:#B91C1C">✕</i>${x}</div>`).join('')}</div>
+    <div class="cmp" style="background:#16131F;color:#F5F5F7"><h4 style="color:#C8F031">With Sales Mama</h4>${sc.after.map(x => `<div class="it"><i style="background:#C8F031;color:#16131F">✓</i>${x}</div>`).join('')}</div></div>`);
+  root.append(t, g);
+  const [a, b] = g.children; return { t, a, b, ai: [...a.querySelectorAll('.it')], bi: [...b.querySelectorAll('.it')] };
+};
+DRAW.compare = (st, u, d) => {
+  show(st.t, u, .2, .8, 40); show(st.a, u, .6, .8, 50);
+  st.ai.forEach((el, i) => show(el, u, 1 + i * .45, .5, 16));
+  const t1 = 1 + st.ai.length * .45 + .4; show(st.b, u, t1, .8, 50);
+  st.bi.forEach((el, i) => show(el, u, t1 + .4 + i * .55, .5, 16));
+  st.a.style.filter = u > t1 + .3 ? `saturate(${1 - .6 * seg(u, t1 + .3, t1 + 1)})` : 'none';
+};
+BUILD.recap = (sc, root) => {
+  const t = h(`<div class="abs" style="left:170px;top:120px"><div class="eyebrow">${sc.eyebrow}</div><div class="h2s" style="margin-top:14px">${sc.h}</div></div>`);
+  const l = h(`<div class="abs" style="left:170px;right:170px;top:400px;display:flex;flex-direction:column;gap:30px">${sc.items.map((x, i) => `<div class="rc"><b>${i + 1}</b><span>${x[0]}<small>${x[1]}</small></span></div>`).join('')}</div>`);
+  root.append(t, l); return { t, r: [...l.children] };
+};
+DRAW.recap = (st, u, d) => { show(st.t, u, .2, .8, 30); st.r.forEach((el, i) => show(el, u, .9 + i * .5, .6, 24)); };
+BUILD.epout = (sc, root) => {
+  const c = h(`<div class="cam" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:32px">
+    <div class="logo">SM</div><div class="h2 center" style="position:static;max-width:1600px">${sc.h}</div>
+    <div class="sub">Sales Mama · the next-gen sales buddy</div>${sc.next ? `<div class="pill" style="font-family:Geist;font-size:28px">Next · ${sc.next}</div>` : `<div class="mono" style="font-size:28px;color:#6D28D9">github.com/neam-lang/sales-mama.ai</div>`}</div>`);
+  root.appendChild(c); return { c, k: [...c.children] };
+};
+DRAW.epout = (st, u, d) => {
+  const pl = ox(seg(u, .1, 1.1)), lg = st.k[0];
+  lg.style.opacity = pl; lg.style.transform = `scale(${lerp(.6, 1, pl)})`; lg.style.filter = `blur(${(1 - pl) * 14}px)`;
+  show(st.k[1], u, .6, .9, 40); show(st.k[2], u, 2.2, .8, 20); show(st.k[3], u, 3.0, .8, 20);
+  st.c.style.transform = `scale(${lerp(1, 1.05, io(u / d))})`;
+};
+
+// ---- build all scenes
+const STATE = {};
+for (const sc of TL.scenes) {
+  const el = document.createElement('section'); el.className = `scene ${sc.bg}`; el.id = sc.id; $('stage').appendChild(el);
+  STATE[sc.id] = BUILD[sc.type](sc, el);
+}
+window.DURATION = TL.duration;
+window.render = async function (t) {
+  $('flash').style.background = 'none';
+  PENDING.length = 0;
+  let active = null;
+  for (const sc of TL.scenes) {
+    const on = t >= sc.start && (t < sc.end || sc === TL.scenes[TL.scenes.length - 1]);
+    $(sc.id).classList.toggle('on', on); if (on) active = sc;
+  }
+  if (active) { const u = t - active.start; DRAW[active.type](STATE[active.id], u, active.end - active.start, u / BEAT, active); }
+  const tail = seg(t, TL.duration - .9, TL.duration);
+  if (tail > 0) $('flash').style.background = `rgba(245,245,247,${io(tail)})`;
+  await Promise.all(PENDING);
+};
+// preload stills
+window.READY = Promise.all([...document.images].filter(i => i.getAttribute('src')).map(i => i.decode().catch(() => {})));
+render(0);
+</script>
+</body></html>

@@ -1,0 +1,13 @@
+[
+ {"id":"problem","min":12,"lines":["It's Monday morning in Singapore.","Maya runs a sales team of six, with hundreds of leads, and no time.","Leads go cold in the CRM. Research eats the whole morning.","And nobody is sure which companies are even real."]},
+ {"id":"reveal","min":7,"lines":["Meet Sales Mama.","An AI sales harness that runs inside Claude Code. The repo is the system."]},
+ {"id":"overnight","min":9,"lines":["At two a.m., scouts scan news, tenders and registries.","Every lead is scored, and a virtual account manager watches each book."]},
+ {"id":"manager","min":9,"lines":["At eight thirty, the manager opens the cockpit.","Last night's run, the hot accounts, and a fair allocation, approved in one click."]},
+ {"id":"rep","min":9,"lines":["Reps type, mama day.","Replies are triaged, new accounts are researched in parallel, and drafts are written in their own voice."]},
+ {"id":"grounded","min":6,"lines":["Every fact links back to its source. No source, no claim."]},
+ {"id":"send","min":13,"lines":["In the send window, mama send shows the whole batch.","The rep picks, approves once, and Sales Mama sends email and WhatsApp, logging every touch.","Nothing goes out without approval."]},
+ {"id":"check","min":13,"lines":["Before anyone sells, company check asks: is this company real?","Live with ACRA, filing on time, a real office, not a virtual one, and more than three staff.","Three verifier agents gather the evidence."]},
+ {"id":"insights","min":9,"lines":["Ask a question, get a report.","Nine thousand six hundred clinics. Ninety-three percent filing on time. And the best new leads."]},
+ {"id":"guardrails","min":7,"lines":["Guardrails are built in: approvals, citations, suppression lists, and rules for every market."]},
+ {"id":"outro","min":8,"lines":["Sales Mama.","Your sales team's morning, done before coffee."]}
+]

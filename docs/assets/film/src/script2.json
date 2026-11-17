@@ -1,0 +1,13 @@
+[
+ {"id":"problem","min":12,"lines":["It's Monday morning, [[slnc 200]] in Singapore.","Maya runs a sales team of six. [[slnc 250]] Hundreds of leads. [[slnc 200]] No time.","Leads go cold in the CRM. [[slnc 250]] Research eats the whole morning.","And nobody is sure, [[slnc 150]] which companies are even real."]},
+ {"id":"reveal","min":7,"lines":["Meet Sales Mama.","An AI sales harness, [[slnc 120]] that runs inside Claude Code. [[slnc 250]] The repo is the system."]},
+ {"id":"overnight","min":9,"lines":["At two a.m., [[slnc 150]] scouts scan news, tenders and registries.","Every lead is scored. [[slnc 200]] And a virtual account manager watches every book."]},
+ {"id":"manager","min":9,"lines":["At eight thirty, [[slnc 150]] the manager opens the cockpit.","Last night's run. [[slnc 150]] The hot accounts. [[slnc 150]] And a fair allocation, approved in one click."]},
+ {"id":"rep","min":9,"lines":["Reps type, [[slnc 120]] mama day.","Replies are triaged. [[slnc 150]] New accounts are researched in parallel. [[slnc 150]] And drafts are written in their own voice."]},
+ {"id":"grounded","min":6,"lines":["Every fact links back to its source. [[slnc 300]] No source, [[slnc 100]] no claim."]},
+ {"id":"send","min":13,"lines":["In the send window, [[slnc 120]] mama send shows the whole batch.","The rep picks, [[slnc 100]] approves once, [[slnc 150]] and Sales Mama sends email and WhatsApp, [[slnc 100]] logging every touch.","Nothing goes out, [[slnc 150]] without approval."]},
+ {"id":"check","min":13,"lines":["Before anyone sells, [[slnc 150]] company check asks: [[slnc 200]] is this company real?","Live with ACRA. [[slnc 150]] Filing on time. [[slnc 150]] A real office, not a virtual one. [[slnc 150]] And more than three staff.","Three verifier agents, [[slnc 100]] gather the evidence."]},
+ {"id":"insights","min":9,"lines":["Ask a question. [[slnc 200]] Get a report.","Nine thousand six hundred clinics. [[slnc 200]] Ninety-three percent filing on time. [[slnc 200]] And the best new leads."]},
+ {"id":"guardrails","min":7,"lines":["Guardrails are built in. [[slnc 200]] Approvals, [[slnc 100]] citations, [[slnc 100]] suppression lists, [[slnc 100]] and rules for every market."]},
+ {"id":"outro","min":8,"lines":["Sales Mama.","Your sales team's morning, [[slnc 200]] done before coffee."]}
+]
