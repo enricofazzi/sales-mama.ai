@@ -53,6 +53,15 @@ Music and on-screen words, no voice-over; fictional demo data. Each episode open
 </tr>
 </table>
 
+**Sales Harness Bench** · two 6-minute films about the [Sales Harness Leaderboard](https://huggingface.co/spaces/praveengovi/Sales-Harness-Leaderboard) and its [benchmark](https://huggingface.co/datasets/praveengovi/sales-harness-bench), told through questions:
+
+<table>
+<tr>
+<td width="50%"><a href="docs/assets/video/sales-harness-bench-1-why-720p.mp4"><img src="docs/assets/video/bench1-thumb.jpg" alt="Sales Harness Bench film 1: Can you trust an agent with your pipeline?"></a><br><sub><b>Bench 1 · Can you trust an agent with your pipeline?</b> · 6:01 · what a harness is, the research it builds on, ten tracks, nine rule breaks that zero a task, integrity, why SG · MY · IN.</sub></td>
+<td width="50%"><a href="docs/assets/video/sales-harness-bench-2-how-720p.mp4"><img src="docs/assets/video/bench2-thumb.jpg" alt="Sales Harness Bench film 2: How the leaderboard was built, and how to use it"></a><br><sub><b>Bench 2 · How the leaderboard was built, and how to use it</b> · 6:01 · where the 143 tasks came from, the sandbox, grading, ties, the leak the first run caught, running your harness and opening a PR.</sub></td>
+</tr>
+</table>
+
 GitHub opens these as downloads; they play in any browser or video player.
 
 ## 🎯 Why
@@ -347,7 +356,7 @@ Every pilot mistake becomes a failing eval case before it is fixed.
 | 9 · Console | ✅ |
 | 9b · Console v2: Today, chat, calendar, generative reports | ✅ |
 | 9c · Appointments, team calendar, Google Calendar busy blocks | ✅ |
-| Films: 2-minute pitch, 5-minute tour, install, five episodes | ✅ |
+| Films: 2-minute pitch, 5-minute tour, install, five episodes, two Sales Harness Bench films | ✅ |
 
 </details>
 

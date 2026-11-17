@@ -1,0 +1,586 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Geist:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500;600;700&display=block" rel="stylesheet">
+<style>
+  /* Template 5 · "Bench": a night grid with a running question tracker. Same engine as player3, new look. */
+  * { box-sizing: border-box; margin: 0; }
+  html, body { width: 1920px; height: 1080px; overflow: hidden; background: #000; }
+  body { font-family: Geist, system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  :root { --night: #0D0B14; --night2: #17141F; --line: #2B2638; --paper: #F6F5FA; --ink: #16131F; --lime: #C8F031; --violet: #A78BFA; --violetd: #6D28D9;
+          --teal: #3CC4B0; --tealD: #0F766E; --orange: #FB923C; --orangeD: #C2410C; --red: #FF6B6B; --redD: #B91C1C; --blue: #7DA2FF; --muted: #8A84A3; --mutedL: #6E6A80; }
+  .scene { position: absolute; inset: 0; overflow: hidden; display: none; perspective: 2400px; }
+  .scene.on { display: block; }
+  .night { background-color: var(--night); color: #F4F2FA;
+    background-image: radial-gradient(1200px 700px at 85% 0%, rgba(109,40,217,.22), transparent 60%), radial-gradient(900px 600px at 0% 100%, rgba(200,240,49,.07), transparent 60%),
+      linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px);
+    background-size: auto, auto, 60px 60px, 60px 60px; }
+  .paper { background-color: var(--paper); color: var(--ink);
+    background-image: linear-gradient(rgba(22,19,31,.045) 1px, transparent 1px), linear-gradient(90deg, rgba(22,19,31,.045) 1px, transparent 1px); background-size: 60px 60px; }
+  .black { background: #000; color: #F4F2FA; }
+  .abs { position: absolute; } .center { left: 0; right: 0; text-align: center; }
+  .cam { position: absolute; inset: 0; transform-style: preserve-3d; }
+  .disp { font-family: 'Bricolage Grotesque', Geist, sans-serif; font-weight: 800; letter-spacing: -.035em; line-height: 1.02; }
+  .mono { font-family: 'Geist Mono', ui-monospace, monospace; }
+  .eyebrow { font: 600 26px 'Geist Mono'; letter-spacing: .12em; text-transform: uppercase; color: var(--lime); }
+  .paper .eyebrow { color: var(--violetd); }
+  .h1 { font-size: 132px; } .h2 { font-size: 92px; } .h3 { font-size: 66px; } .h4 { font-size: 48px; letter-spacing: -.02em; }
+  .sub { font: 500 32px/1.4 Geist; color: #B9B4CC; letter-spacing: -.2px; }
+  .paper .sub { color: var(--mutedL); }
+  .lime { color: var(--lime); } .red { color: var(--red); } .vio { color: var(--violet); } .paper .vio { color: var(--violetd); }
+  .mark { background: linear-gradient(transparent 62%, rgba(200,240,49,.85) 62%); color: inherit; padding: 0 .06em; }
+  .night .mark, .black .mark { background: none; color: var(--lime); }
+  .chip { display: inline-flex; align-items: center; gap: 10px; padding: 12px 22px; border-radius: 999px; font: 600 26px Geist; border: 1.5px solid rgba(255,255,255,.18); background: rgba(255,255,255,.05); }
+  .paper .chip { border-color: rgba(22,19,31,.14); background: #fff; }
+  .chip.lit { background: var(--lime); color: var(--ink); border-color: var(--lime); }
+  /* HUD */
+  #hud { position: absolute; inset: 0; z-index: 40; pointer-events: none; opacity: 0; }
+  #hud .tl { position: absolute; left: 64px; top: 46px; display: flex; align-items: center; gap: 16px; font: 600 20px 'Geist Mono'; letter-spacing: .12em; text-transform: uppercase; }
+  #hud .tl b { width: 40px; height: 40px; border-radius: 11px; background: var(--lime); color: var(--ink); display: grid; place-items: center; font: 800 17px Geist; letter-spacing: 0; }
+  #hud .tr { position: absolute; right: 64px; top: 50px; font: 600 20px 'Geist Mono'; letter-spacing: .06em; text-align: right; max-width: 900px; white-space: nowrap; }
+  #hud .tr span { color: var(--lime); }
+  #hud .rail { position: absolute; left: 64px; right: 64px; bottom: 40px; display: flex; gap: 10px; }
+  #hud .rail i { flex: 1; height: 5px; border-radius: 3px; background: rgba(255,255,255,.14); overflow: hidden; position: relative; }
+  #hud .rail i u { position: absolute; inset: 0; background: var(--lime); transform-origin: 0 50%; transform: scaleX(0); }
+  #hud.dk { color: #CFCADF; } #hud.lt { color: #4B4760; }
+  #hud.lt .rail i { background: rgba(22,19,31,.12); } #hud.lt .tr span { color: var(--violetd); } #hud.lt .rail i u { background: var(--violetd); }
+  #flash { position: absolute; inset: 0; pointer-events: none; z-index: 50; }
+  #wipe { position: absolute; top: 0; bottom: 0; width: 220px; background: var(--lime); z-index: 45; transform: translateX(-400px) skewX(-12deg); }
+  /* cold open log */
+  .log { font: 500 40px/1.6 'Geist Mono'; color: #DCD7EA; white-space: nowrap; }
+  .log b { color: #6F6A85; font-weight: 500; margin-right: 28px; }
+  .log.bad { color: var(--red); }
+  .scan { position: absolute; inset: 0; background: repeating-linear-gradient(0deg, rgba(255,255,255,.025) 0 2px, transparent 2px 4px); pointer-events: none; }
+  /* question card */
+  .qnum { font: 800 330px/0.8 'Bricolage Grotesque'; color: transparent; -webkit-text-stroke: 3px var(--lime); letter-spacing: -.05em; }
+  .qtext { font: 800 104px/1.04 'Bricolage Grotesque'; letter-spacing: -.035em; }
+  .car { display: inline-block; width: 7px; height: .9em; background: var(--lime); vertical-align: -.08em; margin-left: 6px; }
+  .qrule { height: 4px; background: var(--lime); border-radius: 4px; }
+  /* cards */
+  .grid { display: grid; gap: 26px; }
+  .card { border-radius: 26px; padding: 32px 34px; background: rgba(255,255,255,.045); border: 1.5px solid var(--line); display: flex; flex-direction: column; gap: 14px; }
+  .paper .card { background: #fff; border-color: rgba(22,19,31,.08); box-shadow: 0 30px 70px -45px rgba(22,19,31,.35); }
+  .card .k { font: 600 21px 'Geist Mono'; letter-spacing: .06em; color: var(--lime); text-transform: uppercase; }
+  .paper .card .k { color: var(--violetd); }
+  .card .t { font: 800 40px/1.12 'Bricolage Grotesque'; letter-spacing: -.02em; }
+  .card .d { font: 500 26px/1.42 Geist; color: #B9B4CC; }
+  .paper .card .d { color: #55516A; }
+  .compact .card { padding: 22px 26px; gap: 8px; border-radius: 22px; } .compact .card .t { font-size: 31px; } .compact .card .d { font-size: 21px; } .compact .card .k { font-size: 18px; }
+  .term.small .tb { font-size: 21px; }
+  .term .cont { color: #FFFFFF; }
+  .card.risk { border-color: rgba(255,107,107,.35); }
+  .card.risk .k { color: var(--red); }
+  .card.lime { background: var(--lime); color: var(--ink); border-color: var(--lime); } .card.lime .k, .card.lime .d { color: #2D3A06; }
+  .card.ink { background: var(--ink); color: #F4F2FA; border-color: var(--ink); } .card.ink .k { color: var(--lime); } .card.ink .d { color: #B9B4CC; }
+  .card .stamp { align-self: flex-start; font: 700 22px 'Geist Mono'; padding: 6px 14px; border-radius: 10px; background: var(--red); color: #fff; }
+  /* windows */
+  .win { position: absolute; background: #fff; border-radius: 18px; overflow: hidden; box-shadow: 0 70px 160px -40px rgba(10,6,30,.6), 0 0 0 1px rgba(0,0,0,.08); }
+  .night .win { box-shadow: 0 70px 180px -30px rgba(0,0,0,.95), 0 0 0 1px #2B2638, 0 0 140px -30px rgba(167,139,250,.35); }
+  .win .bar { height: 52px; background: #ECEBF2; display: flex; align-items: center; gap: 9px; padding: 0 18px; }
+  .win .bar i { width: 13px; height: 13px; border-radius: 50%; } .win .bar i:nth-child(1) { background: #FF5F57; } .win .bar i:nth-child(2) { background: #FEBC2E; } .win .bar i:nth-child(3) { background: #28C840; }
+  .win .bar .url { margin-left: 18px; flex: 1; height: 32px; border-radius: 9px; background: #fff; display: flex; align-items: center; padding: 0 14px; font: 500 16px 'Geist Mono'; color: #55516A; gap: 8px; }
+  .win .bar .url::before { content: '🔒'; font-size: 13px; filter: grayscale(1); }
+  .win .body { position: relative; overflow: hidden; }
+  .ui { position: absolute; left: 0; top: 0; transform-origin: 0 0; }
+  .ui img { position: absolute; left: 0; top: 0; width: 100%; height: 100%; }
+  .spot { position: absolute; border-radius: 14px; box-shadow: 0 0 0 4000px rgba(12,9,24,.5), 0 0 0 3px #C8F031, 0 0 50px 6px rgba(200,240,49,.45); }
+  .term { position: absolute; border-radius: 18px; overflow: hidden; background: #0B0A10; box-shadow: 0 70px 180px -30px rgba(0,0,0,.95), 0 0 0 1px #2B2638; }
+  .term .bar { height: 48px; background: #17141F; display: flex; align-items: center; gap: 9px; padding: 0 18px; }
+  .term .bar i { width: 13px; height: 13px; border-radius: 50%; background: #3A3449; }
+  .term .bar span { margin-left: 14px; font: 500 17px 'Geist Mono'; color: #8A84A3; }
+  .term .tb { padding: 26px 32px; font: 500 25px/1.62 'Geist Mono'; color: #DCD7EA; }
+  .term .ln { white-space: pre; overflow: hidden; }
+  .term .cmd::before { content: '$ '; color: var(--lime); }
+  .term .cmd { color: #FFFFFF; }
+  .term .dim { color: #6F6A85; } .term .ok { color: var(--lime); } .term .bad { color: var(--red); } .term .vio { color: var(--violet); }
+  .doc .tb { font-size: 26px; white-space: pre-wrap; }
+  .doc .hl { background: rgba(255,107,107,.18); box-shadow: inset 4px 0 0 var(--red); border-radius: 4px; }
+  .doc .hlg { background: rgba(200,240,49,.16); box-shadow: inset 4px 0 0 var(--lime); border-radius: 4px; }
+  /* history */
+  .hchip { position: absolute; width: 360px; padding: 14px 18px; border-radius: 16px; background: rgba(255,255,255,.05); border: 1.5px solid var(--line); }
+  .hchip b { display: block; font: 800 25px/1.15 'Bricolage Grotesque'; letter-spacing: -.01em; color: #fff; }
+  .hchip span { display: block; font: 500 19px/1.35 Geist; color: #B9B4CC; margin-top: 5px; }
+  .hchip::before { content: ''; position: absolute; left: -1.5px; top: 14px; bottom: 14px; width: 5px; border-radius: 3px; background: var(--c); }
+  .yr { position: absolute; font: 800 46px 'Bricolage Grotesque'; color: var(--lime); transform: translateX(-50%); }
+  .dot { position: absolute; width: 18px; height: 18px; border-radius: 50%; background: var(--lime); transform: translate(-50%, -50%); box-shadow: 0 0 0 7px rgba(200,240,49,.18); }
+  .legend { display: flex; gap: 34px; font: 600 21px Geist; color: #B9B4CC; }
+  .legend i { display: inline-block; width: 14px; height: 14px; border-radius: 4px; margin-right: 10px; vertical-align: -1px; }
+  /* anatomy */
+  .ring { position: absolute; border-radius: 40px; border: 2px solid; display: flex; justify-content: center; }
+  .ring .lab { position: absolute; top: 18px; left: 0; right: 0; text-align: center; }
+  .ring .lab b { display: block; font: 800 30px 'Bricolage Grotesque'; letter-spacing: -.01em; }
+  .ring .lab span { display: block; font: 500 18px 'Geist Mono'; opacity: .85; margin-top: 4px; white-space: nowrap; }
+  .bracket { position: absolute; border: 3px solid var(--lime); border-left: none; border-radius: 0 24px 24px 0; }
+  /* funnel */
+  .frow { display: grid; grid-template-columns: 230px 190px 300px 150px 1fr; align-items: center; gap: 24px; height: 58px; padding: 0 22px; border-radius: 16px; }
+  .frow .nm { font: 800 30px 'Bricolage Grotesque'; letter-spacing: -.01em; }
+  .frow .st { font: 600 20px 'Geist Mono'; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+  .frow .wb { height: 16px; border-radius: 8px; background: var(--violet); transform-origin: 0 50%; }
+  .frow .wl { font: 700 22px 'Geist Mono'; color: #CFCADF; }
+  .frow .ex { font: 500 21px Geist; color: #B9B4CC; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .frow .tag { justify-self: start; font: 700 18px 'Geist Mono'; padding: 6px 12px; border-radius: 8px; }
+  /* formula */
+  .fx { font: 800 96px 'Bricolage Grotesque'; letter-spacing: -.03em; white-space: nowrap; }
+  .fx small { font: 600 30px 'Geist Mono'; color: var(--muted); letter-spacing: 0; display: block; margin-top: 18px; }
+  .gauge { position: absolute; height: 14px; border-radius: 7px; background: linear-gradient(90deg, var(--lime), #F5C542 30%, var(--red) 100%); }
+  .knob { position: absolute; width: 44px; height: 44px; border-radius: 50%; background: #fff; box-shadow: 0 0 0 6px rgba(255,255,255,.18), 0 10px 30px rgba(0,0,0,.5); transform: translate(-50%, -50%); }
+  .tick { position: absolute; font: 600 22px 'Geist Mono'; color: var(--muted); transform: translateX(-50%); }
+  .big { font: 800 120px/1 'Bricolage Grotesque'; letter-spacing: -.04em; font-variant-numeric: tabular-nums; }
+  .bigl { font: 600 24px 'Geist Mono'; color: var(--muted); letter-spacing: .05em; text-transform: uppercase; margin-top: 10px; }
+  .tile { border-radius: 26px; padding: 30px 32px; background: rgba(255,255,255,.045); border: 1.5px solid var(--line); }
+  .paper .tile { background: #fff; border-color: rgba(22,19,31,.08); }
+  /* tree */
+  .tree { font: 500 34px/1.75 'Geist Mono'; white-space: pre; }
+  .tree .an { font: 600 24px Geist; color: var(--lime); margin-left: 26px; }
+  .tree .an.r { color: var(--red); } .tree .an.v { color: var(--violet); }
+  /* pipeline */
+  .pbox { border-radius: 24px; padding: 28px 28px; background: rgba(255,255,255,.05); border: 1.5px solid var(--line); display: flex; flex-direction: column; gap: 10px; }
+  .pbox .k { font: 600 22px 'Geist Mono'; color: var(--lime); }
+  .pbox .t { font: 800 34px/1.1 'Bricolage Grotesque'; }
+  .pbox .d { font: 500 22px/1.4 Geist; color: #B9B4CC; }
+  /* compare */
+  .cmp { border-radius: 30px; padding: 40px 44px; display: flex; flex-direction: column; gap: 26px; }
+  .cmp h4 { font: 700 26px 'Geist Mono'; letter-spacing: .1em; text-transform: uppercase; }
+  .cmp .it { display: flex; gap: 18px; align-items: center; font: 600 34px/1.22 Geist; letter-spacing: -.5px; }
+  .cmp .it i { flex: none; width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; font: 900 22px Geist; font-style: normal; }
+  /* recap */
+  .rc { display: grid; grid-template-columns: 110px 1fr; align-items: center; gap: 26px; }
+  .rc b { height: 70px; border-radius: 18px; background: var(--lime); color: var(--ink); display: grid; place-items: center; font: 800 30px 'Geist Mono'; }
+  .rc div { font: 800 40px/1.15 'Bricolage Grotesque'; letter-spacing: -.015em; }
+  .rc small { display: block; font: 500 25px/1.35 Geist; color: #B9B4CC; letter-spacing: 0; margin-top: 4px; }
+  .logo { width: 150px; height: 150px; border-radius: 38px; background: var(--lime); color: var(--ink); display: grid; place-items: center; font: 900 60px Geist; letter-spacing: -2px; box-shadow: 0 30px 90px -20px rgba(200,240,49,.45); }
+  .url2 { font: 600 30px 'Geist Mono'; color: #DCD7EA; }
+  .url2 b { color: var(--lime); font-weight: 600; }
+  .pill { display: inline-flex; padding: 14px 26px; border-radius: 999px; background: var(--lime); color: var(--ink); font: 700 28px Geist; }
+</style></head>
+<body>
+<div id="flash"></div>
+<div id="wipe"></div>
+<div id="hud"><div class="tl"><b>SM</b><span id="hud-l"></span></div><div class="tr" id="hud-r"></div><div class="rail" id="rail"></div></div>
+<div id="stage"></div>
+<script>
+const TL = __TIMELINE__;
+const CLIPS = __CLIPS__;
+const BEAT = TL.beat;
+const $ = id => document.getElementById(id);
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const seg = (u, a, b) => clamp((u - a) / (b - a));
+const io = t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+const ox = t => t === 1 ? 1 : 1 - Math.pow(2, -10 * t);
+const lerp = (a, b, p) => a + (b - a) * p;
+const fmt = (n, dec = 0) => dec ? n.toFixed(dec) : Math.round(n).toLocaleString('en-SG');
+const B = b => b * BEAT;
+const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;');
+function show(el, u, a, dur = .7, dy = 30) {
+  const p = ox(seg(u, a, a + dur));
+  el.style.opacity = p; el.style.filter = p < 1 ? `blur(${(1 - p) * 10}px)` : 'none';
+  el.style.transform = `translateY(${(1 - p) * dy}px)`;
+  return p;
+}
+function fade(el, u, a, dur = .45) { const p = io(seg(u, a, a + dur)); if (p > 0) { el.style.opacity = (parseFloat(el.style.opacity || 1)) * (1 - p); } }
+const PENDING = [];
+function setSrc(img, src) { if (img.getAttribute('src') !== src) { img.setAttribute('src', src); PENDING.push(img.decode().catch(() => {})); } }
+function media(img, m, u) {
+  if (!m) return;
+  if (m.clip) { const L = CLIPS[m.clip], t = Math.max(0, u - B(m.at || 0)) * (m.rate || 1) + (m.from_ || 0); setSrc(img, `c/${m.clip}/${L[clamp(Math.floor(t * 30), 0, L.length - 1)]}`); }
+  else setSrc(img, `c/${m.still}.jpg`);
+}
+const h = html => { const d = document.createElement('div'); d.innerHTML = html.trim(); return d.firstElementChild; };
+function camState(cam, ub) { let z = 1, x = 720, y = 450; for (const k of cam || []) { const p = io(seg(ub, k.at, k.at + k.dur)); z = lerp(z, k.z, p); x = lerp(x, k.x, p); y = lerp(y, k.y, p); } return { z, x, y }; }
+function applyCam(ui, s, st) {
+  const W = 1440 * s, H = 900 * s; let tx = W / 2 - st.x * s * st.z, ty = H / 2 - st.y * s * st.z;
+  const blend = clamp((st.z - 1) / .15); tx = clamp(tx * blend, W - W * st.z, 0); ty = clamp(ty * blend, H - H * st.z, 0);
+  ui.style.transform = `translate(${tx}px,${ty}px) scale(${st.z})`;
+}
+function spots(ui, list, s) { return (list || []).map(sp => { const el = h(`<div class="spot"></div>`); const [a, b, c, d] = sp.r;
+  Object.assign(el.style, { left: a * s - 8 + 'px', top: b * s - 8 + 'px', width: (c - a) * s + 16 + 'px', height: (d - b) * s + 16 + 'px', opacity: 0 }); ui.appendChild(el); return { el, sp }; }); }
+function drawSpots(arr, ub) { for (const { el, sp } of arr) el.style.opacity = ox(seg(ub, sp.at, sp.at + 1.2)) * (1 - io(seg(ub, sp.out - .8, sp.out))); }
+// stagger helper: reveal each element in turn between a and b seconds
+function stagger(els, u, a, gap, dur = .6, dy = 26) { els.forEach((el, i) => show(el, u, a + i * gap, dur, dy)); }
+
+const BUILD = {}, DRAW = {};
+
+// ---- cold open: a log of things going wrong, then the question
+BUILD.cold = (sc, root) => {
+  root.appendChild(h(`<div class="scan"></div>`));
+  const eb = h(`<div class="abs eyebrow" style="left:200px;top:190px;color:#8A84A3">${sc.eyebrow}</div>`);
+  const lines = sc.lines.map((l, i) => { const el = h(`<div class="abs log ${l.bad ? 'bad' : ''}" style="left:200px;top:${290 + i * 82}px"><b>${l.t}</b>${l.text}</div>`); el.style.opacity = 0; return el; });
+  const punch = h(`<div class="abs center disp h2" style="top:380px">${sc.punch}</div>`); punch.style.opacity = 0;
+  root.append(eb, ...lines, punch); return { eb, lines, punch };
+};
+DRAW.cold = (st, u, d, ub, sc) => {
+  show(st.eb, u, .3, .6, 10);
+  st.lines.forEach((el, i) => { const a = B(sc.lines[i].at); const p = seg(u, a, a + .5); el.style.opacity = p > 0 ? 1 : 0;
+    const full = el.dataset.full || (el.dataset.full = el.innerHTML); // typewriter on the text part
+    const txt = sc.lines[i].text, n = Math.floor(seg(u, a, a + Math.max(.6, txt.length / 34)) * txt.length);
+    el.innerHTML = `<b>${sc.lines[i].t}</b>${esc(txt.slice(0, n))}`; });
+  const pa = B(sc.punch_at);
+  if (u > pa - .4) { st.lines.forEach(el => el.style.opacity = 1 - io(seg(u, pa - .4, pa))); st.eb.style.opacity = 1 - io(seg(u, pa - .4, pa)); }
+  show(st.punch, u, pa, .9, 40); st.punch.style.transform += ` scale(${lerp(.97, 1.03, seg(u, pa, d))})`;
+};
+
+// ---- say: a statement, with optional chips
+BUILD.say = (sc, root) => {
+  const left = sc.align === 'left';
+  const box = h(`<div class="abs ${left ? '' : 'center'}" style="${left ? 'left:200px;width:1500px' : 'left:160px;right:160px'};top:0;bottom:0;display:flex;flex-direction:column;justify-content:center;${left ? '' : 'align-items:center'};gap:30px">
+    ${sc.eyebrow ? `<div class="eyebrow">${sc.eyebrow}</div>` : ''}<div class="disp ${sc.size || 'h2'}" style="max-width:1600px">${sc.h}</div>
+    ${sc.sub ? `<div class="sub" style="max-width:1300px">${sc.sub}</div>` : ''}
+    ${sc.chips ? `<div style="display:flex;flex-wrap:wrap;gap:16px;${left ? '' : 'justify-content:center'};max-width:1600px">${sc.chips.map((c, i) => `<span class="chip ${sc.lit && sc.lit.includes(i) ? 'lit' : ''}">${c}</span>`).join('')}</div>` : ''}</div>`);
+  root.appendChild(box); const parts = [...box.children]; const chips = sc.chips ? [...parts[parts.length - 1].children] : [];
+  return { box, parts: sc.chips ? parts.slice(0, -1) : parts, chips, chipRow: sc.chips ? parts[parts.length - 1] : null };
+};
+DRAW.say = (st, u, d) => {
+  st.parts.forEach((el, i) => show(el, u, .2 + i * .45, .8, 34));
+  if (st.chipRow) { st.chipRow.style.opacity = 1; stagger(st.chips, u, .3 + st.parts.length * .45, .32, .5, 18); }
+  st.box.style.transform = `scale(${lerp(1, 1.025, io(u / d))})`;
+};
+
+// ---- title card
+BUILD.title = (sc, root) => {
+  const c = h(`<div class="cam" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:30px">
+    <div class="logo">SM</div><div class="eyebrow">${sc.eyebrow}</div><div class="disp h1 center" style="position:static;max-width:1700px">${sc.title}</div><div class="sub center" style="position:static;max-width:1300px">${sc.sub}</div></div>`);
+  root.appendChild(c); return { c, k: [...c.children] };
+};
+DRAW.title = (st, u, d) => {
+  const w = seg(u, 0, .55); $('wipe').style.transform = `translateX(${lerp(-400, 2300, io(w))}px) skewX(-12deg)`;
+  const pl = ox(seg(u, .35, 1.2)); st.k[0].style.opacity = pl; st.k[0].style.transform = `scale(${lerp(.5, 1, pl)}) rotate(${(1 - pl) * 12}deg)`;
+  show(st.k[1], u, .6, .7, 18); show(st.k[2], u, .8, .9, 50); show(st.k[3], u, 1.6, .8, 24);
+  st.c.style.transform = `scale(${lerp(1, 1.04, io(u / d))})`;
+};
+
+// ---- question card: Q-number outline + the question typed
+BUILD.question = (sc, root) => {
+  const n = h(`<div class="abs qnum" style="left:150px;top:300px">${sc.num}</div>`);
+  const t = h(`<div class="abs qtext" style="left:640px;right:150px;top:0;bottom:0;display:flex;flex-direction:column;justify-content:center;gap:34px"><div class="eyebrow">${sc.eyebrow || 'Question'}</div><div class="qt"></div><div class="qrule" style="width:0"></div></div>`);
+  root.append(n, t); return { n, t, eb: t.children[0], qt: t.children[1], rule: t.children[2] };
+};
+DRAW.question = (st, u, d, ub, sc) => {
+  const w = seg(u, 0, .5); $('wipe').style.transform = `translateX(${lerp(-400, 2300, io(w))}px) skewX(-12deg)`;
+  const p = ox(seg(u, .2, 1.1)); st.n.style.opacity = p; st.n.style.transform = `translateX(${(1 - p) * -80}px)`;
+  show(st.eb, u, .35, .5, 12);
+  const txt = sc.text, cps = Math.max(26, txt.length / (d * .42)), k = Math.min(txt.length, Math.floor(Math.max(0, u - .55) * cps));
+  const done = k >= txt.length, blink = done ? (Math.floor(u * 2.4) % 2 ? 0 : 1) : 1;
+  st.qt.innerHTML = esc(txt.slice(0, k)) + `<span class="car" style="opacity:${blink}"></span>`;
+  st.rule.style.width = `${ox(seg(u, .55 + txt.length / cps, 1.4 + txt.length / cps)) * 520}px`;
+  fade(st.t, u, d - .35, .3); fade(st.n, u, d - .35, .3);
+};
+
+// ---- anatomy of a harness: rings around the model
+BUILD.anatomy = (sc, root) => {
+  const txt = h(`<div class="abs" style="left:130px;top:0;bottom:0;width:640px;display:flex;flex-direction:column;justify-content:center;gap:28px"><div class="eyebrow">${sc.eyebrow}</div><div class="disp" style="font-size:60px">${sc.h}</div><div class="sub">${sc.sub}</div></div>`);
+  const cx = 1300, cy = 565, sizes = [[920, 800], [740, 600], [560, 400], [300, 180]];
+  const cols = ['#3CC4B0', '#A78BFA', '#7DA2FF', '#C8F031'];
+  const rings = sc.layers.map((L, i) => { const [w, hh] = sizes[i];
+    const el = h(`<div class="ring" style="left:${cx - w / 2}px;top:${cy - hh / 2}px;width:${w}px;height:${hh}px;border-color:${cols[i]};background:${i === 3 ? cols[i] : 'rgba(255,255,255,.02)'};color:${i === 3 ? '#16131F' : '#F4F2FA'}">
+      <div class="lab" style="${i === 3 ? 'top:50%;transform:translateY(-50%)' : ''}"><b>${L[0]}</b><span>${L[1]}</span></div></div>`); el.style.opacity = 0; return el; });
+  const br = h(`<div class="bracket" style="left:${cx + 475}px;top:${cy - 400}px;width:46px;height:800px;opacity:0"></div>`);
+  const bl = h(`<div class="abs mono" style="left:${cx + 532}px;top:${cy - 16}px;font:700 26px 'Geist Mono';color:#C8F031;opacity:0;writing-mode:vertical-rl;transform:rotate(180deg) translateY(50%)">THE HARNESS</div>`);
+  root.append(txt, ...rings, br, bl); return { parts: [...txt.children], rings, br, bl };
+};
+DRAW.anatomy = (st, u, d) => {
+  st.parts.forEach((el, i) => show(el, u, .2 + i * .4, .8, 30));
+  const order = [3, 2, 1, 0];
+  order.forEach((ri, j) => { const el = st.rings[ri], a = 1.4 + j * 1.15, p = ox(seg(u, a, a + 1)); el.style.opacity = p; el.style.transform = `scale(${lerp(.86, 1, p)})`; });
+  show(st.br, u, 6.2, .8, 0); show(st.bl, u, 6.5, .8, 0); st.bl.style.transform = 'rotate(180deg)';
+};
+
+// ---- the reference history: a timeline 2023 → 2026
+BUILD.history = (sc, root) => {
+  const head = h(`<div class="abs" style="left:150px;top:120px;width:1600px"><div class="eyebrow">${sc.eyebrow}</div><div class="disp h4" style="margin-top:14px">${sc.h}</div></div>`);
+  const X0 = 300, X1 = 1680, AY = 600, years = sc.years, step = (X1 - X0) / (years.length - 1);
+  const axis = h(`<div class="abs" style="left:150px;top:${AY - 2}px;height:4px;width:0;background:#3A3449;border-radius:2px"></div>`);
+  const ys = years.map((y, i) => { const x = X0 + i * step; const yl = h(`<div class="yr" style="left:${x}px;top:${AY + 24}px">${y}</div>`); const dt = h(`<div class="dot" style="left:${x}px;top:${AY}px"></div>`); yl.style.opacity = dt.style.opacity = 0; return { yl, dt, x }; });
+  const CAT = { sales: '#A78BFA', agent: '#3CC4B0', harness: '#7DA2FF', safety: '#FB923C' };
+  const chips = []; const slot = {};
+  for (const c of sc.items) {
+    const i = years.indexOf(c.y), x = X0 + i * step, s = (slot[c.y] = (slot[c.y] || 0) + 1) - 1;
+    const above = s % 2 === 0, row = Math.floor(s / 2);
+    const top = above ? AY - 120 - row * 112 : AY + 96 + row * 112;
+    const el = h(`<div class="hchip" style="--c:${CAT[c.c]};left:${x - 180}px;top:${top}px"><b>${c.n}</b><span>${c.w}</span></div>`); el.style.opacity = 0; chips.push({ el, i }); }
+  const leg = h(`<div class="abs legend" style="left:150px;bottom:100px">${sc.legend.map(([k, l]) => `<span><i style="background:${CAT[k]}"></i>${l}</span>`).join('')}</div>`);
+  const cap = sc.cap ? h(`<div class="abs center disp" style="top:470px;font-size:76px;opacity:0;text-shadow:0 10px 50px #0D0B14">${sc.cap}</div>`) : null;
+  root.append(head, axis, ...ys.flatMap(y => [y.dt, y.yl]), ...chips.map(c => c.el), leg); if (cap) root.appendChild(cap);
+  return { head, axis, ys, chips, leg, cap };
+};
+DRAW.history = (st, u, d, ub, sc) => {
+  show(st.head, u, .2, .8, 24);
+  st.axis.style.width = `${io(seg(u, .6, 2.2)) * 1620}px`;
+  const perYear = (sc.cap ? d - 5.5 : d - 3) / st.ys.length;
+  st.ys.forEach((y, i) => { const a = 1.2 + i * perYear; show(y.yl, u, a, .5, 10); const p = ox(seg(u, a, a + .5)); y.dt.style.opacity = p; y.dt.style.transform = `translate(-50%,-50%) scale(${lerp(.3, 1, p)})`; });
+  const cnt = {}; st.chips.forEach(({ el, i }) => { const k = cnt[i] = (cnt[i] || 0) + 1; show(el, u, 1.5 + i * perYear + (k - 1) * Math.min(.6, perYear / 7), .55, 18); });
+  show(st.leg, u, 2, .8, 10);
+  if (st.cap) { const a = d - 4.6; if (u > a) { const dim = io(seg(u, a, a + .8)); [st.axis, ...st.chips.map(c => c.el), ...st.ys.flatMap(y => [y.yl, y.dt])].forEach(el => el.style.opacity = Math.min(parseFloat(el.style.opacity || 1), 1 - .82 * dim)); }
+    show(st.cap, u, a + .4, .9, 30); }
+};
+
+// ---- cards in a grid
+BUILD.cards = (sc, root) => {
+  const head = h(`<div class="abs" style="left:150px;right:150px;top:${sc.top || 130}px"><div class="eyebrow">${sc.eyebrow || ''}</div><div class="disp h4" style="margin-top:14px;max-width:1500px">${sc.h}</div>${sc.sub ? `<div class="sub" style="margin-top:16px;max-width:1450px">${sc.sub}</div>` : ''}</div>`);
+  const g = h(`<div class="abs grid ${sc.compact ? 'compact' : ''}" style="left:150px;right:150px;top:${sc.gtop || 400}px;grid-template-columns:repeat(${sc.cols || 3},1fr)">${sc.items.map(it => `<div class="card ${it.tone || sc.tone || ''}">${it.k ? `<div class="k">${it.k}</div>` : ''}<div class="t">${it.t}</div>${it.d ? `<div class="d">${it.d}</div>` : ''}${it.stamp ? `<div class="stamp">${it.stamp}</div>` : ''}</div>`).join('')}</div>`);
+  root.append(head, g); return { head, cards: [...g.children] };
+};
+DRAW.cards = (st, u, d, ub, sc) => {
+  show(st.head, u, .2, .8, 26);
+  const gap = Math.min(.75, (d - 3.5) / Math.max(1, st.cards.length));
+  stagger(st.cards, u, 1.1, gap, .6, 34);
+};
+
+// ---- the funnel as tracks
+BUILD.funnel = (sc, root) => {
+  const head = h(`<div class="abs" style="left:150px;right:150px;top:110px"><div class="eyebrow">${sc.eyebrow}</div><div class="disp h4" style="margin-top:12px">${sc.h}</div></div>`);
+  const list = h(`<div class="abs" style="left:130px;right:130px;top:268px;display:flex;flex-direction:column;gap:4px"></div>`);
+  const rows = sc.rows.map(r => { const el = h(`<div class="frow"><div class="nm">${r.n}</div><div class="st">${r.s}</div><div style="display:flex;align-items:center;gap:14px"><div class="wb" style="width:${r.w * 11}px"></div><span class="wl">${r.w}</span></div>
+      <span class="tag" style="${r.live ? 'background:#C8F031;color:#16131F' : 'background:rgba(255,255,255,.08);color:#8A84A3'}">${r.live ? 'LIVE · v0.1' : 'v0.2'}</span><div class="ex">${r.ex}</div></div>`); el.style.opacity = 0; list.appendChild(el); return { el, r }; });
+  const foot = h(`<div class="abs mono" style="left:150px;right:150px;bottom:92px;font:600 24px 'Geist Mono';color:#CFCADF">${sc.foot}</div>`);
+  root.append(head, list, foot); return { head, rows, foot };
+};
+DRAW.funnel = (st, u, d) => {
+  show(st.head, u, .2, .8, 24);
+  st.rows.forEach(({ el, r }, i) => { const a = .9 + i * .38; show(el, u, a, .5, 14); el.querySelector('.wb').style.transform = `scaleX(${ox(seg(u, a + .2, a + 1.1))})`; });
+  const hl = d * .62, p = io(seg(u, hl, hl + .8));
+  st.rows.forEach(({ el, r }) => { el.style.background = r.live ? `rgba(200,240,49,${.1 * p})` : 'transparent'; if (!r.live) el.style.opacity = Math.min(parseFloat(el.style.opacity || 1), 1 - .55 * p); });
+  show(st.foot, u, hl + .4, .8, 14);
+};
+
+// ---- a file shown in a window, with highlights and callouts
+BUILD.doc = (sc, root) => {
+  const w = h(`<div class="term doc" style="left:120px;top:150px;width:${sc.w || 1060}px;height:780px"><div class="bar"><i></i><i></i><i></i><span>${sc.path}</span></div><div class="tb"></div></div>`);
+  const tb = w.querySelector('.tb');
+  const lines = sc.lines.map((l, i) => { const el = h(`<div class="ln ${sc.hl && sc.hl.includes(i) ? 'hlx' : ''} ${sc.good && sc.good.includes(i) ? 'gdx' : ''}" style="white-space:pre-wrap">${esc(l) || ' '}</div>`); el.style.opacity = 0; tb.appendChild(el); return el; });
+  const side = h(`<div class="abs" style="left:${140 + (sc.w || 1060) + 40}px;right:110px;top:150px;display:flex;flex-direction:column;gap:22px">${sc.notes.map(n => `<div class="card ${n.tone || ''}" style="padding:26px 28px"><div class="k">${n.k}</div><div class="t" style="font-size:34px">${n.t}</div>${n.d ? `<div class="d" style="font-size:23px">${n.d}</div>` : ''}</div>`).join('')}</div>`);
+  root.append(w, side); return { w, lines, notes: [...side.children] };
+};
+DRAW.doc = (st, u, d, ub, sc) => {
+  const e = ox(seg(u, 0, 1.1)); st.w.style.opacity = clamp(e * 1.4); st.w.style.transform = `translateY(${(1 - e) * 80}px)`;
+  st.lines.forEach((el, i) => { el.style.opacity = u > .6 + i * .12 ? 1 : 0; });
+  const ha = B(sc.hl_at || 6);
+  st.lines.forEach((el, i) => { if (sc.hl && sc.hl.includes(i)) el.classList.toggle('hl', u > ha); if (sc.good && sc.good.includes(i)) el.classList.toggle('hlg', u > ha); });
+  const gap = (d - ha - 1.5) / st.notes.length;
+  stagger(st.notes, u, Math.min(ha, 2.2), Math.max(.9, gap), .6, 30);
+};
+
+// ---- terminal replay
+BUILD.term = (sc, root) => {
+  const tw = sc.left ? 1180 : 1500, tl = sc.left ? 650 : 210;
+  const head = sc.left ? h(`<div class="abs" style="left:130px;top:0;bottom:0;width:460px;display:flex;flex-direction:column;justify-content:center;gap:26px"><div class="eyebrow">${sc.eyebrow || ''}</div><div class="disp h4">${sc.h}</div><div class="sub" style="font-size:28px">${sc.sub || ''}</div></div>`) : null;
+  const w = h(`<div class="term ${sc.left ? 'small' : ''}" style="left:${tl}px;top:${sc.left ? 150 : 140}px;width:${tw}px;height:${sc.left ? 780 : 800}px"><div class="bar"><i></i><i></i><i></i><span>${sc.title || 'zsh'}</span></div><div class="tb"></div></div>`);
+  const tb = w.querySelector('.tb');
+  const lines = sc.lines.map(l => { const el = h(`<div class="ln ${l.k}"></div>`); el.style.display = 'none'; tb.appendChild(el); return { el, l }; });
+  if (head) root.appendChild(head); root.appendChild(w); return { head, w, tb, lines, max: sc.max || 19 };
+};
+DRAW.term = (st, u, d, ub, sc) => {
+  if (st.head) [...st.head.children].forEach((el, i) => show(el, u, .2 + i * .4, .8, 26));
+  const e = ox(seg(u, 0, 1)); st.w.style.opacity = clamp(e * 1.4); st.w.style.transform = `translateY(${(1 - e) * 70}px) scale(${lerp(.96, 1, e)})`;
+  const visible = [];
+  for (const { el, l } of st.lines) {
+    const a = B(l.at);
+    if (u < a) { el.style.display = 'none'; continue; }
+    el.style.display = 'block'; visible.push(el);
+    if (l.k === 'cmd') { const n = Math.min(l.t.length, Math.floor((u - a) * 38)); el.textContent = l.t.slice(0, n); }
+    else el.textContent = l.t;
+  }
+  const extra = visible.length - st.max; visible.forEach((el, i) => { if (i < extra) el.style.display = 'none'; });
+};
+
+// ---- a folder tree with annotations
+BUILD.tree = (sc, root) => {
+  const head = h(`<div class="abs" style="left:150px;top:120px;width:1600px"><div class="eyebrow">${sc.eyebrow}</div><div class="disp h4" style="margin-top:12px">${sc.h}</div></div>`);
+  const t = h(`<div class="abs tree" style="left:170px;top:330px"></div>`);
+  const rows = sc.rows.map(r => { const el = h(`<div>${esc(r[0])}${r[1] ? `<span class="an ${r[2] || ''}">${r[1]}</span>` : ''}</div>`); el.style.opacity = 0; t.appendChild(el); return el; });
+  const side = h(`<div class="abs" style="right:150px;top:330px;width:560px;display:flex;flex-direction:column;gap:22px">${sc.notes.map(n => `<div class="card ${n.tone || ''}" style="padding:26px 28px"><div class="k">${n.k}</div><div class="t" style="font-size:32px">${n.t}</div>${n.d ? `<div class="d" style="font-size:22px">${n.d}</div>` : ''}</div>`).join('')}</div>`);
+  root.append(head, t, side); return { head, rows, notes: [...side.children] };
+};
+DRAW.tree = (st, u, d) => {
+  show(st.head, u, .2, .8, 24);
+  stagger(st.rows, u, 1, Math.min(.7, (d * .55) / st.rows.length), .45, 14);
+  stagger(st.notes, u, d * .55, Math.min(1.4, (d * .4) / st.notes.length), .6, 30);
+};
+
+// ---- flow: sources on the left feed tracks on the right
+BUILD.flow = (sc, root) => {
+  const head = h(`<div class="abs" style="left:150px;top:110px;width:1600px"><div class="eyebrow">${sc.eyebrow}</div><div class="disp h4" style="margin-top:12px">${sc.h}</div></div>`);
+  const L = sc.links, n = L.length, top = 300, rowH = 118;
+  const svg = h(`<svg class="abs" style="left:0;top:0" width="1920" height="1080"></svg>`);
+  const lefts = [], rights = [], paths = [];
+  L.forEach((l, i) => {
+    const y = top + i * rowH;
+    const a = h(`<div class="abs card" style="left:150px;top:${y}px;width:760px;height:100px;padding:16px 26px;justify-content:center;gap:4px"><div class="t" style="font-size:28px">${l.src}</div><div class="d" style="font-size:20px">${l.sd}</div></div>`);
+    const b = h(`<div class="abs card ${l.tone || ''}" style="left:1250px;top:${y}px;width:520px;height:100px;padding:16px 26px;flex-direction:row;align-items:center;justify-content:space-between"><div class="t" style="font-size:32px">${l.track}</div><div class="big" style="font-size:58px">${l.n}</div></div>`);
+    const p = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    p.setAttribute('d', `M910 ${y + 50} C 1080 ${y + 50}, 1080 ${y + 50}, 1250 ${y + 50}`); p.setAttribute('stroke', '#C8F031'); p.setAttribute('stroke-width', '3'); p.setAttribute('fill', 'none');
+    p.style.strokeDasharray = 400; p.style.strokeDashoffset = 400; svg.appendChild(p);
+    a.style.opacity = b.style.opacity = 0; lefts.push(a); rights.push(b); paths.push(p);
+  });
+  const tot = h(`<div class="abs" style="left:1250px;top:${top + n * rowH + 10}px;width:520px;display:flex;justify-content:space-between;align-items:baseline;padding:0 26px"><span class="mono" style="font:700 26px 'Geist Mono';color:#CFCADF">DEV SPLIT</span><span class="big lime" style="font-size:72px">${sc.total}</span></div>`);
+  tot.style.opacity = 0;
+  root.append(head, svg, ...lefts, ...rights, tot); return { head, lefts, rights, paths, tot };
+};
+DRAW.flow = (st, u, d) => {
+  show(st.head, u, .2, .8, 24);
+  const gap = Math.min(1.4, (d - 4) / st.lefts.length);
+  st.lefts.forEach((el, i) => { const a = 1 + i * gap; show(el, u, a, .5, 18); st.paths[i].style.strokeDashoffset = 400 * (1 - io(seg(u, a + .3, a + .9))); show(st.rights[i], u, a + .7, .5, 18); });
+  show(st.tot, u, 1 + st.lefts.length * gap + .2, .7, 16);
+};
+
+// ---- pipeline: boxes joined by arrows
+BUILD.pipeline = (sc, root) => {
+  const head = h(`<div class="abs" style="left:150px;top:120px;width:1600px"><div class="eyebrow">${sc.eyebrow}</div><div class="disp h4" style="margin-top:12px">${sc.h}</div>${sc.sub ? `<div class="sub" style="margin-top:14px;max-width:1500px">${sc.sub}</div>` : ''}</div>`);
+  const n = sc.steps.length, gap = 60, W = (1620 - (n - 1) * gap) / n;
+  const boxes = sc.steps.map((s, i) => { const el = h(`<div class="abs pbox" style="left:${150 + i * (W + gap)}px;top:${sc.btop || 470}px;width:${W}px;min-height:300px"><div class="k">${s.k}</div><div class="t">${s.t}</div><div class="d">${s.d}</div></div>`); el.style.opacity = 0; return el; });
+  const arrows = sc.steps.slice(1).map((_, i) => { const el = h(`<div class="abs" style="left:${150 + (i + 1) * (W + gap) - gap + 8}px;top:${(sc.btop || 470) + 130}px;font:800 40px Geist;color:#C8F031">→</div>`); el.style.opacity = 0; return el; });
+  const foot = sc.foot ? h(`<div class="abs sub" style="left:150px;right:150px;bottom:110px">${sc.foot}</div>`) : null;
+  root.append(head, ...boxes, ...arrows); if (foot) root.appendChild(foot); return { head, boxes, arrows, foot };
+};
+DRAW.pipeline = (st, u, d) => {
+  show(st.head, u, .2, .8, 24);
+  const gap = Math.min(1.6, (d - 4) / st.boxes.length);
+  st.boxes.forEach((el, i) => { show(el, u, 1 + i * gap, .6, 30); if (i) show(st.arrows[i - 1], u, 1 + i * gap - .3, .4, 0); });
+  if (st.foot) show(st.foot, u, 1 + st.boxes.length * gap, .8, 16);
+};
+
+// ---- formula with a trust slider (example values)
+BUILD.formula = (sc, root) => {
+  const head = h(`<div class="abs" style="left:150px;top:120px;width:1600px"><div class="eyebrow">${sc.eyebrow}</div><div class="disp h4" style="margin-top:12px">${sc.h}</div></div>`);
+  const fx = h(`<div class="abs fx" style="left:150px;top:300px">SHS = 100 × <span class="vio">capability</span> × <span class="lime">trust</span><small>trust = max(0, 1 − 10 × critical-violation rate)</small></div>`);
+  const X0 = 210, X1 = 960, Y = 700;
+  const gauge = h(`<div class="gauge" style="left:${X0}px;top:${Y - 7}px;width:${X1 - X0}px"></div>`);
+  const ticks = [0, 2, 5, 10].map(v => h(`<div class="tick" style="left:${X0 + (X1 - X0) * v / 10}px;top:${Y + 30}px">${v}%</div>`));
+  const lab = h(`<div class="abs mono" style="left:${X0}px;top:${Y - 70}px;font:600 22px 'Geist Mono';color:#8A84A3;letter-spacing:.06em">CRITICAL-VIOLATION RATE</div>`);
+  const knob = h(`<div class="knob" style="left:${X0}px;top:${Y}px"></div>`);
+  const out = h(`<div class="abs" style="left:1080px;top:560px;width:690px;display:grid;grid-template-columns:1fr 1fr 1.2fr;gap:18px">
+      <div class="tile"><div class="big vio" style="font-size:72px">0.90</div><div class="bigl">capability</div></div>
+      <div class="tile"><div class="big lime" style="font-size:72px" id="tv">1.00</div><div class="bigl">trust</div></div>
+      <div class="tile" style="background:#C8F031;border-color:#C8F031;color:#16131F"><div class="big" style="font-size:72px" id="sv">90</div><div class="bigl" style="color:#3A4A08">SHS · example</div></div></div>`);
+  const note = h(`<div class="abs sub" style="left:150px;top:850px;font-size:27px;max-width:1620px">${sc.note}</div>`);
+  [fx, gauge, lab, knob, out, note, ...ticks].forEach(el => el.style.opacity = 0);
+  root.append(head, fx, gauge, lab, ...ticks, knob, out, note);
+  return { head, fx, gauge, lab, ticks, knob, out, note, tv: out.querySelector('#tv'), sv: out.querySelector('#sv'), X0, X1 };
+};
+DRAW.formula = (st, u, d, ub, sc) => {
+  show(st.head, u, .2, .8, 24); show(st.fx, u, 1.2, .9, 30);
+  [st.gauge, st.lab, st.knob, ...st.ticks].forEach(el => show(el, u, 3, .7, 0)); st.knob.style.transform = 'translate(-50%,-50%)';
+  show(st.out, u, 3.4, .8, 30);
+  // knob path: 0% -> 2% -> 5% -> 10% over the scene
+  const keys = [[0, 0], [.42, 0], [.52, 2], [.66, 2], [.74, 5], [.84, 5], [.92, 10]];
+  const f = u / d; let v = 0;
+  for (let i = 1; i < keys.length; i++) { const [f0, v0] = keys[i - 1], [f1, v1] = keys[i]; if (f >= f0) v = lerp(v0, v1, io(seg(f, f0, f1))); }
+  const trust = Math.max(0, 1 - 10 * v / 100), shs = 100 * .9 * trust;
+  st.knob.style.left = `${st.X0 + (st.X1 - st.X0) * v / 10}px`;
+  st.tv.textContent = trust.toFixed(2); st.sv.textContent = Math.round(shs);
+  show(st.note, u, d * .45, .8, 16);
+};
+
+// ---- KPIs plus notes
+BUILD.kpis = (sc, root) => {
+  const head = h(`<div class="abs" style="left:150px;top:120px;width:1650px"><div class="eyebrow">${sc.eyebrow}</div><div class="disp h4" style="margin-top:12px">${sc.h}</div>${sc.sub ? `<div class="sub" style="margin-top:14px;max-width:1550px">${sc.sub}</div>` : ''}</div>`);
+  const k = h(`<div class="abs" style="left:150px;top:${sc.ktop || 380}px;width:${sc.notes ? 860 : 1620}px;display:grid;grid-template-columns:repeat(${sc.kcols || 2},1fr);gap:22px">${sc.items.map(it => `<div class="tile"><div class="big" style="font-size:${it.fs || 96}px;color:${it.color || 'inherit'}">0</div><div class="bigl">${it.label}</div></div>`).join('')}</div>`);
+  const notes = sc.notes ? h(`<div class="abs" style="left:1060px;right:150px;top:${sc.ktop || 380}px;display:flex;flex-direction:column;gap:20px">${sc.notes.map(n => `<div class="card ${n.tone || ''}" style="padding:24px 28px"><div class="k">${n.k}</div><div class="t" style="font-size:30px">${n.t}</div>${n.d ? `<div class="d" style="font-size:22px">${n.d}</div>` : ''}</div>`).join('')}</div>`) : null;
+  root.append(head, k); if (notes) root.appendChild(notes);
+  return { head, tiles: [...k.children], notes: notes ? [...notes.children] : [] };
+};
+DRAW.kpis = (st, u, d, ub, sc) => {
+  show(st.head, u, .2, .8, 24);
+  st.tiles.forEach((el, i) => { const a = 1.1 + i * .5, it = sc.items[i]; show(el, u, a, .6, 26);
+    const v = it.n * io(seg(u, a, a + 1.3)); el.firstChild.textContent = (it.pre || '') + fmt(v, it.dec || 0) + (it.unit || ''); });
+  stagger(st.notes, u, 1.1 + st.tiles.length * .5 + .3, Math.min(1.3, (d * .5) / Math.max(1, st.notes.length)), .6, 26);
+};
+
+// ---- a real screen in a browser window
+const LAYOUTS = { right: { s: .78, left: 770, text: { left: 120, width: 590 } }, left: { s: .78, left: 30, text: { left: 1200, width: 620 } }, full: { s: 1.08, left: 182, text: null } };
+BUILD.device = (sc, root) => {
+  const L = LAYOUTS[sc.layout || 'right'], s = L.s;
+  const cam = h(`<div class="cam"></div>`); root.appendChild(cam);
+  const w = h(`<div class="win"><div class="bar"><i></i><i></i><i></i><div class="url">${sc.url || 'huggingface.co/spaces/praveengovi/Sales-Harness-Leaderboard'}</div></div>
+    <div class="body" style="width:${1440 * s}px;height:${900 * s}px"><div class="ui" style="width:${1440 * s}px;height:${900 * s}px"><img></div></div></div>`);
+  w.style.left = L.left + 'px'; w.style.top = ((1080 - 900 * s - 52) / 2 + 10) + 'px'; cam.appendChild(w);
+  const ui = w.querySelector('.ui'), st = { cam, w, ui, img: ui.querySelector('img'), s, spots: spots(ui, sc.spot, s) };
+  if (L.text) { const t = h(`<div class="abs" style="left:${L.text.left}px;width:${L.text.width}px;top:0;bottom:0;display:flex;flex-direction:column;justify-content:center;gap:26px">
+      ${sc.eyebrow ? `<div class="eyebrow">${sc.eyebrow}</div>` : ''}<div class="disp" style="font-size:66px">${sc.h}</div><div class="sub" style="font-size:29px">${sc.sub || ''}</div></div>`); cam.appendChild(t); st.parts = [...t.children]; }
+  else { const g = h(`<div class="abs card ink" style="left:120px;bottom:90px;max-width:980px;padding:30px 36px"><div class="t" style="font-size:48px">${sc.h}</div><div class="d">${sc.sub || ''}</div></div>`); cam.appendChild(g); st.glass = g; }
+  return st;
+};
+DRAW.device = (st, u, d, ub, sc) => {
+  const e = ox(seg(u, 0, 1.3)), drift = io(u / d), ry = sc.layout === 'left' ? 14 : sc.layout === 'full' ? 0 : -14;
+  st.w.style.transform = `translateY(${(1 - e) * 110}px) rotateY(${(1 - e) * ry}deg) scale(${lerp(.92, 1, e) * lerp(1, 1.02, drift)})`; st.w.style.opacity = clamp(e * 1.4);
+  media(st.img, sc.media, u); applyCam(st.ui, st.s, camState(sc.cam, ub)); drawSpots(st.spots, ub);
+  if (st.parts) st.parts.forEach((el, i) => show(el, u, .3 + i * .35, .8, 30));
+  if (st.glass) show(st.glass, u, B(sc.cap_at || 2), .8, 30);
+};
+
+// ---- steps: numbered actions with a mono line each
+BUILD.steps = (sc, root) => {
+  const head = h(`<div class="abs" style="left:150px;top:120px;width:1600px"><div class="eyebrow">${sc.eyebrow}</div><div class="disp h4" style="margin-top:12px">${sc.h}</div></div>`);
+  const l = h(`<div class="abs" style="left:150px;right:150px;top:${sc.ltop || 330}px;display:flex;flex-direction:column;gap:22px">${sc.items.map((it, i) => `<div class="card" style="flex-direction:row;align-items:center;gap:30px;padding:24px 30px">
+     <div style="flex:none;width:72px;height:72px;border-radius:20px;background:#C8F031;color:#16131F;display:grid;place-items:center;font:800 32px 'Geist Mono'">${i + 1}</div>
+     <div style="flex:1;min-width:0"><div class="t" style="font-size:36px">${it.t}</div>${it.d ? `<div class="d" style="font-size:24px;margin-top:6px">${it.d}</div>` : ''}</div>
+     ${it.c ? `<div class="mono" style="flex:none;max-width:720px;font:500 22px 'Geist Mono';color:#C8F031;background:#0B0A10;padding:14px 18px;border-radius:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(it.c)}</div>` : ''}</div>`).join('')}</div>`);
+  root.append(head, l); return { head, items: [...l.children] };
+};
+DRAW.steps = (st, u, d) => { show(st.head, u, .2, .8, 24); stagger(st.items, u, 1, Math.min(1.5, (d - 3) / st.items.length), .6, 26); };
+
+// ---- before / after
+BUILD.compare = (sc, root) => {
+  const t = h(`<div class="abs center disp h3" style="top:120px">${sc.h}</div>`);
+  const g = h(`<div class="abs" style="left:150px;right:150px;top:310px;display:grid;grid-template-columns:1fr 1fr;gap:34px">
+    <div class="cmp" style="background:rgba(255,255,255,.04);border:1.5px solid #2B2638"><h4 style="color:#FF6B6B">${sc.left}</h4>${sc.before.map(x => `<div class="it" style="color:#9C97B2"><i style="background:rgba(255,107,107,.15);color:#FF6B6B">✕</i>${x}</div>`).join('')}</div>
+    <div class="cmp" style="background:#C8F031;color:#16131F"><h4 style="color:#16131F">${sc.right}</h4>${sc.after.map(x => `<div class="it"><i style="background:#16131F;color:#C8F031">✓</i>${x}</div>`).join('')}</div></div>`);
+  root.append(t, g); const [a, b] = g.children; return { t, a, b, ai: [...a.querySelectorAll('.it')], bi: [...b.querySelectorAll('.it')] };
+};
+DRAW.compare = (st, u, d) => {
+  show(st.t, u, .2, .8, 30); show(st.a, u, .7, .8, 40); stagger(st.ai, u, 1.1, .45, .5, 14);
+  const t1 = 1.1 + st.ai.length * .45 + .5; show(st.b, u, t1, .8, 40); stagger(st.bi, u, t1 + .4, .55, .5, 14);
+};
+
+// ---- recap of the questions
+BUILD.recap = (sc, root) => {
+  const t = h(`<div class="abs" style="left:150px;top:110px"><div class="eyebrow">${sc.eyebrow}</div><div class="disp h4" style="margin-top:12px">${sc.h}</div></div>`);
+  const l = h(`<div class="abs" style="left:150px;right:150px;top:300px;display:flex;flex-direction:column;gap:${sc.items.length > 6 ? 16 : 24}px">${sc.items.map(x => `<div class="rc"><b>${x[0]}</b><div>${x[1]}<small>${x[2]}</small></div></div>`).join('')}</div>`);
+  root.append(t, l); return { t, r: [...l.children] };
+};
+DRAW.recap = (st, u, d) => { show(st.t, u, .2, .8, 24); stagger(st.r, u, .9, Math.min(.7, (d - 2.5) / st.r.length), .55, 20); };
+
+// ---- outro
+BUILD.outro = (sc, root) => {
+  const c = h(`<div class="cam" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:30px">
+    <div class="logo">SM</div><div class="disp h2 center" style="position:static;max-width:1700px">${sc.h}</div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:12px;margin-top:10px">${sc.urls.map(x => `<div class="url2">${x}</div>`).join('')}</div>
+    ${sc.next ? `<div class="pill" style="margin-top:14px">Next · ${sc.next}</div>` : `<div class="sub">${sc.tag || ''}</div>`}</div>`);
+  root.appendChild(c); return { c, k: [...c.children] };
+};
+DRAW.outro = (st, u, d) => {
+  const pl = ox(seg(u, .1, 1.1)); st.k[0].style.opacity = pl; st.k[0].style.transform = `scale(${lerp(.6, 1, pl)})`;
+  show(st.k[1], u, .6, .9, 40); show(st.k[2], u, 2, .8, 20); show(st.k[3], u, 3, .8, 20);
+  st.c.style.transform = `scale(${lerp(1, 1.04, io(u / d))})`;
+};
+
+// ---- build all scenes, HUD
+const STATE = {};
+for (const sc of TL.scenes) {
+  const el = document.createElement('section'); el.className = `scene ${sc.bg}`; el.id = sc.id; $('stage').appendChild(el);
+  STATE[sc.id] = BUILD[sc.type](sc, el);
+}
+$('hud-l').textContent = TL.hud;
+$('rail').innerHTML = TL.questions.map(() => '<i><u></u></i>').join('');
+const RAIL = [...$('rail').querySelectorAll('u')];
+window.DURATION = TL.duration;
+window.render = async function (t) {
+  $('flash').style.background = 'none'; $('wipe').style.transform = 'translateX(-400px) skewX(-12deg)';
+  PENDING.length = 0;
+  let active = null;
+  for (const sc of TL.scenes) { const on = t >= sc.start && (t < sc.end || sc === TL.scenes[TL.scenes.length - 1]); $(sc.id).classList.toggle('on', on); if (on) active = sc; }
+  if (active) {
+    const u = t - active.start; DRAW[active.type](STATE[active.id], u, active.end - active.start, u / BEAT, active);
+    // HUD: question tracker + progress rail
+    const hud = $('hud'), vis = active.hud !== false && active.q >= 0;
+    hud.className = active.bg === 'paper' ? 'lt' : 'dk';
+    const hv = vis ? Math.min(seg(u, .2, 1), 1) : 0; hud.style.opacity = vis ? (active.type === 'question' ? seg(u, 1.2, 2) : 1) : 0;
+    if (vis) { const q = TL.questions[active.q]; $('hud-r').innerHTML = `<span>Q${active.q + 1}/${TL.questions.length}</span> · ${q}`; }
+    RAIL.forEach((el, i) => { const r = TL.qspan[i]; el.style.transform = `scaleX(${seg(t, r[0], r[1])})`; });
+  }
+  const tail = seg(t, TL.duration - .9, TL.duration); if (tail > 0) $('flash').style.background = `rgba(0,0,0,${io(tail)})`;
+  const head = seg(t, 0, .6); if (head < 1) $('flash').style.background = `rgba(0,0,0,${1 - head})`;
+  await Promise.all(PENDING);
+};
+window.READY = Promise.all([...document.images].filter(i => i.getAttribute('src')).map(i => i.decode().catch(() => {})));
+render(0);
+</script>
+</body></html>

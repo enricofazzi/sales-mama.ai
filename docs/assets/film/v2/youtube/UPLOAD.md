@@ -16,8 +16,10 @@ Playlist description: *How small B2B sales teams plan the day, find real buyers,
 | 06 | Ep 4 · Meetings that slip | Sun 22 Nov |
 | 07 | Ep 5 · Managing blind | Mon 23 Nov |
 | 08 | Full tour (5 min) | Tue 24 Nov |
+| 09 | Bench · Film 1: Can you trust an agent with your pipeline? | Wed 25 Nov |
+| 10 | Bench · Film 2: How the leaderboard was built, and how to use it | Thu 26 Nov |
 
-Upload all eight now as **Scheduled** with these dates, add them to the playlist in this order, and pin the playlist on the channel home. After each goes live, add an end screen pointing to the next one.
+Upload all ten now as **Scheduled** with these dates, add them to the playlist in this order, and pin the playlist on the channel home. After each goes live, add an end screen pointing to the next one.
 
 ## 01 · Sales Mama in 2 minutes: the next-gen sales buddy
 
@@ -302,4 +304,89 @@ All companies, people and numbers in this video are fictional demo data, except 
 Start here: Meet Sales Mama https://www.youtube.com/watch?v=7x6Z8WdwA14
 
 #SalesMama #ClaudeCode #AIAgents #AgenticAI #B2BSales #GenAI
+```
+
+
+## 09 · Can you trust an agent with your pipeline? | Sales Harness Bench, Film 1
+
+- **File:** `/Users/praveengovindaraj/Public/sales-mama/sales-mama.ai/docs/assets/film/bench/sales-harness-bench-1-why-1080p.mp4`
+- **Thumbnail:** `/Users/praveengovindaraj/Public/sales-mama/sales-mama.ai/docs/assets/film/v2/youtube/09-thumb-bench1.jpg`
+- **Tags:** Sales Harness Bench, SalesHarnessBench, agent harness, AI agents, benchmark, leaderboard, Hugging Face, Claude Code, B2B sales, Sales Mama, agent evaluation, AI safety
+
+**Title**
+```
+Can you trust an agent with your pipeline? | Sales Harness Bench, Film 1
+```
+**Description**
+```
+Would you find out before your buyer did?
+
+AI agents can do sales work now. The real question is whether they do it safely, every time. This film explains why B2B sales needs a benchmark for agent harnesses (the runtime, instructions, skills and tools around a model), not just for models, told through six questions.
+
+Chapters
+0:00 A morning that shouldn't happen
+0:27 Title
+0:37 Q1 · What is a harness?
+1:20 Q2 · Haven't other benchmarks solved this already?
+2:17 Q3 · What does a sales harness have to get right?
+3:02 Q4 · What must never happen?
+4:27 Q5 · Can it be gamed?
+4:52 Q6 · Why Singapore, Malaysia and India?
+5:15 Before and after
+5:30 Recap
+
+Builds on τ-bench, AppWorld, AgentDojo, ST-WebAgentBench, CRMArena, HAL, Terminal-Bench, SalesLLM and the Harness Leaderboard, among others (full list on the Research tab of the leaderboard).
+
+SalesHarnessBench (SHB-SEA) v0.1 is open: 143 dev tasks, 4 live tracks, 9 critical violation types, Singapore, Malaysia and India, 6 languages. All companies, people and numbers in the tasks are fictional.
+Leaderboard: https://huggingface.co/spaces/praveengovi/Sales-Harness-Leaderboard
+Benchmark kit: https://huggingface.co/datasets/praveengovi/sales-harness-bench
+Reference harness: https://github.com/neam-lang/sales-mama.ai
+
+Music: original score, made for this series. No voice-over.
+
+#SalesHarnessBench #AIAgents #AgentHarness #ClaudeCode #LLMEvaluation #B2BSales
+```
+
+## 10 · How the Sales Harness Leaderboard was built, and how to use it | Film 2
+
+- **File:** `/Users/praveengovindaraj/Public/sales-mama/sales-mama.ai/docs/assets/film/bench/sales-harness-bench-2-how-1080p.mp4`
+- **Thumbnail:** `/Users/praveengovindaraj/Public/sales-mama/sales-mama.ai/docs/assets/film/v2/youtube/10-thumb-bench2.jpg`
+- **Tags:** Sales Harness Bench, SalesHarnessBench, agent harness, AI agents, benchmark, leaderboard, Hugging Face, Claude Code, B2B sales, Sales Mama, agent evaluation, AI safety, pull request, how to
+
+**Title**
+```
+How the Sales Harness Leaderboard was built, and how to use it | Film 2
+```
+**Description**
+```
+So which harness is actually better?
+
+The story of the Sales Harness Leaderboard: where its 143 tasks came from, what an agent sees in its sandbox, how a run is graded on the end state, when one harness is really better than another, how the static board was built (and the leak its first run caught), and how to benchmark your own harness and open a pull request.
+
+Chapters
+0:00 How agents get judged today
+0:27 Title
+0:37 Q1 · Where did the tasks come from?
+1:17 Q2 · What does the agent actually see?
+2:02 Q3 · How is a run scored?
+2:27 Q4 · When is one harness really better than another?
+3:05 Q5 · How was the board itself built?
+4:02 Q6 · How do I benchmark my own harness?
+5:30 Recap
+
+Terminal output in the film is from real runs of the v0.1 dev split (oracle, null and the sanity checks).
+
+Run it:
+git clone https://huggingface.co/datasets/praveengovi/sales-harness-bench
+python -m shb.run --adapter oracle --out runs/oracle.json
+python tests/sanity.py
+
+SalesHarnessBench (SHB-SEA) v0.1 is open: 143 dev tasks, 4 live tracks, 9 critical violation types, Singapore, Malaysia and India, 6 languages. All companies, people and numbers in the tasks are fictional.
+Leaderboard: https://huggingface.co/spaces/praveengovi/Sales-Harness-Leaderboard
+Benchmark kit: https://huggingface.co/datasets/praveengovi/sales-harness-bench
+Reference harness: https://github.com/neam-lang/sales-mama.ai
+
+Music: original score, made for this series. No voice-over.
+
+#SalesHarnessBench #AIAgents #AgentHarness #ClaudeCode #LLMEvaluation #B2BSales
 ```
