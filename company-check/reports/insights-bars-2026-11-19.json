@@ -1,0 +1,256 @@
+{
+  "title": "Singapore SSIC 56130*",
+  "summary": [
+    "361 live companies (SSIC 56130*), median age 8.0 years.",
+    "59.6% file their annual return on time; 6.4% use a shared or virtual address; 9.1% are home-based.",
+    "0 won a government contract in 3 years; 0 are BCA contractors."
+  ],
+  "order": [
+    "overview",
+    "by_year",
+    "age",
+    "entity_types",
+    "districts",
+    "activities"
+  ],
+  "sections": {
+    "overview": {
+      "kind": "metrics",
+      "title": "Singapore SSIC 56130*",
+      "subtitle": "ACRA data as of 2026-10-14",
+      "items": [
+        {
+          "key": "count",
+          "label": "Live companies",
+          "value": 361,
+          "status": "neutral"
+        },
+        {
+          "key": "median_age",
+          "label": "Median age",
+          "value": 8.0,
+          "unit": "yrs",
+          "status": "neutral"
+        },
+        {
+          "key": "on_time_pct",
+          "label": "Filing on time",
+          "value": 59.6,
+          "unit": "%",
+          "note": "of 193 that file annual returns",
+          "status": "risk"
+        },
+        {
+          "key": "shared_pct",
+          "label": "Shared / virtual address",
+          "value": 6.4,
+          "unit": "%",
+          "status": "good"
+        },
+        {
+          "key": "home_pct",
+          "label": "Home-based (HDB)",
+          "value": 9.1,
+          "unit": "%",
+          "status": "neutral"
+        },
+        {
+          "key": "gebiz",
+          "label": "GeBIZ suppliers",
+          "value": 0,
+          "note": "award in 3 yrs",
+          "status": "neutral"
+        },
+        {
+          "key": "bca",
+          "label": "BCA contractors",
+          "value": 0,
+          "status": "neutral"
+        }
+      ],
+      "refs": [
+        "company-check/README.md"
+      ]
+    },
+    "by_year": {
+      "kind": "series",
+      "title": "New companies per year",
+      "dimension": "time",
+      "unit": "companies",
+      "items": [
+        {
+          "label": "2017",
+          "value": 15
+        },
+        {
+          "label": "2018",
+          "value": 24
+        },
+        {
+          "label": "2019",
+          "value": 19
+        },
+        {
+          "label": "2020",
+          "value": 9
+        },
+        {
+          "label": "2021",
+          "value": 6
+        },
+        {
+          "label": "2022",
+          "value": 21
+        },
+        {
+          "label": "2023",
+          "value": 14
+        },
+        {
+          "label": "2024",
+          "value": 35
+        },
+        {
+          "label": "2025",
+          "value": 46
+        },
+        {
+          "label": "2026",
+          "value": 29
+        }
+      ],
+      "note": "still live today, by year registered (2026 is year to date)",
+      "refs": [
+        "company-check/README.md"
+      ]
+    },
+    "age": {
+      "kind": "series",
+      "title": "How old are they?",
+      "dimension": "ordinal",
+      "unit": "companies",
+      "items": [
+        {
+          "label": "< 1 yr",
+          "value": 44
+        },
+        {
+          "label": "1–3 yrs",
+          "value": 69
+        },
+        {
+          "label": "3–5 yrs",
+          "value": 33
+        },
+        {
+          "label": "5–10 yrs",
+          "value": 74
+        },
+        {
+          "label": "10–20 yrs",
+          "value": 84
+        },
+        {
+          "label": "20+ yrs",
+          "value": 57
+        }
+      ],
+      "refs": [
+        "company-check/README.md"
+      ]
+    },
+    "entity_types": {
+      "kind": "series",
+      "title": "Entity types",
+      "dimension": "category",
+      "unit": "companies",
+      "items": [
+        {
+          "label": "Local Company",
+          "value": 233
+        },
+        {
+          "label": "Sole Proprietorship/ Partnership",
+          "value": 106
+        },
+        {
+          "label": "Limited Liability Partnership",
+          "value": 22
+        }
+      ],
+      "share_of_total": true,
+      "refs": [
+        "company-check/README.md"
+      ]
+    },
+    "districts": {
+      "kind": "series",
+      "title": "Where they are (postal sector)",
+      "dimension": "category",
+      "unit": "companies",
+      "items": [
+        {
+          "label": "Sector 18",
+          "value": 34
+        },
+        {
+          "label": "Sector 04",
+          "value": 22
+        },
+        {
+          "label": "Sector 20",
+          "value": 21
+        },
+        {
+          "label": "Sector 23",
+          "value": 20
+        },
+        {
+          "label": "Sector 36",
+          "value": 14
+        },
+        {
+          "label": "Sector 19",
+          "value": 14
+        },
+        {
+          "label": "Sector 05",
+          "value": 13
+        },
+        {
+          "label": "Sector 33",
+          "value": 13
+        },
+        {
+          "label": "Sector 08",
+          "value": 11
+        },
+        {
+          "label": "Sector 17",
+          "value": 11
+        }
+      ],
+      "note": "first two digits of the registered postal code",
+      "refs": [
+        "company-check/README.md"
+      ]
+    },
+    "activities": {
+      "kind": "series",
+      "title": "Top activities (primary SSIC)",
+      "dimension": "category",
+      "unit": "companies",
+      "items": [
+        {
+          "label": "56130 Pubs (Including Bars)",
+          "value": 361
+        }
+      ],
+      "refs": [
+        "company-check/README.md"
+      ]
+    }
+  },
+  "as_of": "2026-10-14",
+  "licence": "Contains information from ACRA, BCA, GeBIZ and HDB datasets accessed on 2026-10-14 from data.gov.sg, made available under the terms of the Singapore Open Data Licence version 1.0 (https://data.gov.sg/open-data-licence)."
+}
