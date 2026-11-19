@@ -709,5 +709,10 @@
       "slots": 15
     }
   ],
-  "status": "proposed"
+  "status": "applied",
+  "decided_by": "praveen",
+  "decided_on": "2026-11-19",
+  "decisions": [
+    "2026-11-19 18:59 praveen: approved 15 of 15 rows"
+  ]
 }
