@@ -1,0 +1,247 @@
+{
+  "title": "A & H CONTROLS (PTE. LTD.)",
+  "summary": [
+    "A & H CONTROLS (PTE. LTD.) (201417193M): Registry OK - needs web check, 75/100.",
+    "12.3 years old vs a peer median of 9.0 among 408 live peers.",
+    "Annual return: pass: filed 2025-12-24 (10 months before the 2026-10-14 data)."
+  ],
+  "order": [
+    "company",
+    "peers",
+    "vs_peers"
+  ],
+  "sections": {
+    "company": {
+      "kind": "company",
+      "title": "A & H CONTROLS (PTE. LTD.)",
+      "uen": "201417193M",
+      "status": "Live Company",
+      "verdict": "Registry OK - needs web check",
+      "score": 75,
+      "facts": {
+        "Entity type": "Local Company",
+        "Registered": "2014-06-13",
+        "Activity": "71124 ENVIRONMENTAL ENGINEERING SERVICES",
+        "Address": "7 GAMBAS CRESCENT #07-01 ARK@GAMBAS Singapore 757087"
+      },
+      "groups": [
+        {
+          "name": "Registry",
+          "checks": [
+            {
+              "id": "G1",
+              "check": "Found in ACRA",
+              "result": "pass",
+              "detail": "201417193M by UEN"
+            },
+            {
+              "id": "G2",
+              "check": "Live",
+              "result": "pass",
+              "detail": "Live Company"
+            },
+            {
+              "id": "C1",
+              "check": "Annual return",
+              "result": "pass",
+              "detail": "filed 2025-12-24 (10 months before the 2026-10-14 data)"
+            },
+            {
+              "id": "C2",
+              "check": "Accounts due",
+              "result": "pass",
+              "detail": "next due 2026-12-31"
+            },
+            {
+              "id": "C3",
+              "check": "Age",
+              "result": "pass",
+              "detail": "registered 2014-06-13 (12.4 years)"
+            }
+          ]
+        },
+        {
+          "name": "Address",
+          "checks": [
+            {
+              "id": "P1",
+              "check": "Address on record",
+              "result": "pass",
+              "detail": "postal sector 75"
+            },
+            {
+              "id": "P2",
+              "check": "Physical or virtual",
+              "result": "pass",
+              "detail": "1 live entity at this address"
+            },
+            {
+              "id": "P3",
+              "check": "Home-based",
+              "result": "n/a",
+              "detail": "not an HDB residential block"
+            },
+            {
+              "id": "P4",
+              "check": "Premises seen",
+              "result": "unknown",
+              "detail": "no web evidence yet"
+            }
+          ]
+        },
+        {
+          "name": "People",
+          "checks": [
+            {
+              "id": "E1",
+              "check": "Employees > 3",
+              "result": "unknown",
+              "detail": "no reliable headcount evidence (ACRA has none)"
+            },
+            {
+              "id": "E2",
+              "check": "Size hints",
+              "result": "info",
+              "detail": "5 officers"
+            }
+          ]
+        },
+        {
+          "name": "Outside signals",
+          "checks": [
+            {
+              "id": "A1",
+              "check": "BCA contractor",
+              "result": "pass",
+              "detail": "ME02 grade L4, valid to 2027-10-01"
+            },
+            {
+              "id": "A2",
+              "check": "GeBIZ supplier",
+              "result": "n/a",
+              "detail": "no government award since 2023-11-20"
+            },
+            {
+              "id": "A3",
+              "check": "Website identity",
+              "result": "unknown",
+              "detail": "no web evidence yet"
+            },
+            {
+              "id": "A4",
+              "check": "Recent activity",
+              "result": "unknown",
+              "detail": "no web evidence yet"
+            }
+          ]
+        },
+        {
+          "name": "Red flags",
+          "checks": [
+            {
+              "id": "R1",
+              "check": "Adverse media / MAS alert",
+              "result": "unknown",
+              "detail": "no web evidence yet"
+            },
+            {
+              "id": "R2",
+              "check": "Shell-like profile",
+              "result": "pass",
+              "detail": "no"
+            },
+            {
+              "id": "R3",
+              "check": "Name changes",
+              "result": "pass",
+              "detail": "0 former name(s)"
+            }
+          ]
+        }
+      ],
+      "subtitle": "ACRA data updated 2026-10-14T17:21:16+08:00, index built 2026-11-05 08:12",
+      "refs": [
+        "company-check/README.md"
+      ]
+    },
+    "peers": {
+      "kind": "metrics",
+      "title": "Peers: SSIC 71124 ENVIRONMENTAL ENGINEERING SERVICES",
+      "subtitle": "408 live companies with the same primary activity, as of 2026-10-14",
+      "items": [
+        {
+          "key": "count",
+          "label": "Live companies",
+          "value": 408,
+          "status": "neutral"
+        },
+        {
+          "key": "median_age",
+          "label": "Median age",
+          "value": 9.0,
+          "unit": "yrs",
+          "status": "neutral"
+        },
+        {
+          "key": "on_time_pct",
+          "label": "Filing on time",
+          "value": 88.5,
+          "unit": "%",
+          "note": "of 304 that file annual returns",
+          "status": "good"
+        },
+        {
+          "key": "shared_pct",
+          "label": "Shared / virtual address",
+          "value": 33.8,
+          "unit": "%",
+          "status": "risk"
+        },
+        {
+          "key": "home_pct",
+          "label": "Home-based (HDB)",
+          "value": 9.6,
+          "unit": "%",
+          "status": "neutral"
+        },
+        {
+          "key": "gebiz",
+          "label": "GeBIZ suppliers",
+          "value": 12,
+          "note": "award in 3 yrs",
+          "status": "good"
+        },
+        {
+          "key": "bca",
+          "label": "BCA contractors",
+          "value": 17,
+          "status": "good"
+        }
+      ],
+      "refs": [
+        "company-check/README.md"
+      ]
+    },
+    "vs_peers": {
+      "kind": "comparison",
+      "title": "This company vs its peers",
+      "items": [
+        {
+          "measure": "Age (yrs)",
+          "this": 12.3,
+          "peer_median": 9.0
+        },
+        {
+          "measure": "Officers",
+          "this": 5,
+          "peer_median": 5.0
+        }
+      ],
+      "refs": [
+        "company-check/README.md"
+      ]
+    }
+  },
+  "as_of": "2026-10-14",
+  "licence": "Contains information from ACRA, BCA, GeBIZ and HDB datasets accessed on 2026-10-14 from data.gov.sg, made available under the terms of the Singapore Open Data Licence version 1.0 (https://data.gov.sg/open-data-licence)."
+}
