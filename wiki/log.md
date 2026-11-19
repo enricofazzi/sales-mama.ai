@@ -61,3 +61,18 @@
 - [2026-11-16 12:11] appointment | praveen | accounts/kestrel-physio | booked Thu 19 Nov 14:00 SGT (tentative) apt-20261119-kestrel-physio-1
 - [2026-11-19 18:32] allocate | praveen | log/allocation/2026-11-19 | proposal: 15 leads, 1 reps, spread 0%
 - [2026-11-19 18:38] check | praveen | company-check/leads | 1 ACRA leads
+- [2026-11-19 18:59] assign | praveen | accounts/pebble-bay-couriers | assigned to praveen (allocation 2026-11-19 row 1)
+- [2026-11-19 18:59] assign | praveen | accounts/harbourlight-foods | assigned to praveen (allocation 2026-11-19 row 2)
+- [2026-11-19 18:59] assign | praveen | accounts/beacon-hardware | assigned to praveen (allocation 2026-11-19 row 3)
+- [2026-11-19 18:59] assign | praveen | accounts/rivet-studio-interiors | assigned to praveen (allocation 2026-11-19 row 4)
+- [2026-11-19 18:59] assign | praveen | accounts/northwind-kopitiam | assigned to praveen (allocation 2026-11-19 row 5)
+- [2026-11-19 18:59] assign | praveen | accounts/dovetail-movers | assigned to praveen (allocation 2026-11-19 row 6)
+- [2026-11-19 18:59] assign | praveen | accounts/tidewater-supplies | assigned to praveen (allocation 2026-11-19 row 7)
+- [2026-11-19 18:59] assign | praveen | accounts/copperleaf-retail | assigned to praveen (allocation 2026-11-19 row 8)
+- [2026-11-19 18:59] assign | praveen | accounts/fernhill-tutors | assigned to praveen (allocation 2026-11-19 row 9)
+- [2026-11-19 18:59] assign | praveen | accounts/9tails-media | assigned to praveen (allocation 2026-11-19 row 10)
+- [2026-11-19 18:59] assign | praveen | accounts/abode-holdings | assigned to praveen (allocation 2026-11-19 row 11)
+- [2026-11-19 18:59] assign | praveen | accounts/asia-pacific-international-commercial-mediation-centre | assigned to praveen (allocation 2026-11-19 row 12)
+- [2026-11-19 18:59] assign | praveen | accounts/best-a | assigned to praveen (allocation 2026-11-19 row 13)
+- [2026-11-19 18:59] assign | praveen | accounts/bright-field | assigned to praveen (allocation 2026-11-19 row 14)
+- [2026-11-19 18:59] assign | praveen | accounts/cafe-gyoen-matcha-bar | assigned to praveen (allocation 2026-11-19 row 15)

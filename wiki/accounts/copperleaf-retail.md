@@ -10,9 +10,9 @@ domain: copperleafretail.example
 city: Singapore
 group: Copperleaf Group
 source: crm
-owner:
-allocated_on:
-allocated_by:
+owner: praveen
+allocated_on: '2026-11-19'
+allocated_by: praveen
 claimed_on:
 stage: researched
 industry: retail
@@ -35,7 +35,7 @@ vam_updated:
 next_action:
 next_action_due:
 last_touch:
-updated: '2026-11-02'
+updated: '2026-11-19'
 ---
 # Copperleaf Retail Pte Ltd
 ## Snapshot
