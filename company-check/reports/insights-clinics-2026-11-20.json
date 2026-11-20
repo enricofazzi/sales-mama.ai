@@ -1,0 +1,421 @@
+{
+  "title": "Singapore clinics",
+  "summary": [
+    "9,618 live companies (clinics), median age 8.4 years.",
+    "92.7% file their annual return on time; 15.9% use a shared or virtual address; 5.5% are home-based.",
+    "49 won a government contract in 3 years; 0 are BCA contractors."
+  ],
+  "order": [
+    "overview",
+    "by_year",
+    "age",
+    "entity_types",
+    "districts",
+    "activities",
+    "leads"
+  ],
+  "sections": {
+    "overview": {
+      "kind": "metrics",
+      "title": "Singapore clinics",
+      "subtitle": "ACRA data as of 2026-10-14",
+      "items": [
+        {
+          "key": "count",
+          "label": "Live companies",
+          "value": 9618,
+          "status": "neutral"
+        },
+        {
+          "key": "median_age",
+          "label": "Median age",
+          "value": 8.4,
+          "unit": "yrs",
+          "status": "neutral"
+        },
+        {
+          "key": "on_time_pct",
+          "label": "Filing on time",
+          "value": 92.7,
+          "unit": "%",
+          "note": "of 6,315 that file annual returns",
+          "status": "good"
+        },
+        {
+          "key": "shared_pct",
+          "label": "Shared / virtual address",
+          "value": 15.9,
+          "unit": "%",
+          "status": "warn"
+        },
+        {
+          "key": "home_pct",
+          "label": "Home-based (HDB)",
+          "value": 5.5,
+          "unit": "%",
+          "status": "neutral"
+        },
+        {
+          "key": "gebiz",
+          "label": "GeBIZ suppliers",
+          "value": 49,
+          "note": "award in 3 yrs",
+          "status": "good"
+        },
+        {
+          "key": "bca",
+          "label": "BCA contractors",
+          "value": 0,
+          "status": "neutral"
+        }
+      ],
+      "refs": [
+        "company-check/README.md"
+      ]
+    },
+    "by_year": {
+      "kind": "series",
+      "title": "New companies per year",
+      "dimension": "time",
+      "unit": "companies",
+      "items": [
+        {
+          "label": "2017",
+          "value": 398
+        },
+        {
+          "label": "2018",
+          "value": 381
+        },
+        {
+          "label": "2019",
+          "value": 401
+        },
+        {
+          "label": "2020",
+          "value": 407
+        },
+        {
+          "label": "2021",
+          "value": 518
+        },
+        {
+          "label": "2022",
+          "value": 553
+        },
+        {
+          "label": "2023",
+          "value": 656
+        },
+        {
+          "label": "2024",
+          "value": 657
+        },
+        {
+          "label": "2025",
+          "value": 808
+        },
+        {
+          "label": "2026",
+          "value": 586
+        }
+      ],
+      "note": "still live today, by year registered (2026 is year to date)",
+      "refs": [
+        "company-check/README.md"
+      ]
+    },
+    "age": {
+      "kind": "series",
+      "title": "How old are they?",
+      "dimension": "ordinal",
+      "unit": "companies",
+      "items": [
+        {
+          "label": "< 1 yr",
+          "value": 737
+        },
+        {
+          "label": "1–3 yrs",
+          "value": 1431
+        },
+        {
+          "label": "3–5 yrs",
+          "value": 1201
+        },
+        {
+          "label": "5–10 yrs",
+          "value": 2069
+        },
+        {
+          "label": "10–20 yrs",
+          "value": 2805
+        },
+        {
+          "label": "20+ yrs",
+          "value": 1375
+        }
+      ],
+      "refs": [
+        "company-check/README.md"
+      ]
+    },
+    "entity_types": {
+      "kind": "series",
+      "title": "Entity types",
+      "dimension": "category",
+      "unit": "companies",
+      "items": [
+        {
+          "label": "Local Company",
+          "value": 7166
+        },
+        {
+          "label": "Sole Proprietorship/ Partnership",
+          "value": 2246
+        },
+        {
+          "label": "Limited Liability Partnership",
+          "value": 203
+        },
+        {
+          "label": "Foreign Company Branch",
+          "value": 2
+        },
+        {
+          "label": "Limited Partnership",
+          "value": 1
+        }
+      ],
+      "share_of_total": true,
+      "refs": [
+        "company-check/README.md"
+      ]
+    },
+    "districts": {
+      "kind": "series",
+      "title": "Where they are (postal sector)",
+      "dimension": "category",
+      "unit": "companies",
+      "items": [
+        {
+          "label": "Sector 23",
+          "value": 605
+        },
+        {
+          "label": "Sector 32",
+          "value": 480
+        },
+        {
+          "label": "Sector 22",
+          "value": 463
+        },
+        {
+          "label": "Sector 40",
+          "value": 393
+        },
+        {
+          "label": "Sector 57",
+          "value": 339
+        },
+        {
+          "label": "Sector 30",
+          "value": 324
+        },
+        {
+          "label": "Sector 25",
+          "value": 282
+        },
+        {
+          "label": "Sector 53",
+          "value": 259
+        },
+        {
+          "label": "Sector 06",
+          "value": 253
+        },
+        {
+          "label": "Sector 56",
+          "value": 236
+        }
+      ],
+      "note": "first two digits of the registered postal code",
+      "refs": [
+        "company-check/README.md"
+      ]
+    },
+    "activities": {
+      "kind": "series",
+      "title": "Top activities (primary SSIC)",
+      "dimension": "category",
+      "unit": "companies",
+      "items": [
+        {
+          "label": "86201 Medical Clinic",
+          "value": 3009
+        },
+        {
+          "label": "86909 Physiotherapy",
+          "value": 2364
+        },
+        {
+          "label": "86202 Other Medical And Health Services (Eg. Chinese Sinseh)",
+          "value": 1310
+        },
+        {
+          "label": "86203 Specialised Medical Services",
+          "value": 1197
+        },
+        {
+          "label": "86204 Dental Services",
+          "value": 1092
+        },
+        {
+          "label": "86904 Home Healthcare Services",
+          "value": 357
+        },
+        {
+          "label": "86903 Ambulance Services",
+          "value": 80
+        },
+        {
+          "label": "86902 Consultation For Diagnostic Imaging",
+          "value": 72
+        },
+        {
+          "label": "Other",
+          "value": 137
+        }
+      ],
+      "refs": [
+        "company-check/README.md"
+      ]
+    },
+    "leads": {
+      "kind": "rows",
+      "title": "Best new leads in this segment",
+      "columns": [
+        {
+          "key": "name",
+          "label": "Company"
+        },
+        {
+          "key": "reg_id",
+          "label": "UEN"
+        },
+        {
+          "key": "why",
+          "label": "Why"
+        },
+        {
+          "key": "rank",
+          "label": "Rank",
+          "numeric": true
+        }
+      ],
+      "rows": [
+        {
+          "name": "ACUMED MEDICAL PTE. LTD.",
+          "reg_id": "197300761M",
+          "why": "54 yrs; AR 2026-01-15; 15 officers; GeBIZ supplier",
+          "rank": 43
+        },
+        {
+          "name": "AMBULANCE MEDICAL SERVICE PTE. LTD.",
+          "reg_id": "200705794E",
+          "why": "20 yrs; AR 2026-07-10; 18 officers; GeBIZ supplier",
+          "rank": 43
+        },
+        {
+          "name": "ASIAMEDIC WELLNESS ASSESSMENT CENTRE PTE. LTD.",
+          "reg_id": "199704956N",
+          "why": "29 yrs; AR 2026-07-09; 32 officers; GeBIZ supplier",
+          "rank": 43
+        },
+        {
+          "name": "CRAWFURD HOSPITAL PTE. LTD.",
+          "reg_id": "201103901W",
+          "why": "16 yrs; AR 2026-07-29; 38 officers; GeBIZ supplier",
+          "rank": 43
+        },
+        {
+          "name": "EMA GLOBAL PTE. LTD.",
+          "reg_id": "200207624R",
+          "why": "24 yrs; AR 2026-08-18; 12 officers; GeBIZ supplier",
+          "rank": 43
+        },
+        {
+          "name": "FIRST AMBULANCE AND HEALTHCARE PTE. LTD.",
+          "reg_id": "201622184N",
+          "why": "10 yrs; AR 2026-02-25; 5 officers; GeBIZ supplier",
+          "rank": 43
+        },
+        {
+          "name": "GOLD LITE PTE LTD",
+          "reg_id": "197900972G",
+          "why": "48 yrs; AR 2025-12-19; 13 officers; GeBIZ supplier",
+          "rank": 43
+        },
+        {
+          "name": "GREEN CRESCENT PTE LTD",
+          "reg_id": "199908183R",
+          "why": "27 yrs; AR 2026-02-23; 7 officers; GeBIZ supplier",
+          "rank": 43
+        },
+        {
+          "name": "HMI MEDICAL CENTRE PTE. LTD.",
+          "reg_id": "201629251M",
+          "why": "10 yrs; AR 2026-01-26; 18 officers; GeBIZ supplier",
+          "rank": 43
+        },
+        {
+          "name": "HMI ONECARE PTE. LTD.",
+          "reg_id": "201620556D",
+          "why": "10 yrs; AR 2025-11-13; 14 officers; GeBIZ supplier",
+          "rank": 43
+        },
+        {
+          "name": "HOPE FIRST RESPONSE PTE. LTD.",
+          "reg_id": "200915893N",
+          "why": "17 yrs; AR 2026-01-30; 10 officers; GeBIZ supplier",
+          "rank": 43
+        },
+        {
+          "name": "I.M.AMBULANCE SERVICES PTE. LTD.",
+          "reg_id": "201220483Z",
+          "why": "14 yrs; AR 2026-02-28; 5 officers; GeBIZ supplier",
+          "rank": 43
+        },
+        {
+          "name": "INNOQUEST DIAGNOSTICS PTE. LTD.",
+          "reg_id": "199600742Z",
+          "why": "31 yrs; AR 2026-07-31; 37 officers; GeBIZ supplier",
+          "rank": 43
+        },
+        {
+          "name": "INTEGRATED HEALTH PLANS PTE LTD",
+          "reg_id": "199400672R",
+          "why": "33 yrs; AR 2026-06-24; 39 officers; GeBIZ supplier",
+          "rank": 43
+        },
+        {
+          "name": "INTERNATIONAL SOS PTE LTD",
+          "reg_id": "198104581M",
+          "why": "45 yrs; AR 2026-03-03; 17 officers; GeBIZ supplier",
+          "rank": 43
+        }
+      ],
+      "next": [
+        {
+          "label": "Save these leads",
+          "prompt": "/company-check leads --industries clinics"
+        }
+      ],
+      "refs": [
+        "company-check/README.md"
+      ]
+    }
+  },
+  "as_of": "2026-10-14",
+  "licence": "Contains information from ACRA, BCA, GeBIZ and HDB datasets accessed on 2026-10-14 from data.gov.sg, made available under the terms of the Singapore Open Data Licence version 1.0 (https://data.gov.sg/open-data-licence)."
+}
