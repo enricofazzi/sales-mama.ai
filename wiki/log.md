@@ -77,3 +77,4 @@
 - [2026-11-19 18:59] assign | praveen | accounts/bright-field | assigned to praveen (allocation 2026-11-19 row 14)
 - [2026-11-19 18:59] assign | praveen | accounts/cafe-gyoen-matcha-bar | assigned to praveen (allocation 2026-11-19 row 15)
 - [2026-11-19 18:59] assign | praveen | log/allocation/2026-11-19 | 15 assigned (A 7, B 2, C 6), 0 rejected
+- [2026-11-20 19:14] allocate | praveen | log/allocation/2026-11-20 | proposal: 15 leads, 1 reps, spread 0%

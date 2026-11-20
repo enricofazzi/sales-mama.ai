@@ -1,0 +1,623 @@
+{
+  "date": "2026-11-20",
+  "base": "SGD",
+  "limit": 0.2,
+  "spread_before": 0.0,
+  "spread": 0.0,
+  "fair_moves": [],
+  "team_rate": 0.1,
+  "reps": {
+    "praveen": {
+      "active": 18,
+      "max_active": 60,
+      "slots": 15,
+      "markets": [
+        "SG"
+      ]
+    }
+  },
+  "rows": [
+    {
+      "row": 1,
+      "rep": "praveen",
+      "account": "cashflow-legacy",
+      "name": "CASHFLOW LEGACY PTE. LTD.",
+      "market": "SG",
+      "tier": "C",
+      "score": 0.42,
+      "industry": "professional_services",
+      "p_meet": 0.1,
+      "product": "cloud-phone",
+      "value": 6000.0,
+      "currency": "SGD",
+      "value_base": 6000.0,
+      "ev": 252.0,
+      "continuity": "",
+      "reason": "Praveen: professional_services meeting rate 10% vs team 10% (no history yet, prior); 42 slots free; only rep who fits; top product cloud-phone (SGD 6,000); employees unknown"
+    },
+    {
+      "row": 2,
+      "rep": "praveen",
+      "account": "cheznoemie",
+      "name": "CHEZNOEMIE PTE. LTD.",
+      "market": "SG",
+      "tier": "C",
+      "score": 0.42,
+      "industry": "retail",
+      "p_meet": 0.1,
+      "product": "cloud-phone",
+      "value": 6000.0,
+      "currency": "SGD",
+      "value_base": 6000.0,
+      "ev": 252.0,
+      "continuity": "",
+      "reason": "Praveen: retail meeting rate 10% vs team 10% (no history yet, prior); 42 slots free; only rep who fits; top product cloud-phone (SGD 6,000); employees unknown"
+    },
+    {
+      "row": 3,
+      "rep": "praveen",
+      "account": "harboria",
+      "name": "HARBORIA PTE. LTD.",
+      "market": "SG",
+      "tier": "C",
+      "score": 0.42,
+      "industry": "professional_services",
+      "p_meet": 0.1,
+      "product": "cloud-phone",
+      "value": 6000.0,
+      "currency": "SGD",
+      "value_base": 6000.0,
+      "ev": 252.0,
+      "continuity": "",
+      "reason": "Praveen: professional_services meeting rate 10% vs team 10% (no history yet, prior); 42 slots free; only rep who fits; top product cloud-phone (SGD 6,000); employees unknown"
+    },
+    {
+      "row": 4,
+      "rep": "praveen",
+      "account": "hidden-global",
+      "name": "HIDDEN GLOBAL PTE. LTD.",
+      "market": "SG",
+      "tier": "C",
+      "score": 0.42,
+      "industry": "professional_services",
+      "p_meet": 0.1,
+      "product": "cloud-phone",
+      "value": 6000.0,
+      "currency": "SGD",
+      "value_base": 6000.0,
+      "ev": 252.0,
+      "continuity": "",
+      "reason": "Praveen: professional_services meeting rate 10% vs team 10% (no history yet, prior); 42 slots free; only rep who fits; top product cloud-phone (SGD 6,000); employees unknown"
+    },
+    {
+      "row": 5,
+      "rep": "praveen",
+      "account": "jc-mega-f-and-b",
+      "name": "JC MEGA F&B PTE. LTD.",
+      "market": "SG",
+      "tier": "C",
+      "score": 0.42,
+      "industry": "fnb",
+      "p_meet": 0.1,
+      "product": "cloud-phone",
+      "value": 6000.0,
+      "currency": "SGD",
+      "value_base": 6000.0,
+      "ev": 252.0,
+      "continuity": "",
+      "reason": "Praveen: fnb meeting rate 10% vs team 10% (no history yet, prior); 42 slots free; only rep who fits; top product cloud-phone (SGD 6,000); employees unknown"
+    },
+    {
+      "row": 6,
+      "rep": "praveen",
+      "account": "jk-vertex",
+      "name": "JK VERTEX PTE. LTD.",
+      "market": "SG",
+      "tier": "C",
+      "score": 0.42,
+      "industry": "professional_services",
+      "p_meet": 0.1,
+      "product": "cloud-phone",
+      "value": 6000.0,
+      "currency": "SGD",
+      "value_base": 6000.0,
+      "ev": 252.0,
+      "continuity": "",
+      "reason": "Praveen: professional_services meeting rate 10% vs team 10% (no history yet, prior); 42 slots free; only rep who fits; top product cloud-phone (SGD 6,000); employees unknown"
+    },
+    {
+      "row": 7,
+      "rep": "praveen",
+      "account": "juhe-nura-shipmanagement",
+      "name": "JUHE NURA SHIPMANAGEMENT PTE. LTD.",
+      "market": "SG",
+      "tier": "C",
+      "score": 0.42,
+      "industry": "logistics",
+      "p_meet": 0.1,
+      "product": "cloud-phone",
+      "value": 6000.0,
+      "currency": "SGD",
+      "value_base": 6000.0,
+      "ev": 252.0,
+      "continuity": "",
+      "reason": "Praveen: logistics meeting rate 10% vs team 10% (no history yet, prior); 42 slots free; only rep who fits; top product cloud-phone (SGD 6,000); employees unknown"
+    },
+    {
+      "row": 8,
+      "rep": "praveen",
+      "account": "jvm26-logistics",
+      "name": "JVM26 LOGISTICS PTE. LTD.",
+      "market": "SG",
+      "tier": "C",
+      "score": 0.42,
+      "industry": "logistics",
+      "p_meet": 0.1,
+      "product": "cloud-phone",
+      "value": 6000.0,
+      "currency": "SGD",
+      "value_base": 6000.0,
+      "ev": 252.0,
+      "continuity": "",
+      "reason": "Praveen: logistics meeting rate 10% vs team 10% (no history yet, prior); 42 slots free; only rep who fits; top product cloud-phone (SGD 6,000); employees unknown"
+    },
+    {
+      "row": 9,
+      "rep": "praveen",
+      "account": "lumina-vision-media",
+      "name": "LUMINA VISION MEDIA PTE. LTD.",
+      "market": "SG",
+      "tier": "C",
+      "score": 0.42,
+      "industry": "professional_services",
+      "p_meet": 0.1,
+      "product": "cloud-phone",
+      "value": 6000.0,
+      "currency": "SGD",
+      "value_base": 6000.0,
+      "ev": 252.0,
+      "continuity": "",
+      "reason": "Praveen: professional_services meeting rate 10% vs team 10% (no history yet, prior); 42 slots free; only rep who fits; top product cloud-phone (SGD 6,000); employees unknown"
+    },
+    {
+      "row": 10,
+      "rep": "praveen",
+      "account": "nexus-computer-global",
+      "name": "NEXUS COMPUTER GLOBAL PTE. LTD.",
+      "market": "SG",
+      "tier": "C",
+      "score": 0.42,
+      "industry": "retail",
+      "p_meet": 0.1,
+      "product": "cloud-phone",
+      "value": 6000.0,
+      "currency": "SGD",
+      "value_base": 6000.0,
+      "ev": 252.0,
+      "continuity": "",
+      "reason": "Praveen: retail meeting rate 10% vs team 10% (no history yet, prior); 42 slots free; only rep who fits; top product cloud-phone (SGD 6,000); employees unknown"
+    },
+    {
+      "row": 11,
+      "rep": "praveen",
+      "account": "palm-valley",
+      "name": "PALM VALLEY PTE. LTD.",
+      "market": "SG",
+      "tier": "C",
+      "score": 0.42,
+      "industry": "professional_services",
+      "p_meet": 0.1,
+      "product": "cloud-phone",
+      "value": 6000.0,
+      "currency": "SGD",
+      "value_base": 6000.0,
+      "ev": 252.0,
+      "continuity": "",
+      "reason": "Praveen: professional_services meeting rate 10% vs team 10% (no history yet, prior); 42 slots free; only rep who fits; top product cloud-phone (SGD 6,000); employees unknown"
+    },
+    {
+      "row": 12,
+      "rep": "praveen",
+      "account": "pdg-global",
+      "name": "PDG GLOBAL PTE. LTD.",
+      "market": "SG",
+      "tier": "C",
+      "score": 0.42,
+      "industry": "retail",
+      "p_meet": 0.1,
+      "product": "cloud-phone",
+      "value": 6000.0,
+      "currency": "SGD",
+      "value_base": 6000.0,
+      "ev": 252.0,
+      "continuity": "",
+      "reason": "Praveen: retail meeting rate 10% vs team 10% (no history yet, prior); 42 slots free; only rep who fits; top product cloud-phone (SGD 6,000); employees unknown"
+    },
+    {
+      "row": 13,
+      "rep": "praveen",
+      "account": "petros",
+      "name": "PETROS PTE. LTD.",
+      "market": "SG",
+      "tier": "C",
+      "score": 0.42,
+      "industry": "professional_services",
+      "p_meet": 0.1,
+      "product": "cloud-phone",
+      "value": 6000.0,
+      "currency": "SGD",
+      "value_base": 6000.0,
+      "ev": 252.0,
+      "continuity": "",
+      "reason": "Praveen: professional_services meeting rate 10% vs team 10% (no history yet, prior); 42 slots free; only rep who fits; top product cloud-phone (SGD 6,000); employees unknown"
+    },
+    {
+      "row": 14,
+      "rep": "praveen",
+      "account": "plg-pacific-logistics-group",
+      "name": "PLG PACIFIC LOGISTICS GROUP PTE. LTD.",
+      "market": "SG",
+      "tier": "C",
+      "score": 0.42,
+      "industry": "logistics",
+      "p_meet": 0.1,
+      "product": "cloud-phone",
+      "value": 6000.0,
+      "currency": "SGD",
+      "value_base": 6000.0,
+      "ev": 252.0,
+      "continuity": "",
+      "reason": "Praveen: logistics meeting rate 10% vs team 10% (no history yet, prior); 42 slots free; only rep who fits; top product cloud-phone (SGD 6,000); employees unknown"
+    },
+    {
+      "row": 15,
+      "rep": "praveen",
+      "account": "jadeport-freight",
+      "name": "Jadeport Freight Pte Ltd",
+      "market": "SG",
+      "tier": "C",
+      "score": 0.39,
+      "industry": "logistics",
+      "p_meet": 0.1,
+      "product": "managed-wifi",
+      "value": 4000.0,
+      "currency": "SGD",
+      "value_base": 4000.0,
+      "ev": 156.0,
+      "continuity": "same group as Copperleaf Retail Pte Ltd",
+      "reason": "Praveen: logistics meeting rate 10% vs team 10% (no history yet, prior); 42 slots free; same group as Copperleaf Retail Pte Ltd; only rep who fits; no recommendation yet, floor managed-wifi (SGD 4,000)"
+    }
+  ],
+  "unassigned": [
+    {
+      "account": "amberline-logistics",
+      "market": "SG",
+      "tier": "C",
+      "reason": "no free slots this run for praveen"
+    },
+    {
+      "account": "bluefin-bistro",
+      "market": "SG",
+      "tier": "C",
+      "reason": "no free slots this run for praveen"
+    },
+    {
+      "account": "cinder-coffee-roasters",
+      "market": "SG",
+      "tier": "C",
+      "reason": "no free slots this run for praveen"
+    },
+    {
+      "account": "driftwood-wellness",
+      "market": "SG",
+      "tier": "C",
+      "reason": "no free slots this run for praveen"
+    },
+    {
+      "account": "evergreen-dental",
+      "market": "SG",
+      "tier": "C",
+      "reason": "no free slots this run for praveen"
+    },
+    {
+      "account": "goldcrest-accounting",
+      "market": "SG",
+      "tier": "C",
+      "reason": "no free slots this run for praveen"
+    },
+    {
+      "account": "hilltop-bakehouse",
+      "market": "SG",
+      "tier": "C",
+      "reason": "no free slots this run for praveen"
+    },
+    {
+      "account": "ivory-lane-boutique",
+      "market": "SG",
+      "tier": "C",
+      "reason": "no free slots this run for praveen"
+    },
+    {
+      "account": "maple-and-co-advisory",
+      "market": "SG",
+      "tier": "C",
+      "reason": "no free slots this run for praveen"
+    },
+    {
+      "account": "orchid-optical",
+      "market": "SG",
+      "tier": "C",
+      "reason": "no free slots this run for praveen"
+    },
+    {
+      "account": "quayside-clinic",
+      "market": "SG",
+      "tier": "C",
+      "reason": "no free slots this run for praveen"
+    },
+    {
+      "account": "saffron-spoon",
+      "market": "SG",
+      "tier": "C",
+      "reason": "no free slots this run for praveen"
+    },
+    {
+      "account": "sanco-logistics",
+      "market": "SG",
+      "tier": "C",
+      "reason": "no free slots this run for praveen"
+    },
+    {
+      "account": "sara-masters-law-practice",
+      "market": "SG",
+      "tier": "C",
+      "reason": "no free slots this run for praveen"
+    },
+    {
+      "account": "saranya-engineering-and-logistics-services",
+      "market": "SG",
+      "tier": "C",
+      "reason": "no free slots this run for praveen"
+    },
+    {
+      "account": "sinorek-resources",
+      "market": "SG",
+      "tier": "C",
+      "reason": "no free slots this run for praveen"
+    },
+    {
+      "account": "solenne-advisory",
+      "market": "SG",
+      "tier": "C",
+      "reason": "no free slots this run for praveen"
+    },
+    {
+      "account": "stokebrooke-holdings",
+      "market": "SG",
+      "tier": "C",
+      "reason": "no free slots this run for praveen"
+    },
+    {
+      "account": "sunqin-global",
+      "market": "SG",
+      "tier": "C",
+      "reason": "no free slots this run for praveen"
+    },
+    {
+      "account": "umbra-legal",
+      "market": "SG",
+      "tier": "C",
+      "reason": "no free slots this run for praveen"
+    },
+    {
+      "account": "vantage-kids-academy",
+      "market": "SG",
+      "tier": "C",
+      "reason": "no free slots this run for praveen"
+    },
+    {
+      "account": "vk-twc-movers",
+      "market": "SG",
+      "tier": "C",
+      "reason": "no free slots this run for praveen"
+    },
+    {
+      "account": "willow-pharmacy",
+      "market": "SG",
+      "tier": "B",
+      "reason": "praveen: 216 staff outside 10–200"
+    },
+    {
+      "account": "worldmasterclass-sg",
+      "market": "SG",
+      "tier": "C",
+      "reason": "no free slots this run for praveen"
+    },
+    {
+      "account": "xenon-print-hub",
+      "market": "SG",
+      "tier": "C",
+      "reason": "no free slots this run for praveen"
+    },
+    {
+      "account": "xunhuan",
+      "market": "SG",
+      "tier": "C",
+      "reason": "no free slots this run for praveen"
+    },
+    {
+      "account": "yellowtail-seafood",
+      "market": "SG",
+      "tier": "C",
+      "reason": "no free slots this run for praveen"
+    },
+    {
+      "account": "zest-juice-bar",
+      "market": "SG",
+      "tier": "C",
+      "reason": "no free slots this run for praveen"
+    },
+    {
+      "account": "arka-diagnostics",
+      "market": "IN",
+      "tier": "C",
+      "reason": "market IN is not live"
+    },
+    {
+      "account": "bodhi-learning",
+      "market": "IN",
+      "tier": "C",
+      "reason": "market IN is not live"
+    },
+    {
+      "account": "bukit-indah-mart",
+      "market": "MY",
+      "tier": "C",
+      "reason": "market MY is not live"
+    },
+    {
+      "account": "cahaya-clinic",
+      "market": "MY",
+      "tier": "C",
+      "reason": "market MY is not live"
+    },
+    {
+      "account": "chakra-freight",
+      "market": "IN",
+      "tier": "C",
+      "reason": "market IN is not live"
+    },
+    {
+      "account": "deccan-delights",
+      "market": "IN",
+      "tier": "C",
+      "reason": "market IN is not live"
+    },
+    {
+      "account": "delima-transport",
+      "market": "MY",
+      "tier": "C",
+      "reason": "market MY is not live"
+    },
+    {
+      "account": "ekam-retail",
+      "market": "IN",
+      "tier": "C",
+      "reason": "market IN is not live"
+    },
+    {
+      "account": "embun-cafe",
+      "market": "MY",
+      "tier": "C",
+      "reason": "market MY is not live"
+    },
+    {
+      "account": "falak-consulting",
+      "market": "IN",
+      "tier": "C",
+      "reason": "market IN is not live"
+    },
+    {
+      "account": "firdaus-tuition",
+      "market": "MY",
+      "tier": "C",
+      "reason": "market MY is not live"
+    },
+    {
+      "account": "ganga-pharma-stores",
+      "market": "IN",
+      "tier": "C",
+      "reason": "market IN is not live"
+    },
+    {
+      "account": "gemilang-audit",
+      "market": "MY",
+      "tier": "C",
+      "reason": "market MY is not live"
+    },
+    {
+      "account": "hamsa-couriers",
+      "market": "IN",
+      "tier": "C",
+      "reason": "market IN is not live"
+    },
+    {
+      "account": "harapan-hardware",
+      "market": "MY",
+      "tier": "C",
+      "reason": "market MY is not live"
+    },
+    {
+      "account": "intan-florist",
+      "market": "MY",
+      "tier": "C",
+      "reason": "market MY is not live"
+    },
+    {
+      "account": "jati-courier",
+      "market": "MY",
+      "tier": "C",
+      "reason": "market MY is not live"
+    },
+    {
+      "account": "kenanga-dental",
+      "market": "MY",
+      "tier": "C",
+      "reason": "market MY is not live"
+    },
+    {
+      "account": "seri-kasih-catering",
+      "market": "MY",
+      "tier": "C",
+      "reason": "market MY is not live"
+    }
+  ],
+  "rebalance": [],
+  "checks": [
+    {
+      "check": "live market the rep covers",
+      "ok": true,
+      "violations": []
+    },
+    {
+      "check": "inside rep territory",
+      "ok": true,
+      "violations": []
+    },
+    {
+      "check": "within free slots and daily quota",
+      "ok": true,
+      "violations": []
+    },
+    {
+      "check": "no suppressed / DNC lead",
+      "ok": true,
+      "violations": []
+    },
+    {
+      "check": "lead still unowned",
+      "ok": true,
+      "violations": []
+    },
+    {
+      "check": "each lead at most once",
+      "ok": true,
+      "violations": []
+    }
+  ],
+  "per_rep": [
+    {
+      "market": "SG",
+      "rep": "praveen",
+      "leads": 15,
+      "A": 0,
+      "B": 0,
+      "C": 15,
+      "ev": 3684.0,
+      "active": 18,
+      "max_active": 60,
+      "slots": 15
+    }
+  ],
+  "status": "proposed"
+}
