@@ -1,0 +1,31 @@
+schema: spec-driven
+
+context: |
+  Sales Mama: an AI sales kit for one manager and up to five reps selling to SMBs in SG, MY and IN.
+  Git is the database (wiki/, raw/, log/, knowledge/). Deterministic Python scripts compute scores,
+  allocations and checks; the agent explains, drafts and asks (ADR-0003). Nothing is sent without the
+  owner rep's approval of that batch through scripts/send.py (ADR-0007). Runtimes: Claude Code first,
+  Codex best effort. AGENTS.md holds the short operational rules for the running agent; behaviour
+  requirements live in openspec/specs/ with IDs (OUT-002, ...); rationale lives in docs/adr/.
+
+rules:
+  # These guide whoever writes the artifacts. They do not enforce policy at runtime and do not prove
+  # coverage; enforcement is scripts + hooks + tests, coverage is openspec/trace/.
+  proposal:
+    - Name the requirement IDs the change adds, modifies or removes
+    - Say which runtime surfaces are affected (skills, scripts, hooks, settings, runner, console, benchmark)
+    - List Out of scope explicitly
+  specs:
+    - Give every requirement an ID in its title (AREA-NNN) and every scenario an ID (AREA-NNN.Sn)
+    - Every requirement has at least one scenario with fictional data (*.example domains)
+    - A check that cannot run (missing file, unreadable state, timeout) produces an explicit refusal or
+      PARTIAL/FAILED status with a reason code; never a silent pass or an empty result
+    - Name stable reason codes for every refusal
+    - Never describe sending without the owner rep's approval of that batch
+  design:
+    - State which steps are deterministic scripts and which are agent judgement; prefer a script when it can decide
+    - Product checks and benchmark graders share requirement text, scenario IDs, fixture schema and reason
+      codes, never the checking code
+  tasks:
+    - Make each task verifiable, and add the failing test before the fix
+    - Update openspec/trace/ for every scenario the change touches
